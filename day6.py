@@ -6,7 +6,7 @@ def main():
     string_to_use = ""
     lines = []
     i = input.readline()
-    while i: #get 
+    while i: #get input into a list of strings
         lines.append(i)
         i = input.readline()
     for s in lines:
@@ -17,6 +17,7 @@ def main():
         each_string = each_string.replace("\n", "") #put all strings from the same group in one long string
         for c in each_string:
             set_of_values.add(c) #add each (unique) character to a set
+        
         sum_of_questions += len(set_of_values) #length of the set = amount of unique yes answers
         set_of_values.clear()
 
