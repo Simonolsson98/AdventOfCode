@@ -13,8 +13,9 @@ def main():
     for k in range(25, len(lines)): #checking each number from 25 and onwards
         for i in range(k - 25, k): 
             for j in range(k - 25, k):
-                if(i != j):
+                if(i != j): #dont allow the sum of two equal values
                     resulting_numbers.add(int(lines[i]) + int(lines[j])) #sum all previous 25 numbers and add them to a set
+        
         if int(lines[k]) not in resulting_numbers: #if a number is not in this set, we have found the result
             return int(lines[k])
         resulting_numbers.clear() #else we reset and check next number (next iteration of k)
