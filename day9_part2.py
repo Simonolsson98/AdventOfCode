@@ -20,15 +20,15 @@ def main():
         resulting_numbers.clear() #else we reset and check next number (next iteration of k)
 
     for i in range(len(lines)):
-        index = i
-        check = 0
+        index = i #index to be used to sum all values lines[i] + lines[i+1] + ...
+        check = 0 #reset value for each iteration
         numbers_to_be_added = []
         while check < result_val:
             check += int(lines[index]) 
             numbers_to_be_added.append(int(lines[index])) #to be able to find the minimum and maximum values below
-            index += 1
-            if check == result_val: 
-                return max(numbers_to_be_added) + min(numbers_to_be_added) #sum minimum and maximum value and this is the result
+            index += 1 #increase index
+            if check == result_val: #if the sum is correct...
+                return max(numbers_to_be_added) + min(numbers_to_be_added) #... just sum minimum and maximum value and we are done
 
 
 if __name__ == '__main__':
