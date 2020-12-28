@@ -11,16 +11,8 @@ def main():
     new_lines = copy.deepcopy(lines) #the list used to check if a round changed our starting list
     stopped_changing_or_not = 0
     while True:
-        lines = copy.deepcopy(new_lines)
         for i in range(len(lines)):
             for j in range(len(lines[i])):
-
-                if stopped_changing_or_not >= (len(lines) * len(lines[0])):
-                    result = 0
-                    for k in range(len(new_lines)):
-                        result += new_lines[k].count('#')
-                    return result
-
                 seat = lines[i][j]
                 occupied_seats = get_occupied_seats(lines, i, j, [], stopped_changing_or_not)
 
@@ -34,6 +26,13 @@ def main():
                     stopped_changing_or_not += 1
                     continue
                 occupied_seats.clear()
+        if lines == new_lines: #no change from 1 round, so we should stop
+            result = 0
+            for k in range(len(new_lines)):
+                result += new_lines[k].count('#') #count occurrences of # in every line
+            return result
+        else: #prepare for next round
+            lines = copy.deepcopy(new_lines)
 
 
 def get_occupied_seats(lines, rowindex, colindex, occupied_seats, stop):
