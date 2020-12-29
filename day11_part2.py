@@ -21,7 +21,7 @@ def main():
                     new_lines[i][j] = '#' #seat should be occupied
                 elif seat == '#' and neighbouring_seats.count('#') >= 5:
                     new_lines[i][j] = 'L' #seat gets freed
-                else: #seat = '.' or both of the above requirements were not met
+                else: #seat = '.' or neither of the above requirements were met
                     pass
 
         if lines == new_lines: #no change from the round that just executed, so we should stop
@@ -41,11 +41,12 @@ def get_occupied_seats(lines, row_index, col_index, neighbouring_seats): #functi
         pass
     else:
         i = 1
-        while(lines[row_index][col_index - i] == '.'):
-            print(f"HERE for {i} and {lines[row_index][col_index - i]}")
-            i += 1 
-        neighbouring_seats.append(lines[row_index][col_index-i])
-        print(f"added {lines[row_index][col_index - i]}")
+        try:
+            while(lines[row_index][col_index - i] == '.'):
+                i += 1 
+            neighbouring_seats.append(lines[row_index][col_index-i])
+        except IndexError:
+            pass
     if col_index + 1 > len(lines[row_index]) - 1:
         pass
     else:
@@ -53,7 +54,7 @@ def get_occupied_seats(lines, row_index, col_index, neighbouring_seats): #functi
         try:
             while(lines[row_index][col_index + i] == '.'):
                 i += 1 
-            neighbouring_seats.append(lines[row_index][col_index+1])
+            neighbouring_seats.append(lines[row_index][col_index+i])
         except IndexError:
             pass
     if(col_index - 1 < 0 or row_index + 1 > len(lines) - 1):
@@ -73,18 +74,18 @@ def get_occupied_seats(lines, row_index, col_index, neighbouring_seats): #functi
         try:
             while(lines[row_index + i][col_index + i] == '.'):
                 i += 1 
-            neighbouring_seats.append(lines[row_index+1][col_index+1])
+            neighbouring_seats.append(lines[row_index+i][col_index+i])
         except IndexError:
             pass
 
-    if(row_index + 1 > len(lines) - 1 or col_index > len(lines[row_index + 1]) - 1):
+    if(row_index + 1 > len(lines) - 1):
         pass
     else:
         i = 1
         try:
             while(lines[row_index + i][col_index] == '.'):
                 i += 1 
-            neighbouring_seats.append(lines[row_index+1][col_index])
+            neighbouring_seats.append(lines[row_index+i][col_index])
         except IndexError:
             pass
 
@@ -95,18 +96,29 @@ def get_occupied_seats(lines, row_index, col_index, neighbouring_seats): #functi
         try:
             while(lines[row_index - i][col_index + i] == '.'):
                 i += 1 
-            neighbouring_seats.append(lines[row_index-1][col_index+1])
+            neighbouring_seats.append(lines[row_index-i][col_index+i])
         except IndexError:
             pass
     if(row_index - 1 < 0 or col_index - 1 < 0):
         pass
     else:
-        neighbouring_seats.append(lines[row_index-1][col_index-1])
+        i = 1
+        try:
+            while(lines[row_index - i][col_index - i] == '.'):
+                i += 1 
+            neighbouring_seats.append(lines[row_index-i][col_index-i])
+        except IndexError:
+            pass
     if(row_index - 1 < 0):
         pass
     else: 
-        neighbouring_seats.append(lines[row_index-1][col_index])
-
+        i = 1
+        try:
+            while(lines[row_index - i][col_index] == '.'):
+                i += 1 
+            neighbouring_seats.append(lines[row_index-i][col_index])
+        except IndexError:
+            pass
     return neighbouring_seats
 
 if __name__ == '__main__':
