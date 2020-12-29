@@ -41,23 +41,22 @@ def get_occupied_seats(lines, row_index, col_index, neighbouring_seats): #functi
         pass
     else:
         neighbouring_seats.append(lines[row_index][col_index-1])
-    if col_index + 1 > len(lines[row_index]) - 1:
-        pass
-    else:
+    try:
         neighbouring_seats.append(lines[row_index][col_index+1])
+    except IndexError:
+        pass
     if(col_index - 1 < 0 or row_index + 1 > len(lines) - 1):
         pass
     else:
         neighbouring_seats.append(lines[row_index+1][col_index-1])
-    if(row_index + 1 > len(lines) - 1 or col_index + 1 > len(lines[row_index + 1]) - 1):
-        pass
-    else:
+    try:
         neighbouring_seats.append(lines[row_index+1][col_index+1])
-
-    if(row_index + 1 > len(lines) - 1 or col_index > len(lines[row_index + 1]) - 1):
+    except IndexError:
         pass
-    else:
+    try:
         neighbouring_seats.append(lines[row_index+1][col_index])
+    except IndexError:
+        pass
 
     if(row_index - 1 < 0 or col_index + 1 > len(lines[row_index - 1]) - 1):
         pass
