@@ -37,9 +37,7 @@ def get_occupied_seats(lines, row_index, col_index, neighbouring_seats): #functi
     #checks for all types of indices, also makes sure that for example the first element only has 3 neighbours, since L # gives ['#', '.', '#'] for L
     #                                                                                                                 . #   
     
-    if(col_index - 1 < 0):
-        pass
-    else:
+    if(col_index - 1 >= 0):
         i = 1
         try:
             while(lines[row_index][col_index - i] == '.'):
@@ -47,9 +45,7 @@ def get_occupied_seats(lines, row_index, col_index, neighbouring_seats): #functi
             neighbouring_seats.append(lines[row_index][col_index-i])
         except IndexError:
             pass
-    if col_index + 1 > len(lines[row_index]) - 1:
-        pass
-    else:
+    if col_index + 1 <= len(lines[row_index]) - 1:
         i = 1
         try:
             while(lines[row_index][col_index + i] == '.'):
@@ -57,9 +53,7 @@ def get_occupied_seats(lines, row_index, col_index, neighbouring_seats): #functi
             neighbouring_seats.append(lines[row_index][col_index+i])
         except IndexError:
             pass
-    if(col_index - 1 < 0 or row_index + 1 > len(lines) - 1):
-        pass
-    else:
+    if(col_index - 1 >= 0 and row_index + 1 <= len(lines) - 1):
         i = 1
         try:
             while(lines[row_index + i][col_index - i] == '.'):
@@ -67,9 +61,7 @@ def get_occupied_seats(lines, row_index, col_index, neighbouring_seats): #functi
             neighbouring_seats.append(lines[row_index + i][col_index - i])
         except IndexError:
             pass
-    if(row_index + 1 > len(lines) - 1 or col_index + 1 > len(lines[row_index + 1]) - 1):
-        pass
-    else:
+    if(row_index + 1 <= len(lines) - 1 and col_index + 1 <= len(lines[row_index + 1]) - 1):
         i = 1
         try:
             while(lines[row_index + i][col_index + i] == '.'):
@@ -78,9 +70,7 @@ def get_occupied_seats(lines, row_index, col_index, neighbouring_seats): #functi
         except IndexError:
             pass
 
-    if(row_index + 1 > len(lines) - 1):
-        pass
-    else:
+    if(row_index + 1 <= len(lines) - 1):
         i = 1
         try:
             while(lines[row_index + i][col_index] == '.'):
@@ -89,9 +79,7 @@ def get_occupied_seats(lines, row_index, col_index, neighbouring_seats): #functi
         except IndexError:
             pass
 
-    if(row_index - 1 < 0 or col_index + 1 > len(lines[row_index - 1]) - 1):
-        pass
-    else:
+    if(row_index - 1 >= 0 and col_index + 1 <= len(lines[row_index - 1]) - 1):
         i = 1
         try:
             while(lines[row_index - i][col_index + i] == '.'):
@@ -99,9 +87,7 @@ def get_occupied_seats(lines, row_index, col_index, neighbouring_seats): #functi
             neighbouring_seats.append(lines[row_index-i][col_index+i])
         except IndexError:
             pass
-    if(row_index - 1 < 0 or col_index - 1 < 0):
-        pass
-    else:
+    if(row_index - 1 >= 0 and col_index - 1 >= 0):
         i = 1
         try:
             while(lines[row_index - i][col_index - i] == '.'):
@@ -109,9 +95,7 @@ def get_occupied_seats(lines, row_index, col_index, neighbouring_seats): #functi
             neighbouring_seats.append(lines[row_index-i][col_index-i])
         except IndexError:
             pass
-    if(row_index - 1 < 0):
-        pass
-    else: 
+    if(row_index - 1 >= 0):
         i = 1
         try:
             while(lines[row_index - i][col_index] == '.'):
