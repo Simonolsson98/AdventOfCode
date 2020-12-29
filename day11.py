@@ -36,19 +36,14 @@ def main():
 def get_occupied_seats(lines, row_index, col_index, neighbouring_seats): #function that returns a list of all occupied neighbouring seats
     #checks for all types of indices, also makes sure that for example the first element only has 3 neighbours, since L # gives ['#', '.', '#'] for L
     #                                                                                                                 . #   
-    
-    if(col_index - 1 < 0):
-        pass
-    else:
+    if(col_index - 1 >= 0): #make sure we are not index out of bounds
         neighbouring_seats.append(lines[row_index][col_index-1])
+        if(row_index + 1 <= len(lines) - 1):
+            neighbouring_seats.append(lines[row_index+1][col_index-1])
     try:
         neighbouring_seats.append(lines[row_index][col_index+1])
     except IndexError:
         pass
-    if(col_index - 1 < 0 or row_index + 1 > len(lines) - 1):
-        pass
-    else:
-        neighbouring_seats.append(lines[row_index+1][col_index-1])
     try:
         neighbouring_seats.append(lines[row_index+1][col_index+1])
     except IndexError:
@@ -57,20 +52,13 @@ def get_occupied_seats(lines, row_index, col_index, neighbouring_seats): #functi
         neighbouring_seats.append(lines[row_index+1][col_index])
     except IndexError:
         pass
-
-    if(row_index - 1 < 0 or col_index + 1 > len(lines[row_index - 1]) - 1):
-        pass
-    else:
-        neighbouring_seats.append(lines[row_index-1][col_index+1])
-    if(row_index - 1 < 0 or col_index - 1 < 0):
-        pass
-    else:
-        neighbouring_seats.append(lines[row_index-1][col_index-1])
-    if(row_index - 1 < 0):
-        pass
-    else: 
+    if(row_index - 1 >= 0): #make sure we are not index out of bounds
         neighbouring_seats.append(lines[row_index-1][col_index])
-
+        if(col_index - 1 >= 0): #make sure we are not index out of bounds
+            neighbouring_seats.append(lines[row_index-1][col_index-1])
+        if(col_index + 1 <= len(lines[row_index - 1]) - 1): #make sure we are not index out of bounds
+            neighbouring_seats.append(lines[row_index-1][col_index+1])
+            
     return neighbouring_seats
 
 if __name__ == '__main__':
