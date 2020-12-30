@@ -73,8 +73,7 @@ def get_occupied_seats(lines, row_index, col_index, neighbouring_seats): #functi
         i = 1
         while(lines[row_index + i][col_index + i] == '.' and row_index + i < len(lines) - 1 and col_index + i < len(lines[row_index + i]) - 1):
             i += 1 
-        if col_index < len(lines[row_index]) - 1 and row_index < len(lines) - 1:
-            neighbouring_seats.append(lines[row_index+i][col_index+i])
+        neighbouring_seats.append(lines[row_index+i][col_index+i])
     except IndexError:
         pass
 
@@ -82,18 +81,16 @@ def get_occupied_seats(lines, row_index, col_index, neighbouring_seats): #functi
         i = 1
         while(lines[row_index + i][col_index] == '.' and row_index + i < len(lines) - 1):
             i += 1 
-        if(row_index < len(lines) - 1): #bottom node cant have down neighbour
-            neighbouring_seats.append(lines[row_index+i][col_index])
+        neighbouring_seats.append(lines[row_index+i][col_index])
     except IndexError:
         pass
 
     try: #top-right neighbour
         i = 1
-        while(lines[row_index - i][col_index + i] == '.' and row_index - i > 0 and row_index - i < len(lines) - 1 and col_index + i < len(lines[row_index]) - 1):
+        while(lines[row_index - i][col_index + i] == '.' and row_index - i > 0):
             i += 1 
-        if row_index > 0 and col_index < len(lines[row_index]) - 1: #node in top row cant have top-right neighbour / top right node cant have top right neighbour
+        if row_index > 0: #node in top row (row_index == 0) cant have top-right neighbour
             neighbouring_seats.append(lines[row_index-i][col_index+i])
-        #print(f"added {lines[row_index-i][col_index-i]} for top-right neighbour, {row_index} {i}, {col_index + i}")
     except IndexError:
         pass
 
@@ -112,7 +109,6 @@ def get_occupied_seats(lines, row_index, col_index, neighbouring_seats): #functi
             i += 1 
         if row_index > 0: #node in top row cant have top neighbour
             neighbouring_seats.append(lines[row_index-i][col_index])
-        
     except IndexError:
         pass
     return neighbouring_seats
