@@ -29,7 +29,7 @@ def main():
             for k in range(len(new_lines)):
                 result += new_lines[k].count('#') #count occurrences of # in every line
             return result
-        else: #prepare for next round
+        else: #prepare for next round, this deepcopy here is the main reason for the ~7s execution time
             lines = copy.deepcopy(new_lines) #deepcopy needed here, since lines is a list of lists
 
 
