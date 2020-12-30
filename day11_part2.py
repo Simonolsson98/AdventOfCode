@@ -5,8 +5,6 @@ def main():
     lines = []
     i = input.readline()
     while i: #get input into a list of strings
-        if i[len(i) - 1] == "\n":
-            i = i[:len(i)-1]
         lines.append(list(i))
         i = input.readline()
         
@@ -18,10 +16,7 @@ def main():
             for j in range(len(lines[i])):
                 seat = lines[i][j]
                 neighbouring_seats = get_occupied_seats(lines, i, j, []) #retrieve the neighbouring seats
-                if i == 1 and j == 1:
-                    pass
-                    #print(neighbouring_seats)
-                    #print(f"{lines[0]}\n{lines[1]}\n{lines[2]}")
+                
                 if seat == 'L' and '#' not in neighbouring_seats:
                     new_lines[i][j] = '#' #seat should be occupied
                 elif seat == '#' and neighbouring_seats.count('#') >= 5:
@@ -35,7 +30,7 @@ def main():
                 result += new_lines[k].count('#') #count occurrences of # in every line
             return result
         else: #prepare for next round
-            lines = copy.deepcopy(new_lines)#deepcopy needed here, since lines is a list of lists
+            lines = copy.deepcopy(new_lines) #deepcopy needed here, since lines is a list of lists
 
 
 def get_occupied_seats(lines, row_index, col_index, neighbouring_seats): #function that returns a list of all occupied neighbouring seats
@@ -47,22 +42,20 @@ def get_occupied_seats(lines, row_index, col_index, neighbouring_seats): #functi
             i += 1 
         if col_index > 0: #furthest left node cant have left neighbour
             neighbouring_seats.append(lines[row_index][col_index-i])
-            #print(f"added {lines[row_index][col_index-i]}, {col_index - i} for left neighbour")
     except IndexError:
         pass
     try: #right neighbour
         i = 1
-        while(lines[row_index][col_index + i] == '.' and col_index + i < len(lines[row_index]) - 1):
+        while(lines[row_index][col_index + i] == '.'):
             i += 1 
-        if col_index < len(lines[row_index]) - 1:
-            neighbouring_seats.append(lines[row_index][col_index+i])
+        neighbouring_seats.append(lines[row_index][col_index+i])
 
     except IndexError:
         pass
 
     try: #down-left neighbour
         i = 1
-        while(lines[row_index + i][col_index - i] == '.' and col_index - i > 0 and row_index + i < len(lines) - 1):
+        while(lines[row_index + i][col_index - i] == '.' and col_index - i > 0):
             i += 1 
         if col_index > 0 and row_index < len(lines) - 1: #furthest left node cant have down-left neighbour
             neighbouring_seats.append(lines[row_index + i][col_index - i])
@@ -71,7 +64,7 @@ def get_occupied_seats(lines, row_index, col_index, neighbouring_seats): #functi
         
     try: #down-right neighbour
         i = 1
-        while(lines[row_index + i][col_index + i] == '.' and row_index + i < len(lines) - 1 and col_index + i < len(lines[row_index + i]) - 1):
+        while(lines[row_index + i][col_index + i] == '.'):
             i += 1 
         neighbouring_seats.append(lines[row_index+i][col_index+i])
     except IndexError:
@@ -79,7 +72,7 @@ def get_occupied_seats(lines, row_index, col_index, neighbouring_seats): #functi
 
     try: #down neighbour
         i = 1
-        while(lines[row_index + i][col_index] == '.' and row_index + i < len(lines) - 1):
+        while(lines[row_index + i][col_index] == '.'):
             i += 1 
         neighbouring_seats.append(lines[row_index+i][col_index])
     except IndexError:
@@ -114,6 +107,7 @@ def get_occupied_seats(lines, row_index, col_index, neighbouring_seats): #functi
     return neighbouring_seats
 
 if __name__ == '__main__':
+    times = []
     start_time = time.time()
     returnVal = main() 
     print(f"answer = {returnVal}, execution time: {time.time() - start_time} seconds") #answer = 2180
