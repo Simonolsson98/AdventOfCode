@@ -38,12 +38,13 @@ def get_occupied_seats(lines, row_index, col_index, neighbouring_seats): #functi
     #                                                                                                                 . #   
     try: #left neighbour
         i = 1
-        while(lines[row_index][col_index - i] == '.' and col_index - i > 0): #left neighbour
+        while(lines[row_index][col_index - i] == '.' and col_index - i > 0): # col_index - i > 0 to prevent "wrapping around" the list
             i += 1 
         if col_index > 0: #furthest left node cant have left neighbour
             neighbouring_seats.append(lines[row_index][col_index-i])
     except IndexError:
         pass
+
     try: #right neighbour
         i = 1
         while(lines[row_index][col_index + i] == '.'):
@@ -53,16 +54,16 @@ def get_occupied_seats(lines, row_index, col_index, neighbouring_seats): #functi
     except IndexError:
         pass
 
-    try: #down-left neighbour
+    try: #bottom-left neighbour
         i = 1
-        while(lines[row_index + i][col_index - i] == '.' and col_index - i > 0):
+        while(lines[row_index + i][col_index - i] == '.' and col_index - i > 0): # col_index - i > 0 to prevent "wrapping around" the list
             i += 1 
-        if col_index > 0 and row_index < len(lines) - 1: #furthest left node cant have down-left neighbour
+        if col_index > 0 and row_index < len(lines) - 1: #furthest left node cant have bottom-left neighbour
             neighbouring_seats.append(lines[row_index + i][col_index - i])
     except IndexError:
         pass
         
-    try: #down-right neighbour
+    try: #bottom-right neighbour
         i = 1
         while(lines[row_index + i][col_index + i] == '.'):
             i += 1 
@@ -70,7 +71,7 @@ def get_occupied_seats(lines, row_index, col_index, neighbouring_seats): #functi
     except IndexError:
         pass
 
-    try: #down neighbour
+    try: #bottom neighbour
         i = 1
         while(lines[row_index + i][col_index] == '.'):
             i += 1 
@@ -80,7 +81,7 @@ def get_occupied_seats(lines, row_index, col_index, neighbouring_seats): #functi
 
     try: #top-right neighbour
         i = 1
-        while(lines[row_index - i][col_index + i] == '.' and row_index - i > 0):
+        while(lines[row_index - i][col_index + i] == '.' and row_index - i > 0): # row_index - i > 0 to prevent "wrapping around" the list
             i += 1 
         if row_index > 0: #node in top row (row_index == 0) cant have top-right neighbour
             neighbouring_seats.append(lines[row_index-i][col_index+i])
@@ -89,7 +90,7 @@ def get_occupied_seats(lines, row_index, col_index, neighbouring_seats): #functi
 
     try: #top-left neighbour
         i = 1
-        while(lines[row_index - i][col_index - i] == '.' and row_index - i > 0 and col_index - i > 0):
+        while(lines[row_index - i][col_index - i] == '.' and row_index - i > 0 and col_index - i > 0):# row_index (and col_index) - i > 0 to prevent "wrapping around" the list
             i += 1 
         if col_index > 0 and row_index > 0: #node in left col cant have top-left neighbour / node in top row cant have top-left neighbour
             neighbouring_seats.append(lines[row_index-i][col_index-i])
