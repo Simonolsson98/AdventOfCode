@@ -5,7 +5,6 @@ def main():
     i = input.readline()
     xpos = 0
     ypos = 0
-    ship_direction = 90
     waypoint = (10, 1) #(E, N)
     while i: #get input into a list of strings
         operator = i[0]
@@ -15,14 +14,8 @@ def main():
         elif operator == "L":
             pass
         elif operator == "F":
-            if ship_direction == 0: #North
-                pass
-            elif ship_direction == 90: #East
-                pass
-            elif ship_direction == 180: #South
-                pass
-            else: # ship_direction == 270, West
-                pass
+            xpos += waypoint[0]
+            ypos += waypoint[1]
         elif operator == "N":
             pass
         elif operator == "S":
