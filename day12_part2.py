@@ -6,10 +6,31 @@ def main():
     xpos = 0
     ypos = 0
     ship_direction = 90
+    waypoint = (10, 1) #(E, N)
     while i: #get input into a list of strings
         operator = i[0]
         range_or_dir = i[1:]
-        
+        if operator == "R":
+            pass
+        elif operator == "L":
+            pass
+        elif operator == "F":
+            if ship_direction == 0: #North
+                pass
+            elif ship_direction == 90: #East
+                pass
+            elif ship_direction == 180: #South
+                pass
+            else: # ship_direction == 270, West
+                pass
+        elif operator == "N":
+            pass
+        elif operator == "S":
+            pass
+        elif operator == "W":
+            pass
+        else: #operator == "E"
+            pass
         
         i = input.readline()
     return abs(xpos) + abs(ypos) #manhattan distance
