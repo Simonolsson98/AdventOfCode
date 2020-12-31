@@ -10,7 +10,7 @@ def main():
         operator = i[0]
         range_or_dir = i[1:]
         if operator == "R":
-            pass
+            waypoint = (waypoint[1], -waypoint[0])
         elif operator == "L":
             pass
         elif operator == "F":
