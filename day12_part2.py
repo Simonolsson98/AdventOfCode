@@ -5,12 +5,20 @@ def main():
     i = input.readline()
     xpos = 0
     ypos = 0
-    waypoint = (10, 1) #(E, N)
+    waypoint = (1, 10) #(N/S, E/W)
     while i: #get input into a list of strings
         operator = i[0]
         range_or_dir = i[1:]
         if operator == "R":
-            waypoint = (waypoint[1], -waypoint[0])
+            if waypoint[0] >= 0 and waypoint[1] >= 0:
+                waypoint = (waypoint[1], -waypoint[0])
+            elif waypoint[0] < 0 and waypoint[1] >= 0:
+                waypoint = (-waypoint[1], -waypoint[0])
+            elif waypoint[0] < 0 and waypoint[1] < 0:
+                waypoint = (-waypoint[1], waypoint[0])
+            else:
+                waypoint = (waypoint[1], waypoint[0])
+            
         elif operator == "L":
             pass
         elif operator == "F":
