@@ -22,8 +22,10 @@ def main():
         elif operator == "L":
             pass
         elif operator == "F":
-            xpos += waypoint[0]
-            ypos += waypoint[1]
+            xchange = waypoint[0] * range_or_dir
+            ychange = waypoint[1] * range_or_dir
+            xpos += xchange
+            ypos += ychange
         elif operator == "N":
             waypoint[0] += range_or_dir
         elif operator == "S":
