@@ -25,13 +25,13 @@ def main():
             xpos += waypoint[0]
             ypos += waypoint[1]
         elif operator == "N":
-            pass
+            waypoint[0] += range_or_dir
         elif operator == "S":
-            pass
+            waypoint[0] -= range_or_dir
         elif operator == "W":
-            pass
+            waypoint[1] -= range_or_dir
         else: #operator == "E"
-            pass
+            waypoint[1] += range_or_dir
         
         i = input.readline()
     return abs(xpos) + abs(ypos) #manhattan distance
