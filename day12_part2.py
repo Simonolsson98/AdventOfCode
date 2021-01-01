@@ -10,6 +10,17 @@ def main():
         operator = i[0]
         range_or_dir = i[1:]
         if operator == "R":
+            #if range_or_dir == 90: ...
+            if waypoint[0] >= 0 and waypoint[1] >= 0:
+                waypoint = (-waypoint[1], waypoint[0])
+            elif waypoint[0] < 0 and waypoint[1] >= 0:
+                waypoint = (-waypoint[1], -waypoint[0])
+            elif waypoint[0] < 0 and waypoint[1] < 0:
+                waypoint = (-waypoint[1], waypoint[0])
+            else:
+                waypoint = (-waypoint[1], waypoint[0])
+            
+        elif operator == "L":
             if waypoint[0] >= 0 and waypoint[1] >= 0:
                 waypoint = (waypoint[1], -waypoint[0])
             elif waypoint[0] < 0 and waypoint[1] >= 0:
@@ -18,9 +29,6 @@ def main():
                 waypoint = (-waypoint[1], waypoint[0])
             else:
                 waypoint = (waypoint[1], waypoint[0])
-            
-        elif operator == "L":
-            pass
         elif operator == "F":
             xchange = waypoint[0] * range_or_dir
             ychange = waypoint[1] * range_or_dir
