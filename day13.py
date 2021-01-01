@@ -13,23 +13,20 @@ def main():
         except ValueError: #simply ignore the error
             pass
 
-    chosen_bus = 0
+    chosen_bus = -1
     find_time_to_depart = time_of_departure
-    print(departures)
+
     while True:
         for j in range(len(departures)):
             if (find_time_to_depart % departures[j] == 0):
                 chosen_bus = departures[j]
-        if chosen_bus != 0:
+        if chosen_bus != -1: #silly solution to know when to break out of the loop
             break        
-        find_time_to_depart += 1
+        find_time_to_depart += 1 #see if a bus comes in 1 more minute (essentially)
         
-    print(chosen_bus)
-    print(find_time_to_depart)
-    print(time_of_departure)
-    return chosen_bus * (find_time_to_depart - time_of_departure)
+    return chosen_bus * (find_time_to_depart - time_of_departure) #return bus id * time to wait 
 
 if __name__ == '__main__':
     start_time = time.time()
     returnVal = main() 
-    print(f"answer = {returnVal}, execution time: {time.time() - start_time} seconds") #answer = 
+    print(f"answer = {returnVal}, execution time: {time.time() - start_time} seconds") #answer = 2935
