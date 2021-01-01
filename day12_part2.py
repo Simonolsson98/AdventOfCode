@@ -10,25 +10,25 @@ def main():
         operator = i[0]
         range_or_dir = i[1:]
         if operator == "R":
-            #if range_or_dir == 90: ...
-            if waypoint[0] >= 0 and waypoint[1] >= 0:
-                waypoint = (-waypoint[1], waypoint[0])
-            elif waypoint[0] < 0 and waypoint[1] >= 0:
-                waypoint = (-waypoint[1], -waypoint[0])
-            elif waypoint[0] < 0 and waypoint[1] < 0:
-                waypoint = (-waypoint[1], waypoint[0])
-            else:
-                waypoint = (-waypoint[1], waypoint[0])
-            
+            for i in range(0, range_or_dir / 90): #turn 3 times for 270 degrees, for example
+                if waypoint[0] >= 0 and waypoint[1] >= 0:
+                    waypoint = (-waypoint[1], waypoint[0])
+                elif waypoint[0] < 0 and waypoint[1] >= 0:
+                    waypoint = (-waypoint[1], -waypoint[0])
+                elif waypoint[0] < 0 and waypoint[1] < 0:
+                    waypoint = (-waypoint[1], waypoint[0])
+                else:
+                    waypoint = (-waypoint[1], waypoint[0])
         elif operator == "L":
-            if waypoint[0] >= 0 and waypoint[1] >= 0:
-                waypoint = (waypoint[1], -waypoint[0])
-            elif waypoint[0] < 0 and waypoint[1] >= 0:
-                waypoint = (-waypoint[1], -waypoint[0])
-            elif waypoint[0] < 0 and waypoint[1] < 0:
-                waypoint = (-waypoint[1], waypoint[0])
-            else:
-                waypoint = (waypoint[1], waypoint[0])
+            for i in range(0, range_or_dir / 90):
+                if waypoint[0] >= 0 and waypoint[1] >= 0:
+                    waypoint = (waypoint[1], -waypoint[0])
+                elif waypoint[0] < 0 and waypoint[1] >= 0:
+                    waypoint = (-waypoint[1], -waypoint[0])
+                elif waypoint[0] < 0 and waypoint[1] < 0:
+                    waypoint = (-waypoint[1], waypoint[0])
+                else:
+                    waypoint = (waypoint[1], waypoint[0])
         elif operator == "F":
             xchange = waypoint[0] * range_or_dir
             ychange = waypoint[1] * range_or_dir
@@ -45,12 +45,7 @@ def main():
         
         i = input.readline()
     return abs(xpos) + abs(ypos) #manhattan distance
-
-def get_direction(degrees, ship_dir):
     
-    return ship_dir
-
-
 if __name__ == '__main__':
     start_time = time.time()
     returnVal = main() 
