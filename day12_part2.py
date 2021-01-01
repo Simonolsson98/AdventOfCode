@@ -20,7 +20,6 @@ def main():
                 else:
                     waypoint = [-waypoint[1], waypoint[0]]
         elif operator == "L":
-            print(f"going {int(range_or_dir / 90)} times for {range_or_dir}")
             for i in range(0, int(range_or_dir / 90)):
                 if waypoint[0] >= 0 and waypoint[1] >= 0:
                     waypoint = [waypoint[1], -waypoint[0]]
@@ -30,12 +29,12 @@ def main():
                     waypoint = [waypoint[1], -waypoint[0]]
                 else: #waypoint[0] >= 0 and waypoint[1] < 0:
                     waypoint = [waypoint[1], -waypoint[0]]
-        elif operator == "F":
-            print(range_or_dir)
-            xchange = waypoint[0] * range_or_dir
+        elif operator == "F": #move forward with a scale of range_or_dir * waypoint
+            xchange = waypoint[0] * range_or_dir 
             ychange = waypoint[1] * range_or_dir
             xpos += xchange
             ypos += ychange
+        #move waypoint appropriately
         elif operator == "N":
             waypoint[0] += range_or_dir
         elif operator == "S":
