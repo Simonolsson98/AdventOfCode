@@ -1,44 +1,26 @@
 from os import times
 import time
+from typing import Type
 
 def main():
     input = open("day13_input.txt")
     _ = input.readline()
     buses = input.readline()
-    split_buses = buses.split(",")
-    departures = list(split_buses)
-    #print(departures)
+    departures = list(buses.split(","))
+    print(departures)
     result = -1
-    timestamp = 1
-    max_departure = 0
-    """ for i in range(len(departures)):
-        print(i)
+    real_buses = []
+    
+    for j in range(len(departures)):
         try:
-            print(max_departure)
-            if int(departures[i]) > max_departure:
-                print(int(departures[i]))
-                print(i)
-                max_departure = departures[i]
-        except TypeError:
+            int(departures[j])
+            real_buses.append(int(departures[j])) #adds the buses with real ID's to a separate list
+        except ValueError: #ignore 'x' entries
             pass
-        except ValueError:
-            pass """
-    
-    while timestamp >= 1:
-        #print(timestamp)
-        for j in range(len(departures)):
-            try:
-                if((timestamp + j) % int(departures[j]) != 0):
-                    timestamp += (732 - int(departures[j]))
-                    break
-            except ValueError: #ignore 'x' entries
-                pass
-            #print(f"GOT PAST: {departures[j]}")
-            if(j == len(departures)):
-                return timestamp
-    
+    real_buses.sort()
+    print(real_buses)
 
-    return result
+    return None
 
 if __name__ == '__main__':
     start_time = time.time()
