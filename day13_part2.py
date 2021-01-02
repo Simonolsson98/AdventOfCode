@@ -6,15 +6,15 @@ def main():
     buses = input.readline()
     departures = list(buses.split(","))
 
-    mods = {}
+    dict_of_buses = {}
     for idx, bus_id in enumerate(departures):
         if bus_id != 'x': #ignore x's
-            mods[int(bus_id)] = -idx % int(bus_id)
+            dict_of_buses[int(bus_id)] = -idx % int(bus_id)
 
     iterator = 0
     increment = 1
-    for bus in mods.keys():
-        while iterator % bus != mods[bus]:
+    for bus in dict_of_buses.keys():
+        while iterator % bus != dict_of_buses[bus]:
             iterator += increment
         increment *= bus
 
