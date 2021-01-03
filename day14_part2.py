@@ -13,10 +13,7 @@ def main():
             continue
         
         index = int(i.split(" = ")[0][4:-1]) #:-1 to ignore ]
-        address = int(i.split(" = ")[1]) #:-1 to ignore newline
-        
-        value_to_write = address
-        
+        address = int(i.split(" = ")[1]) #:-1 to ignore newline, value to be written to the addresses that we calculate later
         bin_value = bin(index) #get the binary value
         bin_value = bin_value[2:]
 
@@ -43,32 +40,25 @@ def main():
         result = result.replace('X', '0')
         temp_result = result #to use later to reset the binary value for the next permutation of X's
 
-        #print(f"len of X's: {len(index_pos_list)}")
         for i in range(2 ** len(index_pos_list)):
             bin_index = bin(i)
             bin_index = bin_index[2:]
 
             while len(bin_index) < len(index_pos_list):
                 bin_index = '0' + bin_index #extend to proper amount of bits
-
+            
             for j in range(len(bin_index)):
                 result = result[:index_pos_list[j]] + bin_index[j] + result[index_pos_list[j] + 1:]    
             
-            #print(f"result after:  {result}")
             result = int("0b" + result, base = 0) #add 0b to be able to convert back to int, from binary
-            
-            changed_vals[result] = value_to_write #write the proper value to the addresses
-
+            changed_vals[result] = address #write the proper value to the addresses
             result = temp_result #prepare for next permutation of X's to be changed
 
         i = input.readline()
     
-    values = list(changed_vals.values()) #get all values that were changed
-
-    sum = 0
-    for value in values: #sum these values
-        sum += int(value)
-    return sum
+    values = sum(list(changed_vals.values())) #get all values that were changed and sum these
+    
+    return values
 
 if __name__ == '__main__':
     start_time = time.time()
