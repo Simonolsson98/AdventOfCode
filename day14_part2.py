@@ -13,19 +13,20 @@ def main():
             continue
         
         index = int(i.split(" = ")[0][4:-1]) #:-1 to ignore ]
-        value = int(i.split(" = ")[1]) #:-1 to ignore newline
-        val_written = value
-        value = bin(index) #get the binary value
-        value = value[2:]
+        address = int(i.split(" = ")[1]) #:-1 to ignore newline
+        
+        value_to_write = address
+        
+        bin_value = bin(index) #get the binary value
+        bin_value = bin_value[2:]
 
-        while len(value) <= 35:
-            value = '0' + value #extend to 35 bits
+        while len(bin_value) <= 35:
+            bin_value = '0' + bin_value #extend to 35 bits
         result = ""
 
-        for j in range(len(value)):
-            #print(mask[j])
+        for j in range(len(bin_value)):
             if mask[j] == '0': # mask == 0 means overwrite bit to 0
-                result += value[j]
+                result += bin_value[j]
             elif mask[j] == '1' or mask[j] == 'X': #mask == 'X' or 1, so keep this bit as this value
                 result += mask[j]
 
@@ -40,7 +41,7 @@ def main():
                 break
         
         result = result.replace('X', '0')
-        temp_result = result
+        temp_result = result #to use later to reset the binary value for the next permutation of X's
 
         #print(f"len of X's: {len(index_pos_list)}")
         for i in range(2 ** len(index_pos_list)):
@@ -55,7 +56,8 @@ def main():
             
             #print(f"result after:  {result}")
             result = int("0b" + result, base = 0) #add 0b to be able to convert back to int, from binary
-            changed_vals[result] = val_written
+            
+            changed_vals[result] = value_to_write #write the proper value to the addresses
 
             result = temp_result #prepare for next permutation of X's to be changed
 
@@ -71,4 +73,4 @@ def main():
 if __name__ == '__main__':
     start_time = time.time()
     returnVal = main() 
-    print(f"answer = {returnVal}, execution time: {time.time() - start_time} seconds") #answer = 
+    print(f"answer = {returnVal}, execution time: {time.time() - start_time} seconds") #answer = 3706820676200
