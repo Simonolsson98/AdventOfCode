@@ -9,11 +9,14 @@ def main():
         if i[0:4] == "mask":
             mask = i[7:]
             i = input.readline()
+            print(mask)
             continue
         
-        index = i.split(" = ")[0][4:-1] #:-1 to ignore ]
-        value = int(i.split(" = ")[1]) #:-1 to ignore newline
-        value = bin(value) #get the binary value
+        index = int(i.split(" = ")[0][4:-1]) #:-1 to ignore ]
+        #value = int(i.split(" = ")[1]) #:-1 to ignore newline
+        print(index)
+        value = bin(index) #get the binary value
+        print(value)
         value = value[2:]
 
         while len(value) <= 35:
@@ -26,7 +29,7 @@ def main():
                 result += value[j]
             elif mask[j] == '1' or mask[j] == 'X': #mask == 'X' or 1, so keep this bit as this value
                 result += mask[j]
-        number_of_x = result.count('X')
+
         index_pos_list = []
         index_pos = 0
         while True: 
@@ -36,22 +39,31 @@ def main():
                 index_pos += 1
             except ValueError as e:
                 break
-        temp_result = result
-        result = result.replace('X', '0')
         
+        result = result.replace('X', '0')
+        temp_result = result
+
+        print(f"len of X's: {len(index_pos_list)}")
         for i in range(2 ** len(index_pos_list)):
             bin_index = bin(i)
             bin_index = bin_index[2:]
 
+            while len(bin_index) < len(index_pos_list):
+                bin_index = '0' + bin_index #extend to proper amount of bits
+
             for j in range(len(bin_index)):
-                print(bin_index[j])
-                result = str(result[:index_pos_list[j]] + bin_index[j] + result[index_pos_list[j] + 1:])
-            result = int("0b" + result, base = 2) #add 0b to be able to convert back to int, from binary
+                result = result[:index_pos_list[j]] + bin_index[j] + result[index_pos_list[j] + 1:]    
+            
+            print(f"result after:  {result}")
+            result = int("0b" + result, base = 0) #add 0b to be able to convert back to int, from binary
             changed_vals[index] = result
+
+            result = temp_result #prepare for next permutation of X's to be changed
 
         i = input.readline()
     
     values = list(changed_vals.values()) #get all values that were changed
+    print(values)
     sum = 0
     for value in values: #sum these values
         sum += int(value)
