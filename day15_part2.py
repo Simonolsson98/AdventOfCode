@@ -7,16 +7,17 @@ def main():
     for i in range(len(spoken_vals), 2020):
         (a, b) = spoken_vals[last_spoken]
         if b == None:
-            spoken_vals[i] = (i,a)
+            spoken_vals[0] = (i,a)
+            last_spoken = 0
         else:
             if a - b in spoken_vals.keys():
+                last_spoken = a - b
                 (c, _) = spoken_vals[a - b]
                 spoken_vals[a - b] = (i, c)
             else:
+                last_spoken = a - b
                 spoken_vals[a - b] = (i, None)
-
-
-    print(spoken_vals.keys())
+        
     return last_spoken
     
 if __name__ == '__main__':
