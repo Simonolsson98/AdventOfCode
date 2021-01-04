@@ -1,16 +1,22 @@
 import time
 
 def main():
-    spoken_vals = {0:0,1:1,5:2,10:3,3:4,12:5,19:6} # no real need for i/o here lol
-    last_spoken = 19
+    spoken_vals = {0:(0,None), 3:(1, None), 6:(2, None)} # no real need for i/o here lol
+    last_spoken = 6
 
     for i in range(len(spoken_vals), 2020):
-        index = spoken_vals[last_spoken]
-        print(index)
-        spoken_vals[last_spoken] = i
-        last_spoken = i - index - 1
-        
-    
+        (a, b) = spoken_vals[last_spoken]
+        if b == None:
+            spoken_vals[i] = (i,a)
+        else:
+            if a - b in spoken_vals.keys():
+                (c, _) = spoken_vals[a - b]
+                spoken_vals[a - b] = (i, c)
+            else:
+                spoken_vals[a - b] = (i, None)
+
+
+    print(spoken_vals.keys())
     return last_spoken
     
 if __name__ == '__main__':
