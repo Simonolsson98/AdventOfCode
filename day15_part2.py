@@ -8,7 +8,7 @@ def main():
         (a, b) = spoken_vals[last_spoken]
         
         if b == None:
-            spoken_vals[0] = (i,spoken_vals[0][0])
+            spoken_vals[0] = (i, spoken_vals[0][0])
             last_spoken = 0
         else:
             if a - b in spoken_vals.keys():
