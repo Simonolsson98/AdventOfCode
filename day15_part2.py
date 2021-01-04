@@ -1,10 +1,10 @@
 import time
 
-def main(part):
+def main(input_range):
     spoken_vals = {0:(0,None), 1:(1,None), 5:(2,None), 10:(3,None),3:(4,None),12:(5,None),19:(6,None)} # no real need for i/o here lol
     last_spoken = 19
 
-    for i in range(len(spoken_vals), part):
+    for i in range(len(spoken_vals), input_range):
         (a, b) = spoken_vals[last_spoken]
         if b == None:
             spoken_vals[0] = (i, spoken_vals[0][0])
