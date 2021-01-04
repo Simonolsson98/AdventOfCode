@@ -1,18 +1,16 @@
 import time
 
 def main():
-    spoken_vals = [0,1,5,10,3,12,19] # no real need for i/o here lol
+    spoken_vals = {0:0,1:1,5:2,10:3,3:4,12:5,19:6} # no real need for i/o here lol
     last_spoken = 19 #fun way to retrieve last element of a list
 
-    for i in range(len(spoken_vals), 30000000):
-        if(last_spoken not in spoken_vals[:-1]): # if number hasnt appeared before, add it and say 0
-            last_spoken = 0
-            spoken_vals.append(last_spoken)
-        else:
-            # get the index of the last occurring number that is last_spoken, 
-            # and assign last_spoken to the difference between the turn value and this value
-            last_spoken = i - (len(spoken_vals) - spoken_vals[:-1][::-1].index(last_spoken) - 1) 
-            spoken_vals.append(last_spoken)
+    for i in range(len(spoken_vals), 2020):
+        
+        index = spoken_vals[last_spoken]
+        print(index)
+        spoken_vals[last_spoken] = i
+        last_spoken = i - index - 1
+        
     
     return last_spoken
     
