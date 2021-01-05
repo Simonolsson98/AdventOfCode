@@ -14,13 +14,26 @@ def main():
     all_ranges = all_ranges.split("\n")
     ranges = []
     for line in all_ranges: #get all ranges into a list
-        ranges.append(line.split(": ")[1].split(" or ")[0])
-        ranges.append(line.split(": ")[1].split(" or ")[1])
+        #kinda crazy string manipulation here, but its essentially only extracting the ranges from the input
+        ranges.append((int(line.split(": ")[1].split(" or ")[0].split("-")[0]), (int(line.split(": ")[1].split(" or ")[0].split("-")[1]))))
+        ranges.append((int(line.split(": ")[1].split(" or ")[1].split("-")[0]), (int(line.split(": ")[1].split(" or ")[1].split("-")[1]))))
 
     #print(ranges)
     my_ticket = split_lines[1]
-    nearby_tickets = split_lines[2]
+    nearby_tickets = list(split_lines[2][16:].replace("\n", ",").split(","))
+
+    for i in range(len(nearby_tickets)):
+        nearby_tickets[i] = int(nearby_tickets[i])
     
+    erronous_ticket = 0
+    for number in nearby_tickets:
+        for number_range in ranges:
+            if number_range[0] <= number <= number_range[1]: #if its in a range, its not erronous
+                break
+        erronous_ticket += number     
+    
+    return erronous_ticket
+
 if __name__ == '__main__':
     start_time = time.time()
     returnVal = main() 
