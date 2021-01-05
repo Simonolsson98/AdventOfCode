@@ -14,11 +14,11 @@ def main():
     all_ranges = all_ranges.split("\n")
     ranges = []
     for line in all_ranges: #get all ranges into a list
-        #kinda crazy string manipulation here, but its essentially only extracting the ranges from the input
+        #kinda crazy string manipulation here, but its essentially only extracting the ranges from the input, putting them in a tuple
         ranges.append((int(line.split(": ")[1].split(" or ")[0].split("-")[0]), (int(line.split(": ")[1].split(" or ")[0].split("-")[1]))))
         ranges.append((int(line.split(": ")[1].split(" or ")[1].split("-")[0]), (int(line.split(": ")[1].split(" or ")[1].split("-")[1]))))
 
-    nearby_tickets = list(split_lines[2][16:].replace("\n", ",").split(","))
+    nearby_tickets = list(split_lines[2][16:].replace("\n", ",").split(",")) #use this to get all the ranges as entries in a list
 
     for i in range(len(nearby_tickets)):
         nearby_tickets[i] = int(nearby_tickets[i])
