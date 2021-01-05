@@ -15,8 +15,8 @@ def main():
     ranges = []
     for line in all_ranges: #get all ranges into a list
         #kinda crazy string manipulation here, but its essentially only extracting the ranges from the input, putting them in a tuple
-        ranges.append((int(line.split(": ")[1].split(" or ")[0].split("-")[0]), (int(line.split(": ")[1].split(" or ")[0].split("-")[1]))))
-        ranges.append((int(line.split(": ")[1].split(" or ")[1].split("-")[0]), (int(line.split(": ")[1].split(" or ")[1].split("-")[1]))))
+        ranges.append(range(int(line.split(": ")[1].split(" or ")[0].split("-")[0]), (int(line.split(": ")[1].split(" or ")[0].split("-")[1]))))
+        ranges.append(range(int(line.split(": ")[1].split(" or ")[1].split("-")[0]), (int(line.split(": ")[1].split(" or ")[1].split("-")[1]))))
 
     nearby_tickets = list(split_lines[2][16:].split("\n")) #use this to get all the ranges as entries in a list
     each_nearby_ticket = []
@@ -32,7 +32,11 @@ def main():
         check = 0
         for value in number:
             for number_range in ranges:
-                if number_range[0] <= value and value <= number_range[1]: #if last 
+                print(value)
+                print(number_range)
+                print(number_range[-1]+2)
+                print(f"check: {check}")
+                if value in range(number_range[0], number_range[-1]+2): #if last 
                     check += 1
                     if number not in valid_tickets and check == len(number):
                         valid_tickets.append(number)
@@ -40,9 +44,15 @@ def main():
 
     print(nearby_tickets)
     print(valid_tickets)
+    try_this = []
+    print(ranges)
     for i in range(len(valid_tickets)):
-        pass
-
+        for j in range(len(valid_tickets[i])):
+            for k in range(len(ranges)):
+                if valid_tickets[i][j] in ranges[k]:
+                    try_this.append((valid_tickets[i][j], k))
+        #if valid_tickets[i][j] 
+    print(try_this)
     return None
 
 if __name__ == '__main__':
