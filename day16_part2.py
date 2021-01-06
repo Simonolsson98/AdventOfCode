@@ -31,12 +31,11 @@ def main():
     for number in each_nearby_ticket:
         check = 0
         for value in number:
-            for number_range in ranges:
+            for range_index in range(0, len(ranges), 2):
                 print(value)
-                print(number_range)
-                print(number_range[-1]+2)
+                print((ranges[range_index]))
                 print(f"check: {check}")
-                if value in range(number_range[0], number_range[-1]+2): #if last 
+                if value in ranges[range_index] or value in ranges[range_index+1]: #if last 
                     check += 1
                     if number not in valid_tickets and check == len(number):
                         valid_tickets.append(number)
