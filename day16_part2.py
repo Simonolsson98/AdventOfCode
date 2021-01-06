@@ -43,15 +43,14 @@ def main():
                         valid_tickets.append(list_of_numbers)
                     break
 
-    try_this = []
-    print(len(each_nearby_ticket))
-    print(len(valid_tickets))
+    try_this = {}
+
     for i in range(len(valid_tickets)):
         for j in range(len(valid_tickets[i])):
-            for k in range(len(ranges)):
-                if valid_tickets[i][j] in ranges[k]:
-                    try_this.append((valid_tickets[i][j], k))
-        #if valid_tickets[i][j] 
+            for k in range(0, len(ranges), 2):
+                if valid_tickets[i][j] in range(ranges[k][0], ranges[k][-1] + 1) or valid_tickets[i][j] in range(ranges[k + 1][0], ranges[k + 1][-1] + 1): #if last :
+                    try_this[k].append(valid_tickets[i][j])
+        #if valid_tickets[i][j]
     #print(try_this)
     return None
 
