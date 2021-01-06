@@ -1,5 +1,5 @@
 import time
-
+import math
 def main():
     input = open("day16_input.txt")
     lines = ""
@@ -28,30 +28,31 @@ def main():
             each_nearby_ticket[j][k] = int(each_nearby_ticket[j][k])
         
     valid_tickets = []
-    for number in each_nearby_ticket:
-        check = 0
-        for value in number:
-            for range_index in range(0, len(ranges), 2):
-                print(value)
-                print((ranges[range_index]))
-                print(f"check: {check}")
-                if value in ranges[range_index] or value in ranges[range_index+1]: #if last 
-                    check += 1
-                    if number not in valid_tickets and check == len(number):
-                        valid_tickets.append(number)
-                    break          
-
-    print(nearby_tickets)
-    print(valid_tickets)
-    try_this = []
     print(ranges)
+    for list_of_numbers in each_nearby_ticket:
+        check = 0
+        for value in list_of_numbers:
+            print(f"for value: {value}")
+            for range_index in range(0, len(ranges), 2):
+                print(range_index)
+                print(f"{value} in {ranges[range_index][1] + 2}")
+                if value in range(ranges[range_index][0], ranges[range_index][1] + 2) or value in range(ranges[range_index + 1][0], ranges[range_index + 1][1] + 2): #if last 
+                    check += 1
+                    print(f"check: {check}")
+                    if list_of_numbers not in valid_tickets and check == len(list_of_numbers):
+                        print(f"appending: {list_of_numbers}")
+                        valid_tickets.append(list_of_numbers)
+                    break
+
+    try_this = []
+    print(valid_tickets)
     for i in range(len(valid_tickets)):
         for j in range(len(valid_tickets[i])):
             for k in range(len(ranges)):
                 if valid_tickets[i][j] in ranges[k]:
                     try_this.append((valid_tickets[i][j], k))
         #if valid_tickets[i][j] 
-    print(try_this)
+    #print(try_this)
     return None
 
 if __name__ == '__main__':
