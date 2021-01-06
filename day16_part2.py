@@ -44,14 +44,35 @@ def main():
                     break
 
     try_this = {}
+    """ for i in range(0, len(ranges), 2):
+        try_this[i] = [] """
+    print(valid_tickets[0])
 
-    for i in range(len(valid_tickets)):
-        for j in range(len(valid_tickets[i])):
-            for k in range(0, len(ranges), 2):
-                if valid_tickets[i][j] in range(ranges[k][0], ranges[k][-1] + 1) or valid_tickets[i][j] in range(ranges[k + 1][0], ranges[k + 1][-1] + 1): #if last :
-                    try_this[k].append(valid_tickets[i][j])
-        #if valid_tickets[i][j]
-    #print(try_this)
+    for j in range(len(valid_tickets[0])):
+        for k in range(0, len(ranges), 2):
+            if valid_tickets[0][j] in range(ranges[k][0], ranges[k][-1] + 1) or valid_tickets[0][j] in range(ranges[k + 1][0], ranges[k + 1][-1] + 1):
+                if j not in try_this.keys():
+                    try_this[j] = []
+                try_this[j].append(valid_tickets[0][j])
+                try_this[j].append(k/2)
+       
+    check = []
+    print(try_this)
+    while(try_this):
+        for value in try_this.values():
+            print(value)
+            if len(value) == 2:
+                check.append((value[0], value[1]))
+                for i in range(len(try_this)):
+                    print(i)
+                    if value[1] in try_this[i]:
+                        index = try_this[i].index(value[1])
+                        print(index)
+                        try_this[i].pop(index)
+                        try_this[i].pop(index - 1)
+
+
+    print(try_this)
     return None
 
 if __name__ == '__main__':
