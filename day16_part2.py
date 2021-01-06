@@ -44,38 +44,50 @@ def main():
                     break
 
     try_this = {}
-    """ for i in range(0, len(ranges), 2):
-        try_this[i] = [] """
-    print(valid_tickets[0])
+    print(valid_tickets)
 
     for j in range(len(valid_tickets[0])):
         for k in range(0, len(ranges), 2):
             if valid_tickets[0][j] in range(ranges[k][0], ranges[k][-1] + 1) or valid_tickets[0][j] in range(ranges[k + 1][0], ranges[k + 1][-1] + 1):
-                if j not in try_this.keys():
-                    try_this[j] = []
-                try_this[j].append(valid_tickets[0][j])
-                try_this[j].append(k/2)
-       
-    check = []
+                if valid_tickets[0][j] not in try_this.keys():
+                    try_this[valid_tickets[0][j]] = []
+                try_this[valid_tickets[0][j]].append(k/2)
+                #try_this[j].append(k/2)
+    
     print(try_this)
-    while(try_this):
+    return  
+    check = []
+    while(True):
+        #print(try_this.values())
+        print(value)
+        if all(not value for value in try_this.values()):
+            break
         for value in try_this.values():
-            print(value)
             if len(value) == 2:
                 check.append((value[0], value[1]))
                 for i in range(len(try_this)):
-                    print(i)
-                    if value[1] in try_this[i]:
-                        index = try_this[i].index(value[1])
-                        print(index)
-                        try_this[i].pop(index)
-                        try_this[i].pop(index - 1)
+                    print(try_this)
+                    try:
+                        if value[1] in try_this[i]:
+                            index = try_this[i].index(value[1])
+                            print(index)
+                            try_this[i].pop(index)
+                            try_this[i].pop(index - 1)
+                    except IndexError:
+                        pass
 
+    print(check)
+    rows_to_look = []
+    for i in range(len(all_ranges)):
+        print(all_ranges[i][0:3])
+        if all_ranges[i][0:3] == "dep":
+            rows_to_look.append(i)
 
-    print(try_this)
+    print(rows_to_look)
+    
     return None
 
 if __name__ == '__main__':
     start_time = time.time()
     returnVal = main() 
-    print(f"answer = {returnVal}, execution time: {time.time() - start_time} seconds") #answer = 1373
+    print(f"answer = {returnVal}, execution time: {time.time() - start_time} seconds") #answer = 3029180675981
