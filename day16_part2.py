@@ -29,18 +29,13 @@ def main():
             each_nearby_ticket[j][k] = int(each_nearby_ticket[j][k])
         
     valid_tickets = []
-    #print(ranges)
     for list_of_numbers in each_nearby_ticket:
         check = 0
         for value in list_of_numbers:
-           # print(f"for value: {value}")
             for range_index in range(0, len(ranges), 2):
-               # print(f"{value} in {ranges[range_index][-1]+1} or {ranges[range_index+1][-1]+1}")
                 if value in range(ranges[range_index][0], ranges[range_index][-1] + 1) or value in range(ranges[range_index + 1][0], ranges[range_index + 1][-1] + 1): #if last 
                     check += 1
-                    #print(f"check: {check}")
                     if list_of_numbers not in valid_tickets and check == len(list_of_numbers):
-                        #print(f"appending: {list_of_numbers}")
                         valid_tickets.append(list_of_numbers)
                     break
 
@@ -58,9 +53,6 @@ def main():
         for k in range(0, len(ranges), 2):
             for j in range(len(try_this[i])):
                 value = try_this[i][j]
-                #print(k)
-                #print(len(ranges))
-                #print(f"{value} in {range(ranges[k][0], ranges[k][-1] + 1)} or {value} in {range(ranges[k+1][0], ranges[k+1][-1] + 1)}")
                 if value in range(ranges[k][0], ranges[k][-1] + 1) or value in range(ranges[k+1][0], ranges[k+1][-1] + 1): 
                     if j+1 == len(try_this[i]):
                         check.append((i, int(k/2)))
