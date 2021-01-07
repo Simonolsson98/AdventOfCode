@@ -28,7 +28,7 @@ def main():
             each_nearby_ticket[j][k] = int(each_nearby_ticket[j][k])
         
     valid_tickets = []
-    print(ranges)
+    #print(ranges)
     for list_of_numbers in each_nearby_ticket:
         check = 0
         for value in list_of_numbers:
@@ -43,49 +43,53 @@ def main():
                         valid_tickets.append(list_of_numbers)
                     break
 
-    try_this = {}
+    try_this = [[]]
+    for i in range(1, len(valid_tickets[0])):
+        try_this.append([])
+
+    for i in range(len(valid_tickets[0])):
+        for j in range(len(valid_tickets)):    
+            #list of lists of columns of values
+            try_this[i].append(valid_tickets[j][i])
+        
+    pls = {}
     #print(valid_tickets)
     for i in range(len(valid_tickets)):
         for j in range(len(valid_tickets[i])):
             for k in range(0, len(ranges), 2):
                 if valid_tickets[i][j] in range(ranges[k][0], ranges[k][-1] + 1) or valid_tickets[i][j] in range(ranges[k + 1][0], ranges[k + 1][-1] + 1):
-                    if j not in try_this.keys():
-                        try_this[j] = []
-                    try_this[j].append(valid_tickets[i][j])
-                    try_this[j].append(int(k/2))
+                    if j not in pls.keys():
+                        pls[j] = []
+                    pls[j].append(valid_tickets[i][j])
+                    pls[j].append(int(k/2))
         
+   
     check = []
-    asd = 0
     while(True):
-        if asd > 50000:
-            print("BREAKING")
-            break
-        asd += 1
-        if all(not value for value in try_this.values()):
-            break
-        #print(len(try_this[0])
-        for value in try_this.values():
-            if len(value) == 2:
-                check.append((value[0], value[1]))
-            print(value)
-            for i in range(0, 19):
-                #print(i)
-                try:
-                    if i not in value:
-                        for key in try_this.keys():
-                            try:
-                                vals = try_this[key]
-                                #print(vals)
-                                index = vals.index(i)
-                                vals.remove(i)
-                                vals.pop(index - 1)
-                                #print(vals)
-                                try_this[key] = vals
-                                #print("REMOVING")
-                            except ValueError:
-                                pass
-                except ValueError:
-                    pass
+        for i in range(len(valid_tickets)):
+            for j in range(len(valid_tickets[i])):
+                if len(valid_tickets[i][j]) == 2:
+                    check.append((valid_tickets[i][j][0], valid_tickets[i][j][1]))
+                print(valid_tickets[i][j])
+                for k in range(0, 19):
+                    #print(i)
+                    try:
+                        if k not in try_this[i][j]:
+                            for key in try_this.keys():
+                                try:
+                                    valid_tickets[i][k]
+                                    vals = try_this[key]
+                                    #print(vals)
+                                    index = vals.index(k)
+                                    vals.remove(k)
+                                    vals.pop(index - 1)
+                                    #print(vals)
+                                    try_this[key] = vals
+                                    #print("REMOVING")
+                                except ValueError:
+                                    pass
+                    except ValueError:
+                        pass
 
     print(check)
     rows_to_look = []
