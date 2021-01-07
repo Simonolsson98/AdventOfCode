@@ -44,48 +44,62 @@ def main():
                     break
 
     try_this = {}
-    print(valid_tickets)
-
-    for j in range(len(valid_tickets[0])):
-        for k in range(0, len(ranges), 2):
-            if valid_tickets[0][j] in range(ranges[k][0], ranges[k][-1] + 1) or valid_tickets[0][j] in range(ranges[k + 1][0], ranges[k + 1][-1] + 1):
-                if valid_tickets[0][j] not in try_this.keys():
-                    try_this[valid_tickets[0][j]] = []
-                try_this[valid_tickets[0][j]].append(k/2)
-                #try_this[j].append(k/2)
-    
-    print(try_this)
-    return  
+    #print(valid_tickets)
+    for i in range(len(valid_tickets)):
+        for j in range(len(valid_tickets[i])):
+            for k in range(0, len(ranges), 2):
+                if valid_tickets[i][j] in range(ranges[k][0], ranges[k][-1] + 1) or valid_tickets[i][j] in range(ranges[k + 1][0], ranges[k + 1][-1] + 1):
+                    if j not in try_this.keys():
+                        try_this[j] = []
+                    try_this[j].append(valid_tickets[i][j])
+                    try_this[j].append(int(k/2))
+        
     check = []
+    asd = 0
     while(True):
-        #print(try_this.values())
-        print(value)
+        if asd > 50000:
+            print("BREAKING")
+            break
+        asd += 1
         if all(not value for value in try_this.values()):
             break
+        #print(len(try_this[0])
         for value in try_this.values():
             if len(value) == 2:
                 check.append((value[0], value[1]))
-                for i in range(len(try_this)):
-                    print(try_this)
-                    try:
-                        if value[1] in try_this[i]:
-                            index = try_this[i].index(value[1])
-                            print(index)
-                            try_this[i].pop(index)
-                            try_this[i].pop(index - 1)
-                    except IndexError:
-                        pass
+            print(value)
+            for i in range(0, 19):
+                #print(i)
+                try:
+                    if i not in value:
+                        for key in try_this.keys():
+                            try:
+                                vals = try_this[key]
+                                #print(vals)
+                                index = vals.index(i)
+                                vals.remove(i)
+                                vals.pop(index - 1)
+                                #print(vals)
+                                try_this[key] = vals
+                                #print("REMOVING")
+                            except ValueError:
+                                pass
+                except ValueError:
+                    pass
 
     print(check)
     rows_to_look = []
     for i in range(len(all_ranges)):
-        print(all_ranges[i][0:3])
         if all_ranges[i][0:3] == "dep":
             rows_to_look.append(i)
 
-    print(rows_to_look)
-    
-    return None
+    #print(rows_to_look)
+    my_ticket = split_lines[1][13:].split(",")
+    #print(my_ticket)
+    result = 1
+    for i in range(6):
+        result *= int(my_ticket[i])
+    return result
 
 if __name__ == '__main__':
     start_time = time.time()
