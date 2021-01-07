@@ -1,3 +1,4 @@
+from os import remove
 import time
 import math
 def main():
@@ -55,8 +56,6 @@ def main():
     print(ranges)
     for i in range(len(try_this)):
         for k in range(0, len(ranges), 2):
-            if ((val[0] == i) for val in check):
-                break
             for j in range(len(try_this[i])):
                 value = try_this[i][j]
                 #print(k)
@@ -64,13 +63,35 @@ def main():
                 #print(f"{value} in {range(ranges[k][0], ranges[k][-1] + 1)} or {value} in {range(ranges[k+1][0], ranges[k+1][-1] + 1)}")
                 if value in range(ranges[k][0], ranges[k][-1] + 1) or value in range(ranges[k+1][0], ranges[k+1][-1] + 1): 
                     if j+1 == len(try_this[i]):
-                        check.append((i, k))
-                        #try_this.pop(i)
-                        #ranges.pop(k)
+                        check.append((i, int(k/2)))
                         break
                     continue
                 else:
                     break
+
+    print(check)
+    asd = []
+    bs = []
+
+    while(True):
+        for c in check:
+            bs.append(c[1])
+            
+        for i in range(0,20):
+            if bs.count(i) == 1:
+                asd.append(i)
+        print(asd)
+        for vals in asd:
+            print(vals)
+            for val in check:
+                print(val)
+                if val[1] == vals:
+                    for remove_these in check:
+                        if remove_these[0] == val[0]:
+                            print(f"REMOVING: {remove_these}")
+                            check.remove(remove_these)
+        asd = []
+        bs = []
 
     print(check)
     rows_to_look = []
