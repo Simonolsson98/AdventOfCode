@@ -46,50 +46,31 @@ def main():
     try_this = [[]]
     for i in range(1, len(valid_tickets[0])):
         try_this.append([])
-
     for i in range(len(valid_tickets[0])):
         for j in range(len(valid_tickets)):    
             #list of lists of columns of values
             try_this[i].append(valid_tickets[j][i])
-        
-    pls = {}
-    #print(valid_tickets)
-    for i in range(len(valid_tickets)):
-        for j in range(len(valid_tickets[i])):
-            for k in range(0, len(ranges), 2):
-                if valid_tickets[i][j] in range(ranges[k][0], ranges[k][-1] + 1) or valid_tickets[i][j] in range(ranges[k + 1][0], ranges[k + 1][-1] + 1):
-                    if j not in pls.keys():
-                        pls[j] = []
-                    pls[j].append(valid_tickets[i][j])
-                    pls[j].append(int(k/2))
-        
-   
+
     check = []
-    while(True):
-        for i in range(len(valid_tickets)):
-            for j in range(len(valid_tickets[i])):
-                if len(valid_tickets[i][j]) == 2:
-                    check.append((valid_tickets[i][j][0], valid_tickets[i][j][1]))
-                print(valid_tickets[i][j])
-                for k in range(0, 19):
-                    #print(i)
-                    try:
-                        if k not in try_this[i][j]:
-                            for key in try_this.keys():
-                                try:
-                                    valid_tickets[i][k]
-                                    vals = try_this[key]
-                                    #print(vals)
-                                    index = vals.index(k)
-                                    vals.remove(k)
-                                    vals.pop(index - 1)
-                                    #print(vals)
-                                    try_this[key] = vals
-                                    #print("REMOVING")
-                                except ValueError:
-                                    pass
-                    except ValueError:
-                        pass
+    print(ranges)
+    for i in range(len(try_this)):
+        for k in range(0, len(ranges), 2):
+            if ((val[0] == i) for val in check):
+                break
+            for j in range(len(try_this[i])):
+                value = try_this[i][j]
+                #print(k)
+                #print(len(ranges))
+                #print(f"{value} in {range(ranges[k][0], ranges[k][-1] + 1)} or {value} in {range(ranges[k+1][0], ranges[k+1][-1] + 1)}")
+                if value in range(ranges[k][0], ranges[k][-1] + 1) or value in range(ranges[k+1][0], ranges[k+1][-1] + 1): 
+                    if j+1 == len(try_this[i]):
+                        check.append((i, k))
+                        #try_this.pop(i)
+                        #ranges.pop(k)
+                        break
+                    continue
+                else:
+                    break
 
     print(check)
     rows_to_look = []
@@ -103,7 +84,37 @@ def main():
     result = 1
     for i in range(6):
         result *= int(my_ticket[i])
-    return result
+    return result         
+
+    """ while(True):
+        if all(not value for value in try_this.values()):
+            break
+        #print(len(try_this[0])
+        for value in try_this.values():
+            if len(value) == 2:
+                check.append((value[0], value[1]))
+            print(value)
+            for k in range(0, 19):
+                #print(i)
+                try:
+                    if k not in value:
+                        for key in try_this.keys():
+                            try:
+                                valid_tickets[i][k]
+                                vals = try_this[key]
+                                #print(vals)
+                                index = vals.index(k)
+                                vals.remove(k)
+                                vals.pop(index - 1)
+                                #print(vals)
+                                try_this[key] = vals
+                                #print("REMOVING")
+                            except ValueError:
+                                pass
+                except ValueError:
+                    pass """
+
+
 
 if __name__ == '__main__':
     start_time = time.time()
