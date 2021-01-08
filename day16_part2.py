@@ -1,6 +1,6 @@
 from os import remove
 import time
-import math
+
 def main():
     input = open("day16_input.txt")
     lines = ""
@@ -48,7 +48,6 @@ def main():
             try_this[i].append(valid_tickets[j][i])
 
     check = []
-    print(ranges)
     for i in range(len(try_this)):
         for k in range(0, len(ranges), 2):
             for j in range(len(try_this[i])):
@@ -61,66 +60,49 @@ def main():
                 else:
                     break
 
-    print(check)
+    
     asd = []
     bs = []
-
     rows_to_look = []
-
     amount = 0
     index = 0
     while(check):
         for c in check:
             bs.append(c[1])
-            
         for i in range(0,20):
             if bs.count(i) == 1:
                 asd.append(i)
-        print(asd)
+
         for vals in asd:
             for val in check:
                 if val[1] == vals:
                     number_to_remove = val[0]
                     rows_to_look.append((number_to_remove, val[1]))
-                    print(f"number_to_remove = {number_to_remove}")
                     for tuple in check:
                         if tuple[0] == number_to_remove:
                             index = check.index(tuple)
                             amount += 1
-            print(index)
-            print(amount)
             for i in range(index, index + amount):
-                print(f"POPPED: {check[index-amount+1]}")
                 check.pop(index - amount + 1)
-        print(check)
-        index = 0
+        
         amount = 0
         asd = []
         bs = []
 
-    print(rows_to_look)
-    rows_for_departures = []
-    for i in range(len(all_ranges)):
-        if all_ranges[i][0:3] == "dep":
-            rows_for_departures.append(i)
-
     resulting_cols = []
-    for i in range(0, 6):
+    for i in range(0, 6): #the first 6 rows are the departure ranges
         for val in rows_to_look:
             if val[1] == i:
                 resulting_cols.append(val[0])
                 break
     
-    my_ticket = split_lines[1][13:].split(",")
+    my_ticket = split_lines[1][13:].split(",") #get my ticket
     result = 1
     
-    print(resulting_cols)
     for index in resulting_cols:
-        result *= int(my_ticket[index])
+        result *= int(my_ticket[index]) #multply these values together
     
     return result         
-
-
 
 if __name__ == '__main__':
     start_time = time.time()
