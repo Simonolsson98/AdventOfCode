@@ -65,7 +65,11 @@ def main():
     asd = []
     bs = []
 
-    while(True):
+    rows_to_look = []
+
+    amount = 0
+    index = 0
+    while(check):
         for c in check:
             bs.append(c[1])
             
@@ -74,58 +78,47 @@ def main():
                 asd.append(i)
         print(asd)
         for vals in asd:
-            print(vals)
             for val in check:
-                print(val)
                 if val[1] == vals:
-                    for remove_these in check:
-                        if remove_these[0] == val[0]:
-                            print(f"REMOVING: {remove_these}")
-                            check.remove(remove_these)
+                    number_to_remove = val[0]
+                    rows_to_look.append((number_to_remove, val[1]))
+                    print(f"number_to_remove = {number_to_remove}")
+                    for tuple in check:
+                        if tuple[0] == number_to_remove:
+                            index = check.index(tuple)
+                            amount += 1
+            print(index)
+            print(amount)
+            for i in range(index, index + amount):
+                print(f"POPPED: {check[index-amount+1]}")
+                check.pop(index - amount + 1)
+        print(check)
+        index = 0
+        amount = 0
         asd = []
         bs = []
 
-    print(check)
-    rows_to_look = []
+    print(rows_to_look)
+    rows_for_departures = []
     for i in range(len(all_ranges)):
         if all_ranges[i][0:3] == "dep":
-            rows_to_look.append(i)
+            rows_for_departures.append(i)
 
-    #print(rows_to_look)
+    resulting_cols = []
+    for i in range(0, 6):
+        for val in rows_to_look:
+            if val[1] == i:
+                resulting_cols.append(val[0])
+                break
+    
     my_ticket = split_lines[1][13:].split(",")
-    #print(my_ticket)
     result = 1
-    for i in range(6):
-        result *= int(my_ticket[i])
+    
+    print(resulting_cols)
+    for index in resulting_cols:
+        result *= int(my_ticket[index])
+    
     return result         
-
-    """ while(True):
-        if all(not value for value in try_this.values()):
-            break
-        #print(len(try_this[0])
-        for value in try_this.values():
-            if len(value) == 2:
-                check.append((value[0], value[1]))
-            print(value)
-            for k in range(0, 19):
-                #print(i)
-                try:
-                    if k not in value:
-                        for key in try_this.keys():
-                            try:
-                                valid_tickets[i][k]
-                                vals = try_this[key]
-                                #print(vals)
-                                index = vals.index(k)
-                                vals.remove(k)
-                                vals.pop(index - 1)
-                                #print(vals)
-                                try_this[key] = vals
-                                #print("REMOVING")
-                            except ValueError:
-                                pass
-                except ValueError:
-                    pass """
 
 
 
