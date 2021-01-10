@@ -7,11 +7,21 @@ def main():
     i = input.readline()
     
     while i: # get input into a list of lists
-        lines.append([i[:-1]])
+        if(i[-1] == "\n"):
+            lines.append([i[:-1]])
+        else:
+            lines.append([i])
         i = input.readline()
+    behind = []
+    infront = []
+    for i in range(len(lines)):
+        for j in range(len(lines[i])):
+            infront.append(["........"])
+            behind.append(["........"])
 
+    print(infront)
     print(lines)    
-
+    print(behind)
 
 if __name__ == '__main__':
     start_time = time.time()
