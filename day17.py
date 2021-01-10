@@ -19,9 +19,12 @@ def main():
             infront.append(["........"])
             behind.append(["........"])
 
-    print(infront)
-    print(lines)    
-    print(behind)
+    new_behind = []
+    new_infront = []
+
+    active_neighbours = 0
+    for _ in range(6): #6 rounds
+        
 
 if __name__ == '__main__':
     start_time = time.time()
