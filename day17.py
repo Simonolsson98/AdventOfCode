@@ -29,8 +29,8 @@ def main():
             for j in range(len(lines[i])):
                 try:
                     cube_to_check = lines[i][j]
-                    neighbours.append(lines[i][j+1])
-                    neighbours.append(lines[i][j-1])
+                    neighbours.append(lines[i][j+1][j+1])
+                    neighbours.append(lines[i][j-1][j-1])
                     
                     neighbours.append(lines[i+1][j+1])
                     neighbours.append(lines[i+1][j])
