@@ -3,12 +3,14 @@ import time
 
 def main():
     input = open("day17_input.txt")
-    lines = ""
+    lines = []
     i = input.readline()
     
-    while i: # get input into a list of strings
-        lines += i
-        i = input.readline()    
+    while i: # get input into a list of lists
+        lines.append([i[:-1]])
+        i = input.readline()
+
+    print(lines)    
 
 
 if __name__ == '__main__':
