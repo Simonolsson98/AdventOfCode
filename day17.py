@@ -30,11 +30,10 @@ def main():
     cube_to_check = None
     neighbours = []
     for _ in range(6): #6 rounds
-        for i in range(len(lines)):
-            print(len(lines[i]))
+        for i in range(len(lines)):            
             for j in range(8):
-                print(f"i: {i}, j: {j}")
                 try:
+                    print(f"CUBE: {cube_to_check}")
                     cube_to_check = lines[i][0][j]
                 except IndexError:
                     pass
@@ -159,13 +158,20 @@ def main():
                     pass
 
                 print(f"NEIGHBOURCOUNT: {neighbours.count('#')} and number of neighbours: {len(neighbours)} ")
-                print(neighbours)
-                print(behind)
+                #print(neighbours)
+                #print(behind)
                 if(cube_to_check == "#" and neighbours.count("#") == 2 or neighbours.count("#") == 3):
                     print("DID NUFFIN")
                 elif(cube_to_check == "." and neighbours.count("#") == 3):
-                    print("GOT INACTIVE")
-                    new_lines[i][j][j] = "."
+                    print("STAYED INACTIVE")
+                    print(new_lines[i][0][j])
+                    new_lines[i][0][j] = new_lines[i][0][j:] + "." + new_lines[i][0][:j+1]
+                    print(new_lines[i][0][j])
+                    return
+                else: 
+                    new_lines[i][0][j] = new_lines[i][0][j:] + "." + new_lines[i][0][:j+1]
+                    print("GOT ACTIVE")
+                
                 neighbours = [] #reset for next cube
 
                 cube_to_check = behind[i][0][j]
@@ -254,7 +260,10 @@ def main():
                     print("DID NUFFIN")
                 elif(cube_to_check == "." and neighbours.count("#") == 3):
                     print("GOT INACTIVE")
-                    new_behind[i][j][j] = "."
+                    print(new_behind[i][0][j])
+                    new_behind[i][0][j] = new_behind[i][0][:j] + "." + new_behind[i][0][j+1:]
+                    print(new_behind[i][0][j])
+                    return
                 neighbours = []
 
                 cube_to_check = str(infront[i][0])[j]
@@ -343,7 +352,7 @@ def main():
                     print("DID NUFFIN")
                 elif(cube_to_check == "." and neighbours.count("#") == 3):
                     print("GOT INACTIVE")
-                    new_infront[i][j][j] = "."
+                    new_infront[i][0][j] = "."
                 neighbours = []
 
                 lines = new_lines
@@ -352,7 +361,7 @@ def main():
 
     count = 0
     for i in range(len(lines)):
-        count += lines[i].count("#")
+        count += lines[i][0].count("#")
     
     print(lines)
     return count
