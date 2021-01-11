@@ -13,7 +13,6 @@ def main():
             lines.append([i])
         i = input.readline()
 
-    print(lines)
     behind = []
     infront = []
     for i in range(len(lines)):
@@ -21,146 +20,147 @@ def main():
             infront.append(['........'])
             behind.append(['........'])
 
-    print(infront)
-    print(infront[0][0])
-    print(behind)
+    print(f"LINES: {lines}")
+    print(f"INFRONT: {infront}")
+    print(f"BEHIND: {behind}")
     #return
     new_behind = behind
     new_infront = infront
     new_lines = lines
     cube_to_check = None
     neighbours = []
-    
     for _ in range(6): #6 rounds
         for i in range(len(lines)):
-            for j in range(len(lines[i])):
+            print(len(lines[i]))
+            for j in range(8):
+                print(f"i: {i}, j: {j}")
                 try:
-                    cube_to_check = lines[i][j][j]
+                    cube_to_check = lines[i][0][j]
                 except IndexError:
                     pass
                 try:
-                    neighbours.append(lines[i][j+1][j+1])
+                    neighbours.append(lines[i][0][j+1])
                 except IndexError:
                     pass                
                 try:
                     if j-1 > 0:
-                        neighbours.append(lines[i][j-1][j-1])    
+                        neighbours.append(lines[i][0][j-1])    
                 except IndexError:
                     pass
                 try:
-                    neighbours.append(lines[i+1][j+1][j+1])
+                    neighbours.append(lines[i+1][0][j+1])
                 except IndexError:
                     pass
                 try:
-                    neighbours.append(lines[i+1][j][j])
-                except IndexError:
-                    pass
-                try:
-                    if j-1 > 0:
-                        neighbours.append(lines[i+1][j-1][j-1])
-                except IndexError:
-                    pass
-                try:
-                    if i-1 >= 0:
-                        neighbours.append(lines[i-1][j+1][j+1])
-                except IndexError:
-                    pass
-                try:
-                    if i-1 >= 0:
-                        neighbours.append(lines[i-1][j][j])    
-                except IndexError:
-                    pass
-                try:
-                    if j-1 > 0 and i-1 >= 0:
-                        neighbours.append(lines[i-1][j-1][j-1])
-                except IndexError:
-                    pass
-                try:
-                    neighbours.append(infront[i][j+1][j+1])
-                except IndexError:
-                    pass
-                try:
-                    neighbours.append(infront[i][j][j])
+                    neighbours.append(lines[i+1][0][j])
                 except IndexError:
                     pass
                 try:
                     if j-1 > 0:
-                        neighbours.append(infront[i][j-1][j-1])
+                        neighbours.append(lines[i+1][0][j-1])
                 except IndexError:
                     pass
                 try:
-                    neighbours.append(infront[i+1][j+1][j+1])
+                    if i-1 >= 0:
+                        neighbours.append(lines[i-1][0][j+1])
                 except IndexError:
                     pass
                 try:
-                    neighbours.append(infront[i+1][j][j])
+                    if i-1 >= 0:
+                        neighbours.append(lines[i-1][0][j])    
                 except IndexError:
                     pass
                 try:
                     if j-1 > 0 and i-1 >= 0:
-                        neighbours.append(infront[i+1][j-1][j-1])
+                        neighbours.append(lines[i-1][0][j-1])
+                except IndexError:
+                    pass
+                try:
+                    neighbours.append(infront[i][0][j+1])
+                except IndexError:
+                    pass
+                try:
+                    neighbours.append(infront[i][0][j])
+                except IndexError:
+                    pass
+                try:
+                    if j-1 > 0:
+                        neighbours.append(infront[i][0][j-1])
+                except IndexError:
+                    pass
+                try:
+                    neighbours.append(infront[i+1][0][j+1])
+                except IndexError:
+                    pass
+                try:
+                    neighbours.append(infront[i+1][0][j])
+                except IndexError:
+                    pass
+                try:
+                    if j-1 > 0 and i-1 >= 0:
+                        neighbours.append(infront[i+1][0][j-1])
                 except IndexError:
                     pass
                 try:
                     if i-1 >= 0:
-                        neighbours.append(infront[i-1][j+1][j+1])
+                        neighbours.append(infront[i-1][0][j+1])
                 except IndexError:
                     pass
                 try:
                     if i-1 >= 0:
-                        neighbours.append(infront[i-1][j][j])
+                        neighbours.append(infront[i-1][0][j])
                 except IndexError:
                     pass
                 try:
                     if j-1 >= 0 and i-1 >= 0:
-                        neighbours.append(infront[i-1][j-1][j-1])
+                        neighbours.append(infront[i-1][0][j-1])
                 except IndexError:
                     pass
                 try:
-                    neighbours.append(behind[i][j+1][j+1])
+                    neighbours.append(behind[i][0][j+1])
                 except IndexError:
                     pass
                 try:
-                    neighbours.append(behind[i][j][j])
-                except IndexError:
-                    pass
-                try:
-                    if j-1 >= 0:
-                        neighbours.append(behind[i][j-1][j-1])
-                except IndexError:
-                    pass
-                try:
-                    neighbours.append(behind[i+1][j+1][j+1])
-                except IndexError:
-                    pass
-                try:
-                    neighbours.append(behind[i+1][j][j])
+                    neighbours.append(behind[i][0][j])
                 except IndexError:
                     pass
                 try:
                     if j-1 >= 0:
-                        neighbours.append(behind[i+1][j-1][j-1])
+                        neighbours.append(behind[i][0][j-1])
+                except IndexError:
+                    pass
+                try:
+                    neighbours.append(behind[i+1][0][j+1])
+                except IndexError:
+                    pass
+                try:
+                    neighbours.append(behind[i+1][0][j])
+                except IndexError:
+                    pass
+                try:
+                    if j-1 >= 0:
+                        neighbours.append(behind[i+1][0][j-1])
                 except IndexError:
                     pass
                 try:
                     if i-1 >= 0:
-                        neighbours.append(behind[i-1][j+1][j+1])
+                        neighbours.append(behind[i-1][0][j+1])
                 except IndexError:
                     pass
                 try:
                     if i-1 >= 0:
-                        neighbours.append(behind[i-1][j][j])
+                        neighbours.append(behind[i-1][0][j])
                 except IndexError:
                     pass
                 try:
                     if j-1 >= 0 and i-1 >= 0:
-                        neighbours.append(behind[i-1][j-1][j-1])
+                        neighbours.append(behind[i-1][0][j-1])
                 except IndexError:
                     pass
 
-                
-                #print(f"NEIGHBOURCOUNT: {neighbours.count('#')} and number of neighbours: {len(neighbours)} ")
-                #print(neighbours)
+                print(f"NEIGHBOURCOUNT: {neighbours.count('#')} and number of neighbours: {len(neighbours)} ")
+                print(neighbours)
+                print(behind)
                 if(cube_to_check == "#" and neighbours.count("#") == 2 or neighbours.count("#") == 3):
                     print("DID NUFFIN")
                 elif(cube_to_check == "." and neighbours.count("#") == 3):
@@ -168,83 +168,83 @@ def main():
                     new_lines[i][j][j] = "."
                 neighbours = [] #reset for next cube
 
-                cube_to_check = behind[i][j][j]
+                cube_to_check = behind[i][0][j]
                 try:
                     if j-1 >= 0:
-                        neighbours.append(behind[i][j-1][j-1])
+                        neighbours.append(behind[i][0][j-1])
                 except IndexError:
                     pass
                 try:    
-                    neighbours.append(behind[i][j+1][j+1])
+                    neighbours.append(behind[i][0][j+1])
                 except IndexError:
                     pass
                 try:
                     if j-1 >= 0 and i-1 >= 0:
-                        neighbours.append(behind[i-1][j-1][j-1])
+                        neighbours.append(behind[i-1][0][j-1])
                 except IndexError:
                     pass
                 try:    
                     if i-1 >= 0:
-                        neighbours.append(behind[i-1][j+1][j+1])
+                        neighbours.append(behind[i-1][0][j+1])
                 except IndexError:
                     pass
                 try:    
                     if i-1 >= 0:
-                        neighbours.append(behind[i-1][j][j])
+                        neighbours.append(behind[i-1][0][j])
                 except IndexError:
                     pass
                 try:
                     if j-1 >= 0:
-                        neighbours.append(behind[i+1][j-1][j-1])
+                        neighbours.append(behind[i+1][0][j-1])
                 except IndexError:
                     pass
                 try:    
-                    neighbours.append(behind[i+1][j+1][j+1])
+                    neighbours.append(behind[i+1][0][j+1])
                 except IndexError:
                     pass
                 try:    
-                    neighbours.append(behind[i+1][j][j])
+                    neighbours.append(behind[i+1][0][j])
                 except IndexError:
                     pass
                 try:
-                    neighbours.append(lines[i][j+1][j+1])
+                    neighbours.append(lines[i][0][j+1])
                 except IndexError:
                     pass  
                 try:
-                    neighbours.append(lines[i][j][j])
+                    neighbours.append(lines[i][0][j])
                 except IndexError:
                     pass                
                 try:
                     if j-1 > 0:
-                        neighbours.append(lines[i][j-1][j-1])    
+                        neighbours.append(lines[i][0][j-1])    
                 except IndexError:
                     pass
                 try:
-                    neighbours.append(lines[i+1][j+1][j+1])
+                    neighbours.append(lines[i+1][0][j+1])
                 except IndexError:
                     pass
                 try:
-                    neighbours.append(lines[i+1][j][j])
+                    neighbours.append(lines[i+1][0][j])
                 except IndexError:
                     pass
                 try:
                     if j-1 > 0:
-                        neighbours.append(lines[i+1][j-1][j-1])
+                        neighbours.append(lines[i+1][0][j-1])
                 except IndexError:
                     pass
                 try:
                     if i-1 >= 0:
-                        neighbours.append(lines[i-1][j+1][j+1])
+                        neighbours.append(lines[i-1][0][j+1])
                 except IndexError:
                     pass
                 try:
                     if i-1 >= 0:
-                        neighbours.append(lines[i-1][j][j])    
+                        neighbours.append(lines[i-1][0][j])    
                 except IndexError:
                     pass
                 try:
                     if j-1 > 0 and i-1 >= 0:
-                        neighbours.append(lines[i-1][j-1][j-1])
+                        neighbours.append(lines[i-1][0][j-1])
                 except IndexError:
                     pass
 
@@ -257,83 +257,83 @@ def main():
                     new_behind[i][j][j] = "."
                 neighbours = []
 
-                cube_to_check = infront[i][j][j]
+                cube_to_check = str(infront[i][0])[j]
                 try:
                     if j-1 >= 0:
-                        neighbours.append(infront[i][j-1][j-1])
+                        neighbours.append(infront[i][0][j-1])
                 except IndexError:
                     pass
                 try:    
-                    neighbours.append(infront[i][j+1][j+1])
+                    neighbours.append(infront[i][0][j+1])
                 except IndexError:
                     pass
                 try:
                     if j-1 >= 0 and i-1 >= 0:
-                        neighbours.append(infront[i-1][j-1][j-1])
+                        neighbours.append(infront[i-1][0][j-1])
                 except IndexError:
                     pass
                 try:    
                     if i-1 >= 0:
-                        neighbours.append(infront[i-1][j+1][j+1])
+                        neighbours.append(infront[i-1][0][j+1])
                 except IndexError:
                     pass
                 try:    
                     if i-1 >= 0:
-                        neighbours.append(infront[i-1][j][j])
+                        neighbours.append(infront[i-1][0][j])
                 except IndexError:
                     pass
                 try:
                     if j-1 >= 0:
-                        neighbours.append(infront[i+1][j-1][j-1])
+                        neighbours.append(infront[i+1][0][j-1])
                 except IndexError:
                     pass
                 try:    
-                    neighbours.append(infront[i+1][j+1][j+1])
+                    neighbours.append(infront[i+1][0][j+1])
                 except IndexError:
                     pass
                 try:    
-                    neighbours.append(infront[i+1][j][j])
+                    neighbours.append(infront[i+1][0][j])
                 except IndexError:
                     pass
                 try:
-                    neighbours.append(lines[i][j+1][j+1])
+                    neighbours.append(lines[i][0][j+1])
                 except IndexError:
                     pass  
                 try:
-                    neighbours.append(lines[i][j][j])
+                    neighbours.append(lines[i][0][j])
                 except IndexError:
                     pass                
                 try:
                     if j-1 > 0:
-                        neighbours.append(lines[i][j-1][j-1])    
+                        neighbours.append(lines[i][0][j-1])    
                 except IndexError:
                     pass
                 try:
-                    neighbours.append(lines[i+1][j+1][j+1])
+                    neighbours.append(lines[i+1][0][j+1])
                 except IndexError:
                     pass
                 try:
-                    neighbours.append(lines[i+1][j][j])
+                    neighbours.append(lines[i+1][0][j])
                 except IndexError:
                     pass
                 try:
                     if j-1 > 0:
-                        neighbours.append(lines[i+1][j-1][j-1])
+                        neighbours.append(lines[i+1][0][j-1])
                 except IndexError:
                     pass
                 try:
                     if i-1 >= 0:
-                        neighbours.append(lines[i-1][j+1][j+1])
+                        neighbours.append(lines[i-1][0][j+1])
                 except IndexError:
                     pass
                 try:
                     if i-1 >= 0:
-                        neighbours.append(lines[i-1][j][j])    
+                        neighbours.append(lines[i-1][0][j])    
                 except IndexError:
                     pass
                 try:
                     if j-1 > 0 and i-1 >= 0:
-                        neighbours.append(lines[i-1][j-1][j-1])
+                        neighbours.append(lines[i-1][0][j-1])
                 except IndexError:
                     pass
                 
