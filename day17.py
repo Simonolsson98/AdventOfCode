@@ -1,4 +1,3 @@
-from os import remove
 import time
 
 def main():
@@ -15,23 +14,18 @@ def main():
 
     behind = []
     infront = []
-    infront.append(['................................'])
-    infront.append(['................................'])
-    infront.append(['................................'])
     for i in range(len(lines)):
         for j in range(len(lines[i])):
-            infront.append(['................................'])
-            behind.append(['................................'])
-    infront.append(['................................'])
-    infront.append(['................................'])
-    infront.append(['................................'])
+            infront.append(['........'])
+            behind.append(['........'])
     print(f"LINES: {lines}")
     print(f"INFRONT: {infront}")
     print(f"BEHIND: {behind}")
-    #return
+
     new_behind = behind
     new_infront = infront
     new_lines = lines
+
     cube_to_check = None
     neighbours = []
     for _ in range(6): #6 rounds
