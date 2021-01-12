@@ -5,19 +5,27 @@ def main():
     i = input.readline()    
     result = 0
     substr = ""
+    iter = 1
     while i: # get input into a list of lists
         for j in range(len(i)):
             substr = substr + i[j]
-            #print(substr)
+            print(substr)
+            pares = ""
+            while substr[0] == "(" and len(substr) != substr.count("("):
+                pares += substr[0]
+                substr = substr[1:]
             try:
                 substr = str(eval(substr))
-                #print(eval(substr))
+                substr = pares + substr
+                print(substr)
             except SyntaxError:
-                pass
+                substr = pares + substr
+
         result += int(substr)
-        #print(int(substr))
+        print(f"row: {iter} for {int(substr)}")
         substr = ""
         i = input.readline()
+        iter += 1
 
     return result
 
