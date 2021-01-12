@@ -10,26 +10,26 @@ def main():
         for j in range(len(i)):
             substr = substr + i[j]
 
-            pares = ""
+            parentheses = ""
             while substr[0] == "(" and len(substr) != substr.count("("):
-                pares += substr[0]
+                parentheses += substr[0]
                 substr = substr[1:]
             if substr.count(")") >= 1: #if unmatching parentheses'
-                substr = pares + substr
+                substr = parentheses + substr
                 try:
                     index = 0
                     for k in range(len(substr)):
-                        if substr[k] == "(":
+                        if substr[k] == "(": #get the inner parentheses index
                             index = k
-                    substr = substr[:index] + str(eval(substr[index:]))
+                    substr = substr[:index] + str(eval(substr[index:])) #try to parse the expression inside the opening parentheses
                 except SyntaxError:
-                    substr = pares + substr
+                    substr = parentheses + substr
             else:
                 try:
                     substr = str(eval(substr))
-                    substr = pares + substr
+                    substr = parentheses + substr
                 except SyntaxError:
-                    substr = pares + substr
+                    substr = parentheses + substr
                     index = 0
                     for k in range(len(substr)):
                         if substr[k] == "(":
@@ -40,13 +40,12 @@ def main():
                         pass
 
         result += int(eval(substr)) #add result from the row
-        print(int(eval(substr)))
-        substr = ""
+
+        substr = "" #reset substring for next equation
         i = input.readline()
         iter += 1
 
     return result
-
 
 
 if __name__ == '__main__':
