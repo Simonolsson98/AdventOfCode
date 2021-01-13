@@ -24,11 +24,8 @@ def main():
                     break
             split_on_plus = substr[start_index+1:end_index].split(" * ")
             sub_eval = ""
-            for expr in split_on_plus:
-                try:
-                    sub_eval += str(eval(expr))
-                except SyntaxError:
-                    pass
+            for expr in split_on_plus:    
+                sub_eval += str(eval(expr)) #no need for try: here, since expressions no longer can be mismatched parentheses for example
                 sub_eval += " * " #add the operator back again, after evaluating the (addition) operation
             sub_eval = sub_eval[:-3] #remove the last multiplication operator, ugly but works..
             substr = substr[:start_index] + str(eval(sub_eval)) + substr[end_index+1:]
@@ -37,10 +34,7 @@ def main():
         split_on_plus = substr.split(" * ")
         last_expr = 1
         for expr in split_on_plus:
-            try:
-                last_expr *= eval(expr)
-            except SyntaxError:
-                pass
+            last_expr *= eval(expr) #no need for try: here either
 
         result += last_expr
         split_on_plus = []
