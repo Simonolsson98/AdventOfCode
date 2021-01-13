@@ -31,9 +31,9 @@ def main():
                 result += " * "
             result = result[:-3] #remove the last multiplication operator, ugly but works..
             print(result)
-            substr = substr[:start_index-1] + str(eval(result)) + substr[end_index+1:]
+            substr = substr[:start_index] + str(eval(result)) + substr[end_index+1:]
             print(substr)
-            for k in range(start_index, end_index):
+            for k in range(start_index, end_index): #we reach a state where we dont have any parentheses left (hopefully)
                 
                 try: 
                     eval(substr[:k])
