@@ -3,14 +3,13 @@ import time
 def main():
     input = open("day19_input.txt")
     i = input.readline()   
-    lines = []
+    lines = ""
     while i:
-        lines.append(i)
+        lines += i
         i = input.readline()
     
     rules = lines.split("\n\n")[0]
     messages = lines.split("\n\n")[1]
-
 
 if __name__ == '__main__':
     start_time = time.time()
