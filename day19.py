@@ -1,5 +1,5 @@
 import time
-
+import re
 def main():
     input = open("day19_input.txt")
     i = input.readline()   
@@ -10,17 +10,22 @@ def main():
     
     rules = lines.split("\n\n")[0].split("\n")
     messages = lines.split("\n\n")[1]
-    print(rules)
+    #print(rules)
     rule_dict = {}
+    char_rule = []
     for rule in rules:
-        
-        print(rule_dict)
+        if(re.match(r"letter", rule[4:])):
+            char_rule.append(rule)
         try:
-            either_rule = rule[1:].split(" | ")
-            rule_dict[rule[0:2]] = either_rule
+            either_rule = rule.split(" | ")
+            either_rule[0] = either_rule[0].split(":")[1][1:]
+            rule_dict[rule[0:1]] = either_rule
             #sub_rules = either_rule.split(" ")
         except IndentationError:
             pass
+        
+    print(rule_dict)
+    return None
 if __name__ == '__main__':
     start_time = time.time()
     returnVal = main() 
