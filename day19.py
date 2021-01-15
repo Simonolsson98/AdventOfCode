@@ -30,11 +30,24 @@ def main():
     valid_messages = 0
     for message in messages:
         for rule in rule_dict.keys():
-            print(rule_dict["92"])
-            while re.match(r"[a-z]", rule_dict[rule]) == None:
-                list_of_rules = rule_dict[rule].split(" ")
-                for ind_rule in list_of_rules:
-                    pass
+            find_rules(rule, message, rule_dict)            
+    
+
+def find_rules(rule, message, rule_dict):
+    if re.match(r"[a-z]", rule_dict[rule]) == None:
+        list_of_rules = rule_dict[rule].split(", ")
+        for ind_rule in list_of_rules:
+            spl_rule = ind_rule.split(" ")
+            if(find_rules(spl_rule[0], message, rule_dict)) == True and find_rules(spl_rule[1], message, rule_dict) == True:
+                return True
+            else: 
+                return False
+    else: #we hopefully reached the rule with the terminal in it, i.e "a" or "b" or similar
+        if message[0] == rule_dict[rule]:
+            message = message[1:]
+            return True
+        else:
+            return False
 
     print(rule_dict)
     return None
