@@ -14,19 +14,28 @@ def main():
     rule_dict = {}
     char_rule = []
     for rule in rules:
-        if(re.match(r"[a-z]", rule[4:])):
-            char_rule.append(rule)
+        if(re.match(r"[a-z]", rule.split(":")[1][1:])):
+            char_rule.append(rule.split(":")[1][1:])
+            break
         try:
             either_rule = rule.split(" | ")
             either_rule[0] = either_rule[0].split(":")[1][1:]
-            rule_dict[rule[0:2]] = either_rule
+            try: 
+                rule_dict[rule[0:2]] = [either_rule[0], either_rule[1]]
+            except IndexError:
+                rule_dict[rule[0:2]] = [either_rule[0]]
             #sub_rules = either_rule.split(" ")
         except IndentationError:
             pass
     valid_messages = 0
     for message in messages:
         for rule in rule_dict.keys():
-            pass
+            print(rule_dict["92"])
+            while re.match(r"[a-z]", rule_dict[rule]) == None:
+                list_of_rules = rule_dict[rule].split(" ")
+                for ind_rule in list_of_rules:
+                    pass
+
     print(rule_dict)
     return None
 if __name__ == '__main__':
