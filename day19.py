@@ -37,34 +37,33 @@ def main():
             for val in rule_dict[rule]:
                 sub_rule = val.split(" ")
                 for each_sub_rule in sub_rule:
-                    print(each_sub_rule)
                     if find_rules(each_sub_rule, message, rule_dict) == False:
                         break
                     if message == "":
                         valid_messages += 1
                         break
-                        
 
 def find_rules(each_sub_rule, message, rule_dict):
-    print(rule_dict[each_sub_rule])
-    if len(re.findall("\"[a-z]\"", rule_dict[each_sub_rule])) == 0:
-        rule_or_rule = rule_dict[each_sub_rule].split(", ")
-        #print(rule_or_rule)
-        for ind_rule in rule_or_rule:
-            spl_rule = ind_rule.split(" ")
-            if find_rules(spl_rule[0], message, rule_dict) == True and find_rules(spl_rule[1], message, rule_dict) == True:
-                return True
-            else: 
-                return False
-    else: #we hopefully reached the rule with the terminal in it, i.e "a" or "b" or similar
-        print(f"message[0]: {message[0]}")
-        if message[0] == rule_dict[each_sub_rule][1]:
-            print(f"message changed from {message} \n")
-            message = message[1:]
-            print(f"to {message}")
-            return True
-        else:
-            return False
+    print(f"each_s_r: {each_sub_rule}")
+    if isinstance(rule_dict[each_sub_rule], str):
+        #we hopefully reached the rule with the terminal in it, i.e "a" or "b" or similar
+                print(f"message[0]: {message[0]}")
+                if message[0] == rule_dict[each_sub_rule][1]:
+                    print(f"message changed from {message} \n")
+                    message = message[1:]
+                    print(f"to {message}")
+                    return True
+                else:
+                    return False
+    else:
+        for either_rule in rule_dict[each_sub_rule]:
+            seq_of_rules = either_rule.split(", ")
+            for ind_rule in seq_of_rules:
+                list_of_rules = either_rule.split(" ")
+                for indiviual_rule in list_of_rules:
+                    if not find_rules(indiviual_rule, message, rule_dict):
+                        return False
+        return True                
 
     print(rule_dict)
     return None
