@@ -33,15 +33,18 @@ def main():
     print(rule_dict)
     global message
     for message in messages:
-        for rule in rule_dict.keys():
-            for val in rule_dict[rule]:
-                sub_rule = val.split(" ")
-                for each_sub_rule in sub_rule:
-                    if find_rules(each_sub_rule, message, rule_dict) == False:
-                        break
-                    if message == "":
-                        valid_messages += 1
-                        break
+        rule = '0' #only need to check rule 0 according to spec
+        for val in rule_dict[rule]:
+            print(f"CHECKING: {val}")
+            sub_rule = val.split(" ")
+            temp_message = message
+            for each_sub_rule in sub_rule:
+                if find_rules(each_sub_rule, message, rule_dict) == False:
+                    print("rule didnt work, break! (reset message pls)")
+                    break
+            message = temp_message
+        if len(message) == 0:
+            valid_messages += 1
 
 def find_rules(each_sub_rule, message, rule_dict):
     print(f"each_s_r: {each_sub_rule}")
