@@ -35,17 +35,19 @@ def main():
     for message in messages:
         rule = '0' #only need to check rule 0 according to spec
         temp_message = message
+
         for val in rule_dict[rule]:
+            print("PLS?")
             sub_rule = val.split(" ")
             print(sub_rule)
             for each_sub_rule in sub_rule:
                 print(f"CHECKING: {each_sub_rule}")
                 if find_rules(each_sub_rule, message, rule_dict) == False:
-                    print("rule didnt work, break! (reset message pls)")
+                    print("rule didnt work, break! (reset message pls)") #should break to next message here...
                     break
-            message = temp_message
         if len(message) == 0:
             valid_messages += 1
+        message = temp_message        
 
 def find_rules(each_sub_rule, message, rule_dict):
     print(rule_dict[each_sub_rule].count("\""))
@@ -62,7 +64,7 @@ def find_rules(each_sub_rule, message, rule_dict):
     else:
         for either_rule in rule_dict[each_sub_rule]:
             if isinstance(either_rule, str) and len(either_rule) == 1:
-                if not find_rules(rule_dict[either_rule], message, rule_dict):
+                if not find_rules(rule_dict[each_sub_rule], message, rule_dict):
                     return False
             else:
                 print(either_rule)
