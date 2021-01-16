@@ -19,31 +19,43 @@ def main():
             break
         try:
             either_rule = rule.split(" | ")
+            key = either_rule[0].split(":")[0]
             either_rule[0] = either_rule[0].split(":")[1][1:]
             try: 
-                rule_dict[rule[0:2]] = [either_rule[0], either_rule[1]]
+                rule_dict[key] = either_rule[0], either_rule[1]
             except IndexError:
-                rule_dict[rule[0:2]] = [either_rule[0]]
-            #sub_rules = either_rule.split(" ")
+                rule_dict[key] = either_rule[0]
         except IndentationError:
             pass
     valid_messages = 0
+
+    print(rule_dict)
+    global message
     for message in messages:
         for rule in rule_dict.keys():
-            find_rules(rule, message, rule_dict)            
-    
+            for val in rule_dict[rule]:
+                sub_rule = val.split(" ")
+                for each_sub_rule in sub_rule:
+                    print(each_sub_rule)
+                    if find_rules(each_sub_rule, message, rule_dict) == False:
+                        break
+                    if message == "":
+                        valid_messages += 1
+                        break
+                        
 
-def find_rules(rule, message, rule_dict):
-    if re.match(r"[a-z]", rule_dict[rule]) == None:
-        list_of_rules = rule_dict[rule].split(", ")
-        for ind_rule in list_of_rules:
+def find_rules(each_sub_rule, message, rule_dict):
+    print(rule_dict[each_sub_rule])
+    if len(re.findall("[a-z]", rule_dict[each_sub_rule])) == 1:
+        for ind_rule in rule_dict[each_sub_rule][0]:
             spl_rule = ind_rule.split(" ")
-            if(find_rules(spl_rule[0], message, rule_dict)) == True and find_rules(spl_rule[1], message, rule_dict) == True:
+            if find_rules(spl_rule[0], message, rule_dict) == True and find_rules(spl_rule[1], message, rule_dict) == True:
                 return True
             else: 
                 return False
     else: #we hopefully reached the rule with the terminal in it, i.e "a" or "b" or similar
-        if message[0] == rule_dict[rule]:
+        print("HERE?")
+        if message[0] == rule_dict[each_sub_rule]:
             message = message[1:]
             return True
         else:
