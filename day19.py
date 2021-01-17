@@ -27,27 +27,20 @@ def main():
         rule_dict[key] = to_add
    
     valid_messages = 0
-
-    global message
-    print(rule_dict)
+    global message #has to be global, since we are doing recursion
     for message in messages:
-        print(f"next message: {message}")
         should_break = False
         rule = '0' #only need to check rule 0 according to spec
 
         for val in rule_dict[rule]:
             sub_rule = val.split(" ")
             for each_sub_rule in sub_rule:
-                print(f"SUB_RULE: {sub_rule}")
-                print(f"CHECKING: {each_sub_rule} WITH MESSAGE: {message}")
                 if not find_rules(each_sub_rule, message, rule_dict):
-                    print("rule didnt work, break!") #should break to next message here...
-                    should_break = True
+                    should_break = True #should break to next message here...
                     break
-            if should_break == True:
+            if should_break == True: #scuffed way to break out of nested for loop
                 break
-        if len(message) == 0:
-            print(f"MESSAGE COMPILED PROPERLY")
+        if len(message) == 0: #if entire message was parsed, it is a successful message!
             valid_messages += 1
 
     return valid_messages 
@@ -57,13 +50,11 @@ def find_rules(each_sub_rule, msg, rule_dict):
     message = msg
     temp_message = message
 
-    print(f"for rule {each_sub_rule}: {rule_dict[each_sub_rule]}")
+    #print(f"for rule {each_sub_rule}: {rule_dict[each_sub_rule]}")
     if rule_dict[each_sub_rule][0].count("\"") > 0: #we hopefully reached the rule with the terminal in it, i.e "a" or "b" or similar
         try:
-            if message[0] == rule_dict[each_sub_rule][0][1]:
-                print(f"message changed from {message}")
-                message = message[1:]
-                print(f"to {message}")
+            if message[0] == rule_dict[each_sub_rule][0][1]: #if first char in message matches the rule, it passes parsing!
+                message = message[1:] #so we remove this char and end this recursive branch
                 return True
             else:
                 return False
@@ -71,7 +62,7 @@ def find_rules(each_sub_rule, msg, rule_dict):
             return False
     else:
         length = -1
-        counter = 0
+        counter = 0 #used to check if we passed all the rules in a sequence of rules
         for either_rule in rule_dict[each_sub_rule]:
             if isinstance(either_rule, str) and len(either_rule) == 1: #if 2: 5 for example 
                 if not find_rules(rule_dict[each_sub_rule], message, rule_dict):
@@ -79,23 +70,16 @@ def find_rules(each_sub_rule, msg, rule_dict):
             else: #either_rule is ex: 10 8
                 split_rules = either_rule.split(" ")
                 length = len(split_rules)
-                print(f"split_rules: {split_rules} and len: {len(split_rules)}")
                 for indiviual_rule in split_rules:
                     if not find_rules(indiviual_rule, message, rule_dict): #if either of the rules fail to parse, break
                         message = temp_message #reset message
                         break
                     counter += 1
-                print(f"message: {message}")
-    print(f"counter: {counter} and len: {length}")
-    if counter == length:
-        print("SEQUENCE FINISHED SUCCESSFULLY")
-        counter = 0
-        return True #sequence hopefully finished here
-    else:
-        print("SEQUENCE DIDNT FINISH SUCCESSFULLY")
-        counter = 0
-        return False
+                if counter == length: #if this is true, we passed all the rules in a sequence (either of the rule sequences split with a "|")
+                    #counter = 0
+                    return True #sequence hopefully finished here
+                counter = 0
 if __name__ == '__main__':
     start_time = time.time()
     returnVal = main() 
-    print(f"answer = {returnVal}, execution time: {time.time() - start_time} seconds") #answer =
+    print(f"answer = {returnVal}, execution time: {time.time() - start_time} seconds") #answer = 190
