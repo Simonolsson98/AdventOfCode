@@ -31,6 +31,7 @@ def main():
     global message
     print(rule_dict)
     for message in messages:
+        print(f"next message: {message}")
         should_break = False
         rule = '0' #only need to check rule 0 according to spec
 
@@ -46,8 +47,8 @@ def main():
             if should_break == True:
                 break
         if len(message) == 0:
+            print(f"MESSAGE COMPILED PROPERLY")
             valid_messages += 1
-        print("next message:")
 
     return valid_messages 
 
@@ -69,21 +70,31 @@ def find_rules(each_sub_rule, msg, rule_dict):
         except IndexError:
             return False
     else:
+        length = -1
+        counter = 0
         for either_rule in rule_dict[each_sub_rule]:
             if isinstance(either_rule, str) and len(either_rule) == 1: #if 2: 5 for example 
                 if not find_rules(rule_dict[each_sub_rule], message, rule_dict):
                     return False
-            else:
-                #either_rule is ex: 10 8
+            else: #either_rule is ex: 10 8
                 split_rules = either_rule.split(" ")
-                print(f"split_rules: {split_rules}")
+                length = len(split_rules)
+                print(f"split_rules: {split_rules} and len: {len(split_rules)}")
                 for indiviual_rule in split_rules:
                     if not find_rules(indiviual_rule, message, rule_dict): #if either of the rules fail to parse, break
                         message = temp_message #reset message
                         break
+                    counter += 1
                 print(f"message: {message}")
-        return True
-
+    print(f"counter: {counter} and len: {length}")
+    if counter == length:
+        print("SEQUENCE FINISHED SUCCESSFULLY")
+        counter = 0
+        return True #sequence hopefully finished here
+    else:
+        print("SEQUENCE DIDNT FINISH SUCCESSFULLY")
+        counter = 0
+        return False
 if __name__ == '__main__':
     start_time = time.time()
     returnVal = main() 
