@@ -50,7 +50,6 @@ def find_rules(each_sub_rule, msg, rule_dict):
     message = msg
     temp_message = message
 
-    #print(f"for rule {each_sub_rule}: {rule_dict[each_sub_rule]}")
     if rule_dict[each_sub_rule][0].count("\"") > 0: #we hopefully reached the rule with the terminal in it, i.e "a" or "b" or similar
         try:
             if message[0] == rule_dict[each_sub_rule][0][1]: #if first char in message matches the rule, it passes parsing!
@@ -79,7 +78,8 @@ def find_rules(each_sub_rule, msg, rule_dict):
                     #counter = 0
                     return True #sequence hopefully finished here
                 counter = 0
+
 if __name__ == '__main__':
     start_time = time.time()
     returnVal = main() 
-    print(f"answer = {returnVal}, execution time: {time.time() - start_time} seconds") #answer = 190
+    print(f"answer = {returnVal}, execution time: {time.time() - start_time} seconds") #answer = 
