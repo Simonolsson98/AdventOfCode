@@ -33,6 +33,7 @@ def main():
         rule = '0' #only need to check rule 0 according to spec
 
         for val in rule_dict[rule]:
+            print(val)
             sub_rule = val.split(" ")
             for each_sub_rule in sub_rule:
                 if not find_rules(each_sub_rule, message, rule_dict):
@@ -62,7 +63,13 @@ def find_rules(each_sub_rule, msg, rule_dict):
     else:
         length = -1
         counter = 0 #used to check if we passed all the rules in a sequence of rules
+        if each_sub_rule == 8:
+            rule_dict[each_sub_rule] = "42 | 42 8"
+        elif each_sub_rule == 11:
+            rule_dict[each_sub_rule] = "42 31 | 42 11 31"
+        #print(f"{each_sub_rule}, : {rule_dict[each_sub_rule]}")
         for either_rule in rule_dict[each_sub_rule]:
+            
             if isinstance(either_rule, str) and len(either_rule) == 1: #if 2: 5 for example 
                 if not find_rules(rule_dict[each_sub_rule], message, rule_dict):
                     return False
