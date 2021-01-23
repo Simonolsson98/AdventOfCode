@@ -6,8 +6,14 @@ def main():
     substr = ""
     while i: # get input into a list of lists
         substr = substr + i
-    grids = substr.split("\n")
-    
+        i = input.readline()
+    grids = substr.split("\n\n")
+    tiles = []
+    for grid in grids:
+        tiles.append(grid.split(":")[0].split(" ")[1])
+
+    print(grids)
+    print(tiles)
 
 
 
