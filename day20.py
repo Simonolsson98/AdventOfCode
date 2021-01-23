@@ -11,6 +11,8 @@ def main():
     tiles = []
     for grid in grids:
         tiles.append(grid.split(":")[0].split(" ")[1])
+        grid = grid.split(":")[1]
+
 
     print(grids)
     print(tiles)
