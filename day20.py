@@ -31,6 +31,11 @@ def main():
         right_col.append(tempR)
         left_col.append(tempL)
 
+    print(right_col)
+    all_edges = right_col + left_col + top_row + bottom_row
+
+    #for each grid, check top and left edges if they have matching pairs...
+    return
 
 
 if __name__ == '__main__':
