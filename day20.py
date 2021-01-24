@@ -36,10 +36,7 @@ def main():
         left_col.append(tempL[::-1])
     
     all_edges = right_col + left_col + top_row + bottom_row
-    top_left_index = 0
-    top_right_index = 0
-    bottom_right_index = 0
-    bottom_left_index = 0
+    indices = []
 
     for each_grid in indiv_grids: #adding each edge to lists for further checks
         left_col_check = ""
@@ -50,26 +47,44 @@ def main():
             right_col_check = right_col_check + row[-1]
             left_col_check = left_col_check + row[0]
         
-        if all_edges.count(top_row) == 1 and all_edges.count(left_col_check) == 1 and all_edges.count(top_row[::-1]) == 1 and all_edges.count(left_col_check[::-1]) == 1:
-            print(f"changing1 for tile {each_grid}")
-            top_left_index = indiv_grids.index(each_grid)
-        elif all_edges.count(top_row) == 1 and all_edges.count(right_col_check) == 1 and all_edges.count(top_row[::-1]) == 1 and all_edges.count(right_col_check[::-1]) == 1:
-            top_right_index = indiv_grids.index(each_grid)
-            print(f"changing2 for tile {each_grid}")
-        elif all_edges.count(bottom_row) == 1 and all_edges.count(right_col_check) == 1: #and all_edges.count(bottom_row[::-1]) == 1 and all_edges.count(right_col_check[::-1]) == 1:
-            bottom_right_index = indiv_grids.index(each_grid)
-            print(f"changing3 for tile {each_grid}")
-        elif all_edges.count(bottom_row) == 1 and all_edges.count(left_col_check) == 1 and all_edges.count(bottom_row[::-1]) == 1 and all_edges.count(left_col_check[::-1]) == 1:
-            bottom_left_index = indiv_grids.index(each_grid)
-            print(f"changing4 for tile {each_grid}")
+        if all_edges.count(top_row) == 1:
+            if all_edges.count(right_col_check) == 1 or all_edges.count(left_col_check) == 1:
+                indices.append(indiv_grids.index(each_grid))
+        
+        elif all_edges.count(top_row[::-1]):
+            if all_edges.count(right_col_check) == 1 or all_edges.count(left_col_check) == 1:
+                indices.append(indiv_grids.index(each_grid))
 
-    return
+        elif all_edges.count(right_col_check) == 1:
+            if all_edges.count(top_row) == 1 or all_edges.count(bottom_row) == 1:
+                indices.append(indiv_grids.index(each_grid))
+        
+        elif all_edges.count(right_col_check[::-1]) == 1:
+            if all_edges.count(top_row) == 1 or all_edges.count(bottom_row) == 1:
+                indices.append(indiv_grids.index(each_grid))
+        
+        elif all_edges.count(left_col_check) == 1:
+            if all_edges.count(top_row) == 1 or all_edges.count(bottom_row) == 1:
+                indices.append(indiv_grids.index(each_grid))
+        
+        elif all_edges.count(left_col_check[::-1]) == 1:
+            if all_edges.count(top_row) == 1 or all_edges.count(bottom_row) == 1:
+                indices.append(indiv_grids.index(each_grid))
+        
+        elif all_edges.count(bottom_row) == 1:
+            if all_edges.count(left_col_check) == 1 or all_edges.count(right_col_check) == 1:
+                indices.append(indiv_grids.index(each_grid))
+        
+        elif all_edges.count(bottom_row[::-1]) == 1:
+            if all_edges.count(left_col_check) == 1 or all_edges.count(right_col_check) == 1:
+                indices.append(indiv_grids.index(each_grid))
 
-    print(f"{tiles[top_left_index]} for {indiv_grids[top_left_index]}")
-    print(f"{tiles[top_right_index]} for {indiv_grids[top_right_index]}")
-    print(f"{tiles[bottom_right_index]} for {indiv_grids[bottom_right_index]}")
-    print(f"{tiles[bottom_left_index]} for {indiv_grids[bottom_left_index]}")
-    return int(tiles[top_right_index]) * int(tiles[top_left_index]) * int(tiles[bottom_right_index]) * int(tiles[bottom_left_index])
+    print(indices)
+    print(tiles[indices[0]])
+    print(tiles[indices[1]])
+    print(tiles[indices[2]])
+    print(tiles[indices[3]])
+    return int(tiles[indices[0]]) * int(tiles[indices[1]]) * int(tiles[indices[2]]) * int(tiles[indices[3]])
 
 
 if __name__ == '__main__':
