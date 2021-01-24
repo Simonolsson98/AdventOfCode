@@ -22,43 +22,57 @@ def main():
 
     for each_grid in indiv_grids: #adding each edge to lists for further checks
         top_row.append(each_grid[0])
+        top_row.append(each_grid[0][::-1])
         bottom_row.append(each_grid[-1])
+        bottom_row.append(each_grid[-1][::-1])
         tempR = ""
         tempL = ""
         for row in each_grid:
             tempR = tempR + row[-1]
             tempL = tempL + row[0]
         right_col.append(tempR)
+        right_col.append(tempR[::-1])
         left_col.append(tempL)
+        left_col.append(tempL[::-1])
     
     all_edges = right_col + left_col + top_row + bottom_row
-
     top_left_index = 0
     top_right_index = 0
     bottom_right_index = 0
     bottom_left_index = 0
+
     for each_grid in indiv_grids: #adding each edge to lists for further checks
         left_col_check = ""
         right_col_check = ""
         top_row = each_grid[0]
         bottom_row = each_grid[-1]
         for row in each_grid:
-            left_col_check = left_col_check + row[0]
             right_col_check = right_col_check + row[-1]
-
-        if all_edges.count(top_row) == 1 and all_edges.count(left_col_check):
-            top_left_index = indiv_grids.index(each_grid)
-        elif all_edges.count(top_row) == 1 and all_edges.count(right_col_check):
-            top_right_index = indiv_grids.index(each_grid)
-        elif all_edges.count(bottom_row) == 1 and all_edges.count(right_col_check):
-            bottom_right_index = indiv_grids.index(each_grid)
-        elif all_edges.count(bottom_row) == 1 and all_edges.count(left_col_check):
-            bottom_left_index = indiv_grids.index(each_grid)
+            left_col_check = left_col_check + row[0]
         
+        if all_edges.count(top_row) == 1 and all_edges.count(left_col_check) == 1 and all_edges.count(top_row[::-1]) == 1 and all_edges.count(left_col_check[::-1]) == 1:
+            print(f"changing1 for tile {each_grid}")
+            top_left_index = indiv_grids.index(each_grid)
+        elif all_edges.count(top_row) == 1 and all_edges.count(right_col_check) == 1 and all_edges.count(top_row[::-1]) == 1 and all_edges.count(right_col_check[::-1]) == 1:
+            top_right_index = indiv_grids.index(each_grid)
+            print(f"changing2 for tile {each_grid}")
+        elif all_edges.count(bottom_row) == 1 and all_edges.count(right_col_check) == 1: #and all_edges.count(bottom_row[::-1]) == 1 and all_edges.count(right_col_check[::-1]) == 1:
+            bottom_right_index = indiv_grids.index(each_grid)
+            print(f"changing3 for tile {each_grid}")
+        elif all_edges.count(bottom_row) == 1 and all_edges.count(left_col_check) == 1 and all_edges.count(bottom_row[::-1]) == 1 and all_edges.count(left_col_check[::-1]) == 1:
+            bottom_left_index = indiv_grids.index(each_grid)
+            print(f"changing4 for tile {each_grid}")
+
     return
+
+    print(f"{tiles[top_left_index]} for {indiv_grids[top_left_index]}")
+    print(f"{tiles[top_right_index]} for {indiv_grids[top_right_index]}")
+    print(f"{tiles[bottom_right_index]} for {indiv_grids[bottom_right_index]}")
+    print(f"{tiles[bottom_left_index]} for {indiv_grids[bottom_left_index]}")
+    return int(tiles[top_right_index]) * int(tiles[top_left_index]) * int(tiles[bottom_right_index]) * int(tiles[bottom_left_index])
 
 
 if __name__ == '__main__':
     start_time = time.time()
     returnVal = main() 
-    print(f"answer = {returnVal}, execution time: {time.time() - start_time} seconds") #answer = 
+    print(f"answer = {returnVal}, execution time: {time.time() - start_time} seconds") #answer < 24552019533359 
