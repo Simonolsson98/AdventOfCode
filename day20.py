@@ -30,11 +30,31 @@ def main():
             tempL = tempL + row[0]
         right_col.append(tempR)
         left_col.append(tempL)
-
-    print(right_col)
+    
     all_edges = right_col + left_col + top_row + bottom_row
 
-    #for each grid, check top and left edges if they have matching pairs...
+    top_left_index = 0
+    top_right_index = 0
+    bottom_right_index = 0
+    bottom_left_index = 0
+    for each_grid in indiv_grids: #adding each edge to lists for further checks
+        left_col_check = ""
+        right_col_check = ""
+        top_row = each_grid[0]
+        bottom_row = each_grid[-1]
+        for row in each_grid:
+            left_col_check = left_col_check + row[0]
+            right_col_check = right_col_check + row[-1]
+
+        if all_edges.count(top_row) == 1 and all_edges.count(left_col_check):
+            top_left_index = indiv_grids.index(each_grid)
+        elif all_edges.count(top_row) == 1 and all_edges.count(right_col_check):
+            top_right_index = indiv_grids.index(each_grid)
+        elif all_edges.count(bottom_row) == 1 and all_edges.count(right_col_check):
+            bottom_right_index = indiv_grids.index(each_grid)
+        elif all_edges.count(bottom_row) == 1 and all_edges.count(left_col_check):
+            bottom_left_index = indiv_grids.index(each_grid)
+        
     return
 
 
