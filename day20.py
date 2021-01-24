@@ -80,12 +80,11 @@ def main():
                 indices.append(indiv_grids.index(each_grid))
 
     print(indices)
-    print(tiles[indices[0]])
-    print(tiles[indices[1]])
-    print(tiles[indices[2]])
-    print(tiles[indices[3]])
-    return int(tiles[indices[0]]) * int(tiles[indices[1]]) * int(tiles[indices[2]]) * int(tiles[indices[3]])
-
+    result = 1
+    for index in indices:
+        print(tiles[index])
+        result *= int(tiles[index])
+    return result
 
 if __name__ == '__main__':
     start_time = time.time()
