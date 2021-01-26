@@ -5,7 +5,6 @@ def main():
     i = input.readline()    
     substr = ""
     while i: # get input into a list of lists
-        #i = i[:-1]
         substr = substr + i
         i = input.readline()
     grids = substr.split("\n\n")
@@ -15,7 +14,8 @@ def main():
     right_col = []
     left_col = []
     indiv_grids = []
-    for i in range(len(grids)):
+
+    for i in range(len(grids)): #doing input handling
         tiles.append(grids[i].split(":")[0].split(" ")[1])
         grids[i] = grids[i].split(":")[1]
         indiv_grids.append(grids[i].split("\n")[1:])
@@ -47,6 +47,8 @@ def main():
             right_col_check = right_col_check + row[-1]
             left_col_check = left_col_check + row[0]
         
+        #if one edge has no matching one, check if either of the adjacent edges dont have a match either, if true
+        #add this tile number to a list
         if all_edges.count(top_row) == 1:
             if all_edges.count(right_col_check) == 1 or all_edges.count(left_col_check) == 1:
                 indices.append(indiv_grids.index(each_grid))
@@ -72,13 +74,12 @@ def main():
             if all_edges.count(left_col_check) == 1 or all_edges.count(right_col_check) == 1:
                 indices.append(indiv_grids.index(each_grid))
 
-    print(indices)
     result = 1
     for index in indices:
-        result *= int(tiles[index])
+        result *= int(tiles[index]) #multiply the resulting tiles
     return result
 
 if __name__ == '__main__':
     start_time = time.time()
     returnVal = main() 
-    print(f"answer = {returnVal}, execution time: {time.time() - start_time} seconds") #answer < 24552019533359 
+    print(f"answer = {returnVal}, execution time: {time.time() - start_time} seconds") #answer = 15405893262491 
