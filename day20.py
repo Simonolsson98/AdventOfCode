@@ -51,7 +51,7 @@ def main():
             if all_edges.count(right_col_check) == 1 or all_edges.count(left_col_check) == 1:
                 indices.append(indiv_grids.index(each_grid))
         
-        elif all_edges.count(top_row[::-1]):
+        elif all_edges.count(top_row[::-1]) == 1:
             if all_edges.count(right_col_check) == 1 or all_edges.count(left_col_check) == 1:
                 indices.append(indiv_grids.index(each_grid))
 
@@ -77,12 +77,12 @@ def main():
         
         elif all_edges.count(bottom_row[::-1]) == 1:
             if all_edges.count(left_col_check) == 1 or all_edges.count(right_col_check) == 1:
+                print(f"adding {indiv_grids.index(each_grid)}")
                 indices.append(indiv_grids.index(each_grid))
 
     print(indices)
     result = 1
     for index in indices:
-        print(tiles[index])
         result *= int(tiles[index])
     return result
 
