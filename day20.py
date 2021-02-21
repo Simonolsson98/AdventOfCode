@@ -42,7 +42,7 @@ def main():
         left_col_check = ""
         right_col_check = ""
         top_row = each_grid[0] #top row
-        bottom_row = each_grid[-1]
+        bottom_row = each_grid[-1] #bottom row
         for row in each_grid:
             right_col_check = right_col_check + row[-1]
             left_col_check = left_col_check + row[0]
