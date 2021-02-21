@@ -10,7 +10,7 @@ def main():
     grids = substr.split("\n\n")
     tiles = []
     top_row = [] #top row
-    bottom_row = []
+    bottom_row = [] #bottom row
     right_col = []
     left_col = []
     indiv_grids = []
