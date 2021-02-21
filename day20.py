@@ -9,7 +9,7 @@ def main():
         i = input.readline()
     grids = substr.split("\n\n")
     tiles = []
-    top_row = []
+    top_row = [] #top row
     bottom_row = []
     right_col = []
     left_col = []
