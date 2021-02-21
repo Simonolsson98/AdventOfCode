@@ -41,7 +41,7 @@ def main():
     for each_grid in indiv_grids: #adding each edge to lists for further checks
         left_col_check = ""
         right_col_check = ""
-        top_row = each_grid[0]
+        top_row = each_grid[0] #top row
         bottom_row = each_grid[-1]
         for row in each_grid:
             right_col_check = right_col_check + row[-1]
