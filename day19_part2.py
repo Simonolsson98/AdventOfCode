@@ -22,7 +22,7 @@ def main():
         key = either_rule[0].split(":")[0]
         either_rule[0] = either_rule[0].split(":")[1][1:]
         to_add = []
-        for rule_asd in either_rule:
+        for rule_asd in either_rule: #loop through rules separated by |
             to_add.append(rule_asd)
         rule_dict[key] = to_add
    
