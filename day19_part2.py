@@ -8,7 +8,7 @@ def main():
         lines += i
         i = input.readline()
     
-    rules = lines.split("\n\n")[0].split("\n")
+    rulesr = lines.split("\n\n")[0].split("\n")
     messages = lines.split("\n\n")[1]
     messages = messages.split("\n")
 
