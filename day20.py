@@ -32,7 +32,7 @@ def main():
             tempL = tempL + row[0]
         right_col.append(tempR) #adding right col
         right_col.append(tempR[::-1]) #both directions
-        left_col.append(tempL)
+        left_col.append(tempL) #adding left col
         left_col.append(tempL[::-1])
     
     all_edges = right_col + left_col + top_row + bottom_row
