@@ -4,7 +4,7 @@ def main():
     input = open("day20_input.txt")
     i = input.readline()    
     substr = ""
-    while i: # get input into a list of lists
+    while i: # get input into a string
         substr = substr + i
         i = input.readline()
     grids = substr.split("\n\n")
