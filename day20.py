@@ -1,7 +1,7 @@
 import time
 
 def main():
-    input = open("day_input.txt")
+    input = open("day20_input.txt")
     i = input.readline()    
     substr = ""
     while i: # get input into a list of lists
