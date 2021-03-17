@@ -11,7 +11,7 @@ def main():
     tiles = []
     top_row = [] #top row
     bottom_row = [] #bottom row
-    right_col = []
+    right_col = [] #right column
     left_col = []
     indiv_grids = []
 
