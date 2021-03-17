@@ -26,7 +26,7 @@ def main():
         bottom_row.append(each_grid[-1])
         bottom_row.append(each_grid[-1][::-1])
         tempR = "" #temp var
-        tempL = "" 
+        tempL = "" #temp var
         for row in each_grid:
             tempR = tempR + row[-1]
             tempL = tempL + row[0]
