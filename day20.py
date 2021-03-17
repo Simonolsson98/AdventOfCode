@@ -12,7 +12,7 @@ def main():
     top_row = [] #top row
     bottom_row = [] #bottom row
     right_col = [] #right column
-    left_col = []
+    left_col = [] #left column
     indiv_grids = []
 
     for i in range(len(grids)): #doing input handling
