@@ -6,7 +6,7 @@ def main():
     substr = ""
     while i: # get input into a list of lists
         substr = substr + i #manipulate input into string
-        i = input.readline()
+        i = input.readline() #continue to next line of input
     grids = substr.split("\n\n")
     tiles = []
     indiv_grids = []
