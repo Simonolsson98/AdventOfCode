@@ -14,8 +14,7 @@ def main():
         tiles.append(grids[i].split(":")[0].split(" ")[1])
         grids[i] = grids[i].split(":")[1]
         indiv_grids.append(grids[i].split("\n")[1:])
-
-    
+        
     return None
 
 if __name__ == '__main__':
