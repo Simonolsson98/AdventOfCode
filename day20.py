@@ -29,7 +29,7 @@ def main():
         tempL = "" #temp var
         for row in each_grid:
             tempR = tempR + row[-1]
-            tempL = tempL + row[0]
+            tempL = tempL + row[0] 
         right_col.append(tempR) #adding right col
         right_col.append(tempR[::-1]) #both directions
         left_col.append(tempL) #adding left col
