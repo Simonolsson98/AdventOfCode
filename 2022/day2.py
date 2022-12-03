@@ -18,7 +18,7 @@ def defineWinOrLoss(opponent, myself):
 			return 5
 		else:
 			return 9
-	else: #opponent = 'C'
+	else:
 		if (myself == 'X'):
 			return 7
 		elif(myself == 'Y'):
@@ -41,7 +41,7 @@ def decideWinOrLoss(opponent, myself):
 			return 5
 		else:
 			return 9
-	else: #opponent = 'C'
+	else:
 		if (myself == 'X'):
 			return 2
 		elif(myself == 'Y'):
