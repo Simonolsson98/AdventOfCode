@@ -20,7 +20,7 @@ for element in shared_chars:
 	prio_total += ElementToPrio(list(element)[0])
 
 # part 1: 
-print("solution for part 1: " + str(prio_total))
+print("day3: solution for part 1: " + str(prio_total))
 
 #--------------------------------part 2--------------------------------------------#
 
@@ -41,4 +41,4 @@ for element in shared_chars:
 	prio_total += ElementToPrio(list(element)[0])
 
 # part 2:  
-print("solution for part 2: " + str(prio_total))
+print("day3: solution for part 2: " + str(prio_total))
