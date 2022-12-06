@@ -55,7 +55,7 @@ while i:
 	i = input.readline()
 
 # part 1: 
-print("solution for part 1: " + str(part1_total))
+print("day2: solution for part 1: " + str(part1_total))
 
 # part 2:  
-print("solution for part 2: " + str(part2_total))
+print("day2: solution for part 2: " + str(part2_total))
