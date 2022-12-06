@@ -12,8 +12,8 @@ while i:
 		i = input.readline()
 
 # part 1: 
-print("solution for part 1: " + str(max(lines)))
+print("day1: solution for part 1: " + str(max(lines)))
 
 # part 2: 
 topThreeSum = (sum(sorted(lines, reverse=True)[:3]))
-print("solution for part 2: " + str(topThreeSum))
+print("day1: solution for part 2: " + str(topThreeSum))
