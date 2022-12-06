@@ -10,7 +10,6 @@ while i:
 	if(i[:-1] == "\n"):
 		i = i[:-1]
 
-
 # part 1: 
 print("day6: solution for part 1: " + str())
 
