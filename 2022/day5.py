@@ -55,11 +55,11 @@ for stack in part1_stacks:
 	message += stack[len(stack) - 1]
 
 # part 1: 
-print("solution for part 1: " + str(message))
+print("day5: solution for part 1: " + str(message))
 
 message = ''
 for stack in part2_stacks:
 	message += stack[len(stack) - 1]
 
 # part 2:  
-print("solution for part 2: " + str(message))
+print("day5: solution for part 2: " + str(message))
