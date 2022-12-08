@@ -38,10 +38,7 @@ total = 70_000_000
 needed = 30_000_000
 freeUpAmount = needed - (total - totalUsed)
 
-closest = needed
-for val in newDict.values():
-	if((val - freeUpAmount) < closest and (val - freeUpAmount) > 0):
-		closest = val
+closest = min([val for val in newDict.values() if val - freeUpAmount > 0])
 
 # part 2:  
 print("day7: solution for part 2: " + str(closest))
