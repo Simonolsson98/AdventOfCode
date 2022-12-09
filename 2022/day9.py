@@ -77,7 +77,6 @@ while i:
 	for _ in range(int(amount)):
 		(hy, hx, ty, tx) = OneStep(direction, -1, head_y, head_x, tail_y, tail_x)
 		(head_y, head_x, tail_y, tail_x) = (hy, hx, ty, tx)
-		print(head_y, head_x, tail_y, tail_x)
 	
 	i = input.readline()[:-1]
 
