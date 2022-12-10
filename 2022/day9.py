@@ -46,17 +46,17 @@ def DetermineTailMovement(head_y, head_x, tail_y, tail_x):
 			tail_y += 1
 	return (head_y, head_x, tail_y, tail_x)
 
-def Solve(i, k):
+def Solve(i, number_of_knots):
 	while i:
 		instruction = i.split(" ")
 		direction = instruction[0]
 		amount = instruction[1]
 		for _ in range(int(amount)):
 			(knots_y[0], knots_x[0]) = MoveHead(direction, knots_y[0], knots_x[0])
-			for j in range(k):
-				if(k == 1):
-					(knots_y[0], knots_x[0], knots_y[1], knots_x[1]) = MoveTail(direction, "part1", knots_y[0], knots_x[0], knots_y[1], knots_x[1])
-				else:
+			if(number_of_knots == 1):
+				(knots_y[0], knots_x[0], knots_y[1], knots_x[1]) = MoveTail(direction, "part1", knots_y[0], knots_x[0], knots_y[1], knots_x[1])
+			else:
+				for j in range(number_of_knots):
 					(knots_y[j], knots_x[j], knots_y[j + 1], knots_x[j + 1]) = MoveTail(direction, j, knots_y[j], knots_x[j], knots_y[j + 1], knots_x[j + 1])
 		i = input_part.readline()[:-1]
 
