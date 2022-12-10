@@ -11,27 +11,9 @@ def MoveHead(direc, head_y, head_x):
 	return (head_y, head_x)
 
 def MoveTail(direc, j, head_y, head_x, tail_y, tail_x):
-	match direc:
-		case "U":
-			(head_y, head_x, tail_y, tail_x) = DetermineTailMovement(head_y, head_x, tail_y, tail_x)		
-			if(j == 8 or j == "part1"):
-				visited_locations.append((tail_y, tail_x))
-
-		case "D":
-			(head_y, head_x, tail_y, tail_x) = DetermineTailMovement(head_y, head_x, tail_y, tail_x)
-			if(j == 8 or j == "part1"):
-				visited_locations.append((tail_y, tail_x))
-
-		case "L":
-			(head_y, head_x, tail_y, tail_x) = DetermineTailMovement(head_y, head_x, tail_y, tail_x)
-			if(j == 8 or j == "part1"):
-				visited_locations.append((tail_y, tail_x))
-
-		case "R":
-			(head_y, head_x, tail_y, tail_x) = DetermineTailMovement(head_y, head_x, tail_y, tail_x)
-			if(j == 8 or j == "part1"):
-				visited_locations.append((tail_y, tail_x))
-
+	(head_y, head_x, tail_y, tail_x) = DetermineTailMovement(head_y, head_x, tail_y, tail_x)		
+	if(j == 8 or j == "part1"):
+		visited_locations.append((tail_y, tail_x))
 	return (head_y, head_x, tail_y, tail_x)
 
 def DetermineTailMovement(head_y, head_x, tail_y, tail_x):
@@ -80,7 +62,7 @@ def Solve(i, k):
 
 input_part = open("day9_input.txt")
 i = input_part.readline()[:-1]
-knots_x, knots_y = [500, 500, 500, 500, 500, 500, 500, 500, 500, 500], [500, 500, 500, 500, 500, 500, 500, 500, 500, 500]
+knots_x, knots_y = [0] * 10, [0] * 10
 
 visited_locations = []
 Solve(i, number_of_knots:=1)
@@ -90,7 +72,7 @@ print("day9: solution for part 1: " + str(len(set(visited_locations))))
 
 input_part = open("day9_input.txt")
 i = input_part.readline()[:-1]
-knots_x, knots_y = [500, 500, 500, 500, 500, 500, 500, 500, 500, 500], [500, 500, 500, 500, 500, 500, 500, 500, 500, 500]
+knots_x, knots_y = [0] * 10, [0] * 10
 
 visited_locations = []
 Solve(i, number_of_knots:=9)
