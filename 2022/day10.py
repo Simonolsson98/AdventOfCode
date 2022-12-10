@@ -10,17 +10,14 @@ while i:
 	if(len(instr) == 1):
 		cycle += 1
 		if(cycle == 20 or (cycle + 20) % 40 == 0):
-			print(f"value of reg: {register} at {cycle}")
 			strength += (cycle * register)
 	else:
 		cycle += 1
 		if(cycle == 20 or (cycle + 20) % 40 == 0):
-			print(f"value of reg: {register} at {cycle}")
 			strength += (cycle * register)
 		cycle += 1
 		register += int(instr[1])
 		if(cycle == 20 or (cycle + 20) % 40 == 0):
-			print(f"value of reg: {register} at {cycle}")
 			strength += (cycle * register)
 
 	i = input.readline()[:-1]
