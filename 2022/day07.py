@@ -1,4 +1,4 @@
-input = open("day7_input.txt")
+input = open("day07_input.txt")
 i = input.readline()[:-1]
 
 newDict = {"/": 0}

@@ -1,4 +1,4 @@
-input = open("day3_input.txt")
+input = open("day03_input.txt")
 i = input.readline()
 
 def ElementToPrio(element):
@@ -24,7 +24,7 @@ print("day3: solution for part 1: " + str(prio_total))
 
 #--------------------------------part 2--------------------------------------------#
 
-input = open("day3_input.txt")
+input = open("day03_input.txt")
 i = input.readline()
 
 shared_chars = []

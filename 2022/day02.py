@@ -1,4 +1,4 @@
-input = open("day2_input.txt")
+input = open("day02_input.txt")
 i = input.readline()
 part1_total = 0
 part2_total = 0

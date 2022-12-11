@@ -1,4 +1,4 @@
-input = open("day5_input.txt")
+input = open("day05_input.txt")
 
 i = input.readline()
 if(i[:-1] == "\n"):

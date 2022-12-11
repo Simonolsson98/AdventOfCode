@@ -1,4 +1,4 @@
-input = open("day4_input.txt")
+input = open("day04_input.txt")
 i = input.readline()
 
 fully_contained = 0
