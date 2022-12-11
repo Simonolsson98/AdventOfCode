@@ -1,6 +1,6 @@
 import math
 
-moduloOfAllDivisors = 3 * 5 * 2 * 13 * 11 * 17
+moduloOfAllDivisors = 3 * 5 * 2 * 13 * 11 * 17 * 19 * 7
 
 def Round(i, part, round_num, starting_items):
 	while i:
