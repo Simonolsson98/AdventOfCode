@@ -48,9 +48,7 @@ def DetermineTailMovement(head_y, head_x, tail_y, tail_x):
 
 def Solve(i, number_of_knots):
 	while i:
-		instruction = i.split(" ")
-		direction = instruction[0]
-		amount = instruction[1]
+		direction, amount = i.split(" ")
 		for _ in range(int(amount)):
 			(knots_y[0], knots_x[0]) = MoveHead(direction, knots_y[0], knots_x[0])
 			if(number_of_knots == 1):
