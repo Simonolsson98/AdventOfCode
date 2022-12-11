@@ -1,4 +1,4 @@
-input_str = open("day6_input.txt").read()
+input_str = open("day06_input.txt").read()
 
 def FindSolution(marker_length):
 	recent = []

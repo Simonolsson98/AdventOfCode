@@ -1,4 +1,4 @@
-input = open("day1_input.txt")
+input = open("day01_input.txt")
 lines = []
 i = input.readline()
 subtotal = 0;

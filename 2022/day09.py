@@ -58,7 +58,7 @@ def Solve(i, number_of_knots):
 					(knots_y[j], knots_x[j], knots_y[j + 1], knots_x[j + 1]) = MoveTail(direction, j, knots_y[j], knots_x[j], knots_y[j + 1], knots_x[j + 1])
 		i = input_part.readline()[:-1]
 
-input_part = open("day9_input.txt")
+input_part = open("day09_input.txt")
 i = input_part.readline()[:-1]
 knots_x, knots_y = [0] * 10, [0] * 10
 
@@ -68,7 +68,7 @@ Solve(i, number_of_knots:=1)
 # part 1: 
 print("day9: solution for part 1: " + str(len(set(visited_locations))))
 
-input_part = open("day9_input.txt")
+input_part = open("day09_input.txt")
 i = input_part.readline()[:-1]
 knots_x, knots_y = [0] * 10, [0] * 10
 

@@ -1,4 +1,4 @@
-input = open("day8_input.txt")
+input = open("day08_input.txt")
 i = input.readline()[:-1]
 arr = []
 count_of_visible_trees = 0
