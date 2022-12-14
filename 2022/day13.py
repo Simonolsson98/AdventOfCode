@@ -43,7 +43,7 @@ def EntryList(i, packet, some_list):
 			return some_list, i
 		elif(packet[i] == ","):
 			pass
-		#number to add
+		# number to add
 		else:
 			some_list.append(packet[i:].split(",")[0].split("]")[0])
 			i += len(packet[i:].split(",")[0].split("]")[0]) - 1
@@ -91,11 +91,11 @@ while i := input.readline()[:-1]:
 # part 1: 
 print("day13: solution for part 1: " + str(sum(right_order)))
 
-#to account for index not being zero based 
+# to account for index not being zero based 
 lower_than_2 += 1
 lower_than_6 += 1
 
-#[[2]] is lower than [[6]]
+# [[2]] is lower than [[6]]
 lower_than_6 += 1
 
 # part 2:  
