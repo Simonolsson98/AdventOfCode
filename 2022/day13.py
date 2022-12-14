@@ -54,6 +54,9 @@ def EntryList(i, packet, some_list):
 input = open("day13_input.txt")
 right_order = []
 index = 1
+
+lower_than_6 = 0
+lower_than_2 = 0
 while i := input.readline()[:-1]:
 	first_packet = i
 	final_list = []
@@ -71,12 +74,29 @@ while i := input.readline()[:-1]:
 	if(val == 2):
 		right_order.append(index)
 
+	# part2, count how many packets are to the left of either decider
+	if(Compare(first_flat_packet, [['2']]) == 2):
+		lower_than_2 += 1
+	if(Compare(first_flat_packet, [['6']]) == 2):
+		lower_than_6 += 1
+	if(Compare(second_flat_packet, [['2']]) == 2):
+		lower_than_2 += 1
+	if(Compare(second_flat_packet, [['6']]) == 2):
+		lower_than_6 += 1
+
 	#newline
 	i = input.readline()[:-1]
 	index += 1
-	
+
 # part 1: 
 print("day13: solution for part 1: " + str(sum(right_order)))
 
+#to account for index not being zero based 
+lower_than_2 += 1
+lower_than_6 += 1
+
+#[[2]] is lower than [[6]]
+lower_than_6 += 1
+
 # part 2:  
-print("day13: solution for part 2: " + str())
+print("day13: solution for part 2: " + str(lower_than_2 * lower_than_6))
