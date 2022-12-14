@@ -71,7 +71,7 @@ def EntryList(i, packet, some_list):
 
 	return some_list
 
-asd = 0
+asd = []
 input = open("day13_input.txt")
 right_order = []
 index = 1
@@ -95,14 +95,14 @@ while i := input.readline()[:-1]:
 	if(val == 1 or val == -1):
 		pass
 	if(val == 2):
-		asd += 1
+		asd.append(index - 1)
 		right_order.append(index)
 
 	#newline
 	i = input.readline()[:-1]
 	index += 1
 	
-print(asd)
+print(sum(asd))
 # ANS: 5529
 # part 1: 
 print("day13: solution for part 1: " + str(sum(right_order)))
