@@ -1,44 +1,54 @@
 def Compare(val1, val2):
 	if(isinstance(val1, str) and isinstance(val2, str)):
-		#print(f"comparing {val1} to {val2}")
-		if(int(val1) > int(val2)):
-			return 1
-		elif(int(val1) < int(val2)):
+		print(f"comparing {val1} to {val2}")
+		if(int(val1) < int(val2)):
 			return 2
+		elif(int(val1) > int(val2)):
+			return 1
 		else:
+			#print(f"no difference!")
 			return -1
 	elif(isinstance(val1, list) and isinstance(val2, list)):
-		#print(f"both lists: {val1} and {val2}")
-		
+		print(f"both lists: {val1} and {val2}")
 		if(len(val1) == 0 and len(val2) == 0):
-			print(f"both lengths zero for {val1}, {val2}")
 			return -1
 		elif(len(val1) == 0):
 			return 2
 		elif(len(val2) == 0):
 			return 1
 
-		for j in range(min(len(val2), len(val1))):
-			#print(f"sending with {val1[j], val2[j]}")
-			val = Compare(val1[j], val2[j])
+		for k in range(min(len(val1), len(val2))):
+			#print(f"k: {k} while looping over: {min(len(val1), len(val2))}")
+			#print(f"sending with {val1[k]} and {val2[k]}")
+			val = Compare(val1[k], val2[k])
+			#print(f"returned: {val}")
 			if(val != -1):
-				#print(f"returning {val} for values: {val1[j]} and {val2[j]}")
+				#print(f"returning {val} for values: {val1[k]} and {val2[k]}")
 				return val
+			if(len(val1[k]) == k and len(val2[k]) != k):
+				#print("what is this return2")
+				return 2
+			elif(len(val1[k]) != k and len(val2[k]) == k):
+				#print("what is this return")
+				return 1
+
+		if(len(val1) < len(val2)):
+			return 2
+		elif(len(val1) > len(val2)):
+			#print("??")
+			return 1
+		else:
+			return -1
 	else:
+		#print(f"val1: {val1} and val2: {val2}")
 		if(isinstance(val1, str)):
+			#print(f"val1: {val1} to list")
 			val1 = list(val1)
 		elif(isinstance(val2, str)):
+			#print(f"val2: {val2} to list")
 			val2 = list(val2)
 
-		if(len(val1) == 0 and len(val2) == 0):
-			print(f"both lengths zero for {val1}, {val2}")
-			return -1
-		elif(len(val1) == 0):
-			return 2
-		elif(len(val2) == 0):
-			return 1
-
-		return Compare(val1[0], val2[0])
+		return Compare(val1, val2)
 
 def EntryList(i, packet, some_list):
 	local_list = []
@@ -61,10 +71,10 @@ def EntryList(i, packet, some_list):
 
 	return some_list
 
-
+asd = 0
 input = open("day13_input.txt")
 right_order = []
-j = 1
+index = 1
 while i := input.readline()[:-1]:
 	first_packet = i
 	final_list = []
@@ -78,36 +88,22 @@ while i := input.readline()[:-1]:
 
 	flat_result2 = [item for sublist in result2 for item in sublist]
 
-	if(len(flat_result) == 0 and len(flat_result2) != 0):
-		right_order.append(j)
-		i = input.readline()[:-1]
-		continue
-	elif(len(flat_result) != 0 and len(flat_result2) == 0):
-		i = input.readline()[:-1]
-		continue
+	print(f"first:  {flat_result}")
+	print(f"second: {flat_result2}")
 
-	val = 12345
-	for (val1, val2) in zip(flat_result, flat_result2):
-		#print(f"init: {val1}, {val2}")
-		val = Compare(val1, val2)
-		
-		if(val == 1):
-			break
-		if(val == 2):
-			right_order.append(j)
-			break
-	print(val1)
-	if(val == -1):
-		if(len(val1) < len(val2)):
-			right_order.append(j)
-			break
-
+	val = Compare(flat_result, flat_result2)
+	if(val == 1 or val == -1):
+		pass
+	if(val == 2):
+		asd += 1
+		right_order.append(index)
 
 	#newline
 	i = input.readline()[:-1]
-	j += 1
-
-#between 5577 and 56xx
+	index += 1
+	
+print(asd)
+# ANS: 5529
 # part 1: 
 print("day13: solution for part 1: " + str(sum(right_order)))
 
