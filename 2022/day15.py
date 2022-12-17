@@ -30,8 +30,8 @@ def asd(i, level):
 		if(lower < 0):
 			lower = 0
 		upper = int(sensor_x) + width
-		if(upper > 4000000):
-			upper = 4000000
+		if(upper > upper_limit - 1):
+			upper = upper_limit - 1
 		ranges_2.append(range(lower, upper + 1))
 
 		i = input.readline()[:-1]
@@ -40,8 +40,12 @@ def asd(i, level):
 
 input = open("day15_input.txt")
 i = input.readline()[:-1]
+
+#4000001 for part2 but its too slow?
+upper_limit = 21
+
 beacon_loc = []
-level = 2000000
+level = int(upper_limit - 1 / 2)
 
 ranges, _ = asd(i, level)
 
@@ -55,8 +59,8 @@ res = len(set(list(sorted(all_ranges))))
 print("day15: solution for part 1: " + str(res))
 
 ranges_2 = []
-for level in range(4000001):
-	print(level)
+for level in range(upper_limit):
+	#print(level)
 	input = open("day15_input.txt")
 	i = input.readline()[:-1]
 	ranges_2 = asd(i, level)[1]
@@ -65,7 +69,7 @@ for level in range(4000001):
 	for interval in ranges_2:
 		all_ranges += interval
 
-	foo = set(range(0, 4000001))
+	foo = set(range(0, upper_limit))
 	bar = set(all_ranges)
 
 	if(foo != bar):
