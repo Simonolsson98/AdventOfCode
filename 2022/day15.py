@@ -1,3 +1,5 @@
+import time
+
 def asd(i, level):
 	ranges = []
 	ranges_2 = []
@@ -30,23 +32,22 @@ def asd(i, level):
 		if(lower < 0):
 			lower = 0
 		upper = int(sensor_x) + width
-		if(upper > upper_limit - 1):
-			upper = upper_limit - 1
+		if(upper > upper_limit):
+			upper = upper_limit
 		ranges_2.append(range(lower, upper + 1))
 
 		i = input.readline()[:-1]
 
+	ranges_2 = sorted(ranges_2, key=lambda r: r.start)
 	return ranges, ranges_2
 
 input = open("day15_input.txt")
 i = input.readline()[:-1]
 
-#4000001 for part2 but its too slow?
-upper_limit = 21
+# 21 for part1, 4000001 for part2
+upper_limit = 4000001
 
-beacon_loc = []
-level = int(upper_limit - 1 / 2)
-
+level = int((upper_limit - 1) / 2)
 ranges, _ = asd(i, level)
 
 all_ranges = []
@@ -58,25 +59,35 @@ res = len(set(list(sorted(all_ranges))))
 # part 1: 
 print("day15: solution for part 1: " + str(res))
 
-ranges_2 = []
-for level in range(upper_limit):
-	#print(level)
+start_time = time.time()
+
+foo = set(range(0, upper_limit))
+cont = False
+missing = 0
+
+#reversed here finds result faster, very ugly
+for level in reversed(range(upper_limit)):
+	if(level % 10000 == 0):
+		print(level)
+
 	input = open("day15_input.txt")
 	i = input.readline()[:-1]
 	ranges_2 = asd(i, level)[1]
+	
+	old_interval = ranges_2[0]
+	largest = old_interval.stop
+	for interval in ranges_2[1:]:
+		if(interval.start > old_interval.stop and interval.start > largest):
+			missing = interval.start - 1
+			cont = True
+			break
+		if(interval.stop > largest):
+			largest = interval.stop
+		old_interval = interval
 
-	all_ranges = []
-	for interval in ranges_2:
-		all_ranges += interval
-
-	foo = set(range(0, upper_limit))
-	bar = set(all_ranges)
-
-	if(foo != bar):
-		print(f"level: {level}, bar: {bar}")
-		res = int(list(foo.difference(bar))[0]) * 4000000 + level
-		
-
+	if(cont):
+		res = (missing * 4000000) + level
+		break
 
 # part 2:  
-print("day15: solution for part 2: " + str(res))
+print(f"day15: solution for part 2: {str(res)}, execution time: {str(round(time.time() - start_time, 2))} seconds")
