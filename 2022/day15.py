@@ -86,7 +86,7 @@ for level in reversed(range(upper_limit)):
 		old_interval = interval
 
 	if(cont):
-		res = (missing * 4000000) + level
+		res = (missing * (upper_limit - 1)) + level
 		break
 
 # part 2:  
