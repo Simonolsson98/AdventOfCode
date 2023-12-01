@@ -44,7 +44,6 @@ with open(os.path.dirname(__file__)+"/day01_input.txt", 'r') as input_text:
 		for char in i[::-1]:
 			try:
 				lastnum = int(char)
-				total = total + int(str(firstnum)+str(lastnum))
 				break
 			except:
 				substr=char+substr
@@ -52,11 +51,12 @@ with open(os.path.dirname(__file__)+"/day01_input.txt", 'r') as input_text:
 				for key in numdict.keys():
 					if key in substr:
 						lastnum = numdict[key]
-						total = total + int(str(firstnum)+str(lastnum))
 						breakcon = True
 						break
 				if breakcon:
 					break
+					
+		total = total + int(str(firstnum)+str(lastnum))
 
 # part 2: 
 print("day1: python solution for part 2: " + str(total))
