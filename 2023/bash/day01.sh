@@ -87,7 +87,3 @@ done < "$input"
 
 echo $number
 echo "elapsed time in seconds: $(($(date +"%s")-$starttime))"
-
-#not 50350
-#not 53518
-#not 53410
