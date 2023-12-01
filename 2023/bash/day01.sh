@@ -1,7 +1,5 @@
 #!/bin/bash
-input="./day01_input.txt"
-
-starttime=$(date +"%s")
+input="$(dirname `which $0`)/day01_input.txt"
 number=0
 
 while IFS= read -r line
@@ -29,8 +27,8 @@ do
     number=$(( number + $firstnum$lastnum ))
 done < "$input"
 
-echo $number
-echo "elapsed time in seconds: $(($(date +"%s")-$starttime))"
+# part 1: 
+printf "%s\n" "day1: bash solution for part 1: $number"
 
 starttime=$(date +"%s")
 number=0
@@ -84,5 +82,5 @@ do
     number=$(( number + $firstnum$lastnum ))
 done < "$input"
 
-echo $number
-echo "elapsed time in seconds: $(($(date +"%s")-$starttime))"
+# part 2: 
+printf "%s\n" "day1: bash solution for part 2: $number"
