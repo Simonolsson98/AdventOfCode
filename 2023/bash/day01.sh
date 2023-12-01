@@ -38,7 +38,6 @@ declare -A myArray=(["one"]="1" ["two"]="2" ["three"]="3" ["four"]="4" ["five"]=
 while IFS= read -r line
 do
     substr=""
-    substitutedline="$line"
     length=${#line}
     firstnum=""
     lastnum=""
