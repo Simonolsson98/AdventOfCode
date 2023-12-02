@@ -41,9 +41,9 @@ def part(part_num):
 
     if part_num == "1":
         result = total_games - saved_impossible_games
-        print(f"day1: Python solution for part 1: {result}")
+        print(f"day2: Python solution for part 1: {result}")
     elif part_num == "2":
-        print(f"day1: Python solution for part 2: {part2result}")
+        print(f"day2: Python solution for part 2: {part2result}")
 
 part("1")
 part("2")
