@@ -1,7 +1,7 @@
 import os
 with open(os.path.dirname(__file__)+"/day01_input.txt", 'r') as input_text:
 	total = 0
-	while i := input_text.readline():
+	for i in input_text:
 		for char in i:
 			try:
 				firstnum = int(char)
@@ -23,7 +23,7 @@ print("day1: python solution for part 1: " + str(total))
 with open(os.path.dirname(__file__)+"/day01_input.txt", 'r') as input_text:
 	total = 0
 	numdict = { "one": "1", "two": "2", "three": "3", "four": "4", "five": "5", "six": "6", "seven": "7", "eight": "8", "nine": "9" }
-	while i := input_text.readline():
+	for i in input_text:
 		substr=""
 		for char in i:
 			try:
