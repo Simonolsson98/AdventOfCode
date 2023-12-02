@@ -57,8 +57,8 @@ part(){
 # part 1: 
 part "1"
 result=$(( total_games - saved_impossible_games ))
-printf "%s\n" "day1: bash solution for part 1: $result"
+printf "%s\n" "day2: bash solution for part 1: $result"
 
 ## part 2: 
 part "2"
-printf "%s\n" "day1: bash solution for part 2: $part2result"
+printf "%s\n" "day2: bash solution for part 2: $part2result"
