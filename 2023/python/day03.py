@@ -39,7 +39,6 @@ def part(part_num):
                     currnum=""
                 elif(value.isdigit()):
                     currnum += value
-                    print(f"currnum: {currnum}")
                     if((topleft != "." and not topleft.isdigit()) or (topmid != "." and not topmid.isdigit()) or (topright != "." and not topright.isdigit())
                             or (midleft != "." and not midleft.isdigit()) or (midright != "." and not midright.isdigit()) or (botleft != "." and not botleft.isdigit()) 
                             or (botmid != "." and not botmid.isdigit()) or (botright != "." and not botright.isdigit())):
@@ -137,11 +136,8 @@ def part(part_num):
                             index += 1
                         nums.append(int(num))
 
-                    print(f"nums: {nums} for value: {value}")
                     if(number_of_parts == 2):
                         subtotal += math.prod(nums)
-                        print(math.prod(nums))
-                        print(f"subtotal: {subtotal}")
 
     if part_num == "1":
         print(f"day3: Python solution for part 1: {subtotal}")
