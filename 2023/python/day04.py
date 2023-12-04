@@ -3,7 +3,6 @@ import os
 def part(part_num):
     result = 0
     part2res = 0
-    numdict={"1": 1}
     with open(os.path.dirname(__file__)+"/day04_input.txt", 'r') as input_text:
         for card, line in enumerate(input_text, 1):
             try:
