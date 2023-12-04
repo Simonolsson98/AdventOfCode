@@ -29,9 +29,9 @@ def part(part_num):
             if(part_num == "2"):
                 part2res += number_of_cards # save cards
                 numberofwinningcards=0
-                for num in havenumbers:
-                    if num in winningnumbers:
-                        numberofwinningcards += 1
+
+                # list comp ftw
+                [numberofwinningcards := numberofwinningcards + 1 for num in havenumbers if num in winningnumbers]
 
                 for index in range(1, numberofwinningcards + 1):
                     maxlines=198
