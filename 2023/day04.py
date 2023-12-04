@@ -37,7 +37,7 @@ def part(part_num):
                     maxlines=198
                     if card + index <= maxlines: # not really needed since it stops at the end of the input data anyways
                         try: 
-                            numdict.update( {str(card + index): numdict[str(card + index)] + number_of_cards} ) #
+                            numdict.update( {str(card + index): numdict[str(card + index)] + number_of_cards} )
                         except KeyError: 
                             numdict.update( {str(card + index): number_of_cards + 1 } ) # save copies + original card
 
