@@ -1,4 +1,7 @@
 import os
+import time
+
+start = time.time()
 with open(os.path.dirname(__file__)+"/day01_input.txt", 'r') as input_text:
 	total = 0
 	for i in input_text:
@@ -18,8 +21,9 @@ with open(os.path.dirname(__file__)+"/day01_input.txt", 'r') as input_text:
 				pass
 
 # part 1: 
-print("day1: python solution for part 1: " + str(total))
+print(f"day8: Python solution for part 1: {str(total)}, time: {round(time.time() - start, 3)} s")
 
+start = time.time()
 with open(os.path.dirname(__file__)+"/day01_input.txt", 'r') as input_text:
 	total = 0
 	numdict = { "one": "1", "two": "2", "three": "3", "four": "4", "five": "5", "six": "6", "seven": "7", "eight": "8", "nine": "9" }
@@ -59,4 +63,4 @@ with open(os.path.dirname(__file__)+"/day01_input.txt", 'r') as input_text:
 		total = total + int(str(firstnum)+str(lastnum))
 
 # part 2: 
-print("day1: python solution for part 2: " + str(total))
+print(f"day1: Python solution for part 2: {str(total)}, time: {round(time.time() - start, 3)} s")

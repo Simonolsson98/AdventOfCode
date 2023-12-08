@@ -1,4 +1,5 @@
 import os
+import time
 
 def part(part_num):
     possible_cards = [str(i) for i in range(9, 1, -1)]
@@ -100,9 +101,11 @@ def part(part_num):
                 rank += 1
 
     if part_num == "1":
-        print(f"day7: Python solution for part 1: {sum(result)}")
+        print(f"day7: Python solution for part 1: {sum(result)}, time: {time.time() - start} s")
     elif part_num == "2":
-        print(f"day7: Python solution for part 2: {sum(result)}")
+        print(f"day7: Python solution for part 2: {sum(result)}, time: {time.time() - start} s")
 
+start = time.time()
 part("1")
+start = time.time()
 part("2")

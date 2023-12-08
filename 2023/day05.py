@@ -1,4 +1,5 @@
 import os
+import time
 
 def part(part_num):
     with open(os.path.dirname(__file__)+"/day05_input.txt", 'r') as input_text:
@@ -30,9 +31,11 @@ def part(part_num):
                 values[values.index(value)] = current_map # update values for next map
 
     if part_num == "1":
-        print(f"day5: Python solution for part 1: {min(values)}")
+        print(f"day5: Python solution for part 1: {min(values)}, time: {time.time() - start} s")
     elif part_num == "2":
-        print(f"day5: Python solution for part 2: {values}")
+        print(f"day5: Python solution for part 2: {values}, time: {time.time() - start} s")
 
+start = time.time()
 part("1")
+start = time.time()
 #part("2")

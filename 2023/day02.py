@@ -1,4 +1,6 @@
 import os
+import time
+start = time.time()
 
 def part(part_num):
     arr = {"red": 12, "green": 13, "blue": 14}
@@ -41,9 +43,9 @@ def part(part_num):
 
     if part_num == "1":
         result = total_games - saved_impossible_games
-        print(f"day2: Python solution for part 1: {result}")
+        print(f"day2: Python solution for part 1: {result}, time: {time.time() - start} s")
     elif part_num == "2":
-        print(f"day2: Python solution for part 2: {part2result}")
+        print(f"day2: Python solution for part 2: {part2result}, time: {time.time() - start} s")
 
 part("1")
 part("2")
