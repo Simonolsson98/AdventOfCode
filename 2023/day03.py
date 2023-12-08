@@ -1,5 +1,6 @@
 import os
 import math
+import time
 
 arr=[]
 def part(part_num):
@@ -140,9 +141,11 @@ def part(part_num):
                         subtotal += math.prod(nums)
 
     if part_num == "1":
-        print(f"day3: Python solution for part 1: {subtotal}")
+        print(f"day3: Python solution for part 1: {subtotal}, time: {round(time.time() - start, 2)} s")
     elif part_num == "2":
-        print(f"day3: Python solution for part 2: {subtotal//2}")
+        print(f"day3: Python solution for part 2: {subtotal//2}, time: {round(time.time() - start, 2)} s")
 
+start = time.time()
 part("1")
+start = time.time()
 part("2")
