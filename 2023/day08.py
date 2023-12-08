@@ -59,6 +59,6 @@ def part(part_num):
         return result
 
 result = part("1")
-print(f"day8: Python solution for part 1: {result}")
+print(f"day8: Python solution for part 1: {result}, time: {time.time() - start} s")
 result = part("2")
-print(f"day8: Python solution for part 2: {result}")
+print(f"day8: Python solution for part 2: {result}, time: {time.time() - start} s")
