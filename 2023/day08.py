@@ -1,6 +1,7 @@
 import os
 from math import lcm
 import time
+start = time.time()
 
 def part(part_num):
     with open(os.path.dirname(__file__)+"/day08_input.txt", 'r') as input_text:
@@ -10,9 +11,9 @@ def part(part_num):
         locations = []
         directions = []
         while i := input_text.readline():
-            yes = i.split(" = (")
-            locations.append(yes[0])
-            directions.append((yes[1].split(", ")[0], yes[1].split(", ")[1].replace(")", "")[:-1]))
+            split_input = i.split(" = (")
+            locations.append(split_input[0])
+            directions.append((split_input[1].split(", ")[0], split_input[1].split(", ")[1].replace(")", "")[:-1]))
 
     result = 0
     if(part_num == "1"):
@@ -20,6 +21,7 @@ def part(part_num):
     else:
         current = [[loc] for loc in locations if loc[2] == "A"]
 
+    loops = []
     saved = leftright
     while(current!=[]):
         if(part_num == "1"):
@@ -33,7 +35,6 @@ def part(part_num):
             if(current == "ZZZ"):
                 break
         else:
-            loops = []
             for i, curr in enumerate(current):
                 for char in leftright:
                     current_index = locations.index(curr[-1])
@@ -57,10 +58,7 @@ def part(part_num):
             result = lcm(loop, result)
         return result
 
-start = time.time()
 result = part("1")
-print(f"day8: Python solution for part 1: {result}, time: {round(time.time() - start, 3)} s")
-
-start = time.time()
+print(f"day8: Python solution for part 1: {result}")
 result = part("2")
-print(f"day8: Python solution for part 2: {result}, time: {round(time.time() - start, 3)} s")
+print(f"day8: Python solution for part 2: {result}")
