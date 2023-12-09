@@ -3,7 +3,14 @@ import time
 
 def part(part_num):
     with open(os.path.dirname(__file__)+"/day05_input.txt", 'r') as input_text:
-        values = [int(x) for x in input_text.readline().split(":")[1].strip().split(" ")]
+        if(part_num == "1"):
+            values = [int(x) for x in input_text.readline().split(":")[1].strip().split(" ")]
+        else:
+            values = [int(x) for x in input_text.readline().split(":")[1].strip().split(" ")]
+            paired_values=[]
+            for i in range(len(values)//2):
+                paired_values.append((values[2*i], values[2*i+1]))
+        print(f"paired_values: {paired_values}")
         input_text.readline() # skip newline in input
         for i in range(7):        
             name = input_text.readline()
@@ -18,24 +25,65 @@ def part(part_num):
                 value_map_tuple.append((dest_range, src_range, range_length))
                 data = input_text.readline()
 
-            for value in values:
-                for stsmap in value_map_tuple:
-                    dest = int(stsmap[0])
-                    src = int(stsmap[1])
-                    rnglen = int(stsmap[2])
-                    if src <= value and src + rnglen >= value:
-                        current_map = (value - src) + dest
-                        break
-                    else: 
-                        current_map = value
-                values[values.index(value)] = current_map # update values for next map
-
+            if(part_num == "2"):
+                for i, (src, src_range) in enumerate(paired_values):
+                    for xdest, xsrc, xsrc_range in value_map_tuple:
+                        if src < xsrc and src + src_range < xsrc:
+                            print(f"left of range")
+                            break
+                        elif src < xsrc and src + src_range == xsrc:
+                            print(f"touching left of range")
+                            paired_values[paired_values.index((src, src_range))]=((xdest, src_range - (xsrc - src)))
+                            paired_values.append((src, xsrc - src))
+                            break
+                        elif src > xsrc + xsrc_range:
+                            print(f"right of range")
+                            break
+                        elif src < xsrc and src + src_range > xsrc + xsrc_range:
+                            print(f"overloaded coverage")
+                            paired_values[paired_values.index((src, src_range))]=((xdest, xsrc_range))
+                            paired_values.append((src, xsrc - src))
+                            paired_values.append((xsrc + xsrc_range, src_range - (xsrc - src) - xdest))
+                            break
+                        elif src < xsrc and src + src_range > xsrc: # but src + src_range <= xsrc + xsrc_range
+                            print(f"end coverage")
+                            paired_values[paired_values.index((src, src_range))]=((xdest, src_range - (xsrc - src)))
+                            paired_values.append((src, xsrc - src))
+                            break
+                        elif src >= xsrc and src + src_range < xsrc + xsrc_range:
+                            print(f"total coverage")
+                            paired_values[paired_values.index((src, src_range))]=(xdest + (xsrc - src), src_range)
+                            break
+                        elif src >= xsrc and src + src_range > xsrc + xsrc_range and src > xsrc + xsrc_range:
+                            print(f"start coverage")
+                            print(src)
+                            print(src_range)
+                            print(xsrc)
+                            print(xsrc_range)
+                            print((xdest + (src - xsrc), (xsrc + xsrc_range) - src))
+                            print((src + (xsrc + xsrc_range) - src, src_range - (xsrc + xsrc_range - src)))
+                            paired_values[paired_values.index((src, src_range))]=(xdest + (src - xsrc), (xsrc + xsrc_range) - src)
+                            paired_values.append((src + (xsrc + xsrc_range) - src, src_range - (xsrc + xsrc_range - src)))
+                            if(xsrc_range - src_range < 0):
+                                print(src_range - (xsrc + xsrc_range - src))
+                                print(src)
+                                print(src_range)
+                                print(xsrc)
+                                print(xsrc_range)
+                            break
+                        else: 
+                            print(f"PLEASE NO")
+                            print(f"src: {src}, src_range: {src_range}")
+                            print(f"xdest: {xdest}, xsrc: {xsrc}, xsrc_range: {xsrc_range}")
+                            break
+        print(value_map_tuple)
     if part_num == "1":
-        print(f"day5: Python solution for part 1: {min(values)}, time: {time.time() - start} s")
+        print(f"day5: Python solution for part 1: {paired_values}, time: {time.time() - start} s")
     elif part_num == "2":
-        print(f"day5: Python solution for part 2: {values}, time: {time.time() - start} s")
+        print(f"day5: Python solution for part 2: {paired_values}, time: {time.time() - start} s")
 
 start = time.time()
 part("1")
 start = time.time()
 #part("2")
+#10114991
