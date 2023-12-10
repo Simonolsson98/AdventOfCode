@@ -47,6 +47,8 @@ def part(part_num, start):
             part2res = 0
             for i in range(len(arr)):
                 for j in range(len(arr[0])):
+                    if((i, j) in visited):
+                        continue
                     point = Point(i, j)
                     if loop_polygon.contains(point):
                         part2res += 1
