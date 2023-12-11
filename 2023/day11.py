@@ -6,29 +6,49 @@ arr=[]
 galaxies=[]
 def part(part_num):
     with open(os.path.dirname(__file__)+"/day11_input.txt", 'r') as input_text:
+        curr_index = 0
         for line in input_text:
-            arr.append(line[:-1])
+            arr.append(line.rstrip("\n"))
             if "#" in line:
-                col = line.index("#")
-                row = len(arr)
-                galaxies.append((row, col))
+                pass
+                #indices = [i for i, x in enumerate(line) if x == "#"]
+                #for index in indices:
+                #    row = len(arr)
+                #    galaxies.append((row - 1, index))
+            else:
+                arr[curr_index:curr_index + 1] = ["." * len(arr[0])] + ["." * len(arr[0])]
+                curr_index += 1
+            curr_index += 1
 
-    print(galaxies)
-    return
-    for rowindex in range(len(arr)):
-        for colindex in range(len(arr[rowindex])):
-            value = arr[rowindex][colindex]
-            try:
-                topleft  = arr[rowindex - 1][colindex - 1]
-                topmid   = arr[rowindex - 1][colindex]
-                topright = arr[rowindex - 1][colindex + 1]
-                midleft  = arr[rowindex][colindex - 1]
-                midright = arr[rowindex][colindex + 1]
-                botleft  = arr[rowindex + 1][colindex - 1]
-                botmid   = arr[rowindex + 1][colindex]
-                botright = arr[rowindex + 1][colindex + 1]
-            except:
-                pass   
+    transposed = [''.join(list(x)) for x in zip(*arr)]
+    index = 0
+    while index < len(transposed):
+        row = transposed[index]
+        if "#" in row:
+            pass
+        else:
+            transposed[index:index + 1] = ["." * len(transposed[0])] + ["." * len(transposed[0])]
+            index += 1
+        
+        index += 1
+
+    test = [''.join(list(x)) for x in zip(*transposed)]
+    for i, row in enumerate(test):
+        if "#" in row:
+            indices = [i for i, x in enumerate(row) if x == "#"]
+            for index in indices:
+                galaxies.append((i, index))
+
+    done = []
+    result = 0
+    i = 0
+    for elem in galaxies:
+        for elem_iter in galaxies:
+            if elem_iter != elem and elem_iter not in done:
+                result += abs(elem[0] - elem_iter[0]) + abs(elem[1] - elem_iter[1])
+        done.append(elem)
+
+    print(result)
 
     if part_num == "1":
         print(f"day11: Python solution for part 1: {result}, time: {round(time.time() - start, 2)} s")
@@ -37,5 +57,5 @@ def part(part_num):
 
 start = time.time()
 part("1")
-start = time.time()
-part("2")
+#start = time.time()
+#part("2")
