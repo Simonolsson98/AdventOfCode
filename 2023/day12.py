@@ -20,14 +20,33 @@ def part(part_num):
                 counts = listofrecords
 
             listcounts = list(map(int, counts.split(",")))
-            result += findarrangements(op, 0, [0][:], listcounts)
+            if(part_num == "1"):
+                result += p1_findarrangements(op, 0, "", counts)
+            else:
+                result += p2_findarrangements(op, 0, [0][:], listcounts)
 
     if part_num == "1":
         print(f"day12: Python solution for part 1: {result}, time: {round(time.time() - start, 3)} s")
     elif part_num == "2":
         print(f"day12: Python solution for part 2: {result}, time: {round(time.time() - start, 3)} s")
 
-def findarrangements(op, currindex, currl, listcounts):
+def p1_findarrangements(op, currindex, currl, counts):
+    result = 0
+    while(currindex < len(op)):
+        currentchar = op[currindex]
+        if currentchar == "?":
+            return p1_findarrangements(op, currindex + 1, currl + "#", counts) \
+            + p1_findarrangements(op, currindex + 1, currl + ".", counts)
+        else:
+            return p1_findarrangements(op, currindex + 1, currl + currentchar, counts)
+
+    test = [len(asd) for asd in currl.split(".") if asd]
+    if(test == list(map(int, counts.split(",")))):
+        return 1
+    
+    return 0
+
+def p2_findarrangements(op, currindex, currl, listcounts):
     result = 0
     while(len(currl) < len(op)):
         currentchar = op[currindex]
@@ -39,8 +58,8 @@ def findarrangements(op, currindex, currl, listcounts):
                 fst.append(0)
             kys[-1] += 1
 
-            return findarrangements(op, currindex + 1, fst[:], listcounts) + \
-                findarrangements(op, currindex + 1, kys[:], listcounts)
+            return p2_findarrangements(op, currindex + 1, fst[:], listcounts) + \
+                p2_findarrangements(op, currindex + 1, kys[:], listcounts)
         elif currentchar == ".":
             current_ele = currl[-1]
             print(f"WHEN DOT: current_ele: {current_ele}")
@@ -49,7 +68,7 @@ def findarrangements(op, currindex, currl, listcounts):
                 return 0
 
             currl.append(0)
-            return findarrangements(op, currindex + 1, currl, listcounts)
+            return p2_findarrangements(op, currindex + 1, currl, listcounts)
         else:
             currl[-1] += 1
             current_ele = currl[-1]
