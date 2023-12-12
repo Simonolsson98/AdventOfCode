@@ -32,86 +32,92 @@ def findarrangements(trimmed, split_records, i, j, arrangements):
 
             print(f"rec: {rec}, entry: {entry}")
             if(len(rec) == entry):
-                unknown = int(entry) - rec.count("#")
-                total = rec.count("?")
-                print(f"trimmed: {trimmed}, split_records: {split_records}")
-                j += 1
-                i += 1
-            else:
                 unknown = int(entry)
-                if(unknown > len([asd for asd in rec if asd != "x"])):
-                    if(i + 1 > len(trimmed)):
-                        print("TOO FAR")
+                unknown_diff = unknown - rec.count("#")
+                total = rec.count("?")
+                if(unknown_diff == total):
+                    print(f"fake ass return: {arrangements + 1}")
+                    return arrangements + 1
+                else:                    
+                    print(f"CAN WE BE HERE??? trimmed: {trimmed}, total: {total} unknown_diff: {unknown_diff}")
+
+            unknown = int(entry)
+            if(unknown > len([asd for asd in rec if asd != "x"])):
+                if(i + 1 > len(trimmed)):
+                    print("TOO FAR")
+                    return arrangements
+                print(f"GO NEXT TECKEN: {i + 1}")
+                return findarrangements(trimmed, split_records, i + 1, j, arrangements)
+
+            indices = [i for i, x in enumerate(rec) if x == "?" or x == "#"]
+            brokenindices = [i for i, x in enumerate(rec) if x == "#"]
+            predefgroup = [x for x in trimmed if all(y == "#" for y in x)]
+            predefidk = "".join([x for x in rec.split("?") if x])
+            print(f"unknown: {unknown} indices: {indices}, brokenindices: {brokenindices}")
+            print(f"predefgroup: {predefgroup}")
+            print(f"predefidk: {predefidk}")
+
+            for start in indices:
+                print(f"start: {start}")
+                ffs = "fuck you"
+                try:
+                    ffs = len(predefgroup[j])
+                except:
+                    ffs = len(predefidk)
+                try:
+                    if(unknown == ffs):
+                        copy = trimmed[i]
+                        tryfind = "#" * unknown
+                        replace = "x" * unknown
+                        yeah = copy.find(tryfind)
+                        print(f"yeah:{yeah + unknown}")
+
+                        copy = "x" * yeah + replace + copy[yeah + unknown:]
+                        print(f"after early stage for copy: {copy}")
+
+                        return findarrangements([copy], split_records, i, j + 1, arrangements)
+                except:
+                    pass
+
+                copy = rec
+                print(f"copy: {copy}, start: {start}, entry: {entry}")
+                copy_before = len(copy)
+                print(f"copy before: {copy}")
+                
+                if(start == 0):
+                    copy = copy[:start] + "#" * unknown + copy[start + unknown:]
+                else:
+                    copy = copy[:start + 1] + "#" * unknown + copy[start + unknown + 1:]
+                
+                print(f"copy after:  {copy}")
+
+                # this makes no sense
+                if(len(copy) > copy_before and "x" in copy):
+                    print("NONONO")
+                    return arrangements
+                
+                time.sleep(0.1)
+                tryfind = "#" * entry
+                print(f"tryfind: {tryfind} for i: {i} and len(split_records): {len(split_records)}")
+                if(tryfind in copy and j == len(split_records) - 1):
+                    final_arrangements = copy.count("#")
+                    print(f"\nINCREASING HERE FROM {arrangements} TO {arrangements + final_arrangements}\n")
+                    arrangements += final_arrangements
+                    if(copy[-1] == "#"):
+                        print(f"LAST{copy[-1]}")
                         return arrangements
-                    print(f"GO NEXT TECKEN: {i + 1}")
-                    return findarrangements(trimmed, split_records, i + 1, j, arrangements)
+                elif(tryfind in copy):
+                    print(f"found - recursion inc: {tryfind}")
+                    copy = "x" * (unknown + start + 1) + copy[start + unknown + 1:]
+                    print(f"copy after fucku: {copy}")
+                    print(f"go to number: {split_records[j + 1]} of stuff - trimmed: {trimmed[:i] + [copy] + trimmed[i+1:]}, split_records: {split_records}, i: {i}, j: {j + 1}")
 
-                indices = [i for i, x in enumerate(rec) if x == "?" or x == "#"]
-                brokenindices = [i for i, x in enumerate(rec) if x == "#"]
-                predefgroup = [x for x in trimmed if all(y == "#" for y in x)]
-                predefidk = "".join([x for x in rec.split("?") if x])
-                print(f"unknown: {unknown} indices: {indices}, brokenindices: {brokenindices}")
-                print(f"predefgroup: {predefgroup}")
-                print(f"predefidk: {predefidk}")
-
-                for start in indices:
-                    print(f"start: {start}")
-                    ffs = "fuck you"
-                    try:
-                        ffs = len(predefgroup[j])
-                    except:
-                        ffs = len(predefidk)
-                    try:
-                        if(unknown == ffs):
-                            copy = trimmed[i]
-                            tryfind = "#" * unknown
-                            replace = "x" * unknown
-                            yeah = copy.find(tryfind)
-                            print(f"yeah:{yeah + unknown}")
-
-                            copy = "x" * yeah + replace + copy[yeah + unknown:]
-                            print(f"after early stage for copy: {copy}")
-
-                            return findarrangements([copy], split_records, i, j + 1, arrangements)
-                    except:
-                        pass
-
-                    copy = rec
-                    print(f"copy: {copy}, start: {start}, entry: {entry}")
-
-                    print(f"copy before: {copy}")
-                    
-                    if(start + unknown == len(copy)):
-                        print("NONONO")
-                        return arrangements
-                    if(start == 0):
-                        copy = copy[:start] + "#" * unknown + copy[start + unknown:]
-                    else:
-                        copy = copy[:start + 1] + "#" * unknown + copy[start + unknown + 1:]
-
-                    print(f"copy after:  {copy}")
-                    time.sleep(0.1)
-                    tryfind = "#" * entry
-                    print(f"tryfind: {tryfind} for i: {i} and len(split_records): {len(split_records)}")
-                    if(tryfind in copy and j == len(split_records) - 1):
-                        final_arrangements = copy.count("#")
-                        print(f"\nINCREASING HERE FROM {arrangements} TO {arrangements + final_arrangements}\n")
-                        arrangements += final_arrangements
-                        if(copy[-1] == "#"):
-                            print(f"LAST{copy[-1]}")
-                            return arrangements
-                    elif(tryfind in copy):
-                        print(f"found - recursion inc: {tryfind}")
-                        copy = "x" * (unknown + start + 1) + copy[start + unknown + 1:]
-                        print(f"copy after fucku: {copy}")
-                        print(f"go to number: {split_records[j + 1]} of stuff - trimmed: {trimmed[:i] + [copy] + trimmed[i+1:]}, split_records: {split_records}, i: {i}, j: {j + 1}")
-
-                        start += unknown + 1
-                        print(f"start after: {start}")
-                        arrangements = findarrangements(trimmed[:i] + [copy] + trimmed[i+1:], split_records, i, j + 1, arrangements)
-                    else:
-                        print(f"no match, return: {arrangements}")
-                        return arrangements
+                    start += unknown + 1
+                    print(f"start after: {start}")
+                    arrangements = findarrangements(trimmed[:i] + [copy] + trimmed[i+1:], split_records, i, j + 1, arrangements)
+                else:
+                    print(f"no match, return: {arrangements}")
+                    return arrangements
             i += 1
     return arrangements
 
