@@ -26,20 +26,18 @@ def part(part_num):
 
                 print(f"result after arr[j]: {arr[j]}: {result}")
         else:
-            print(arr)
             savedarr = []
             x = 0
             while(x < 1_000_000_000):
+                #print(x)
                 for i in range(4):
                     for i in range(len(arr[0])):
                         stopping_index = 0
-                        # HARD CODED 10
+                        # HARD CODED 100
                         test = ["x" * 100]
                         for j in range(len(arr)):
                             curr = arr[j][i]
-                            #print(f"curr: {curr}")
                             
-                            #print(f"testasd: {test}, stopping_index: {stopping_index}")
                             if curr == "O":
                                 if(test[0][stopping_index] == "."):
                                     test[0] = test[0][:stopping_index] + curr + test[0][stopping_index:-1]
@@ -52,13 +50,9 @@ def part(part_num):
                             elif curr == "#":
                                 stopping_index = j + 1
                                 test[0] = test[0][:j] + curr + test[0][j + 1:]
-                            #print(f"testasdafter: {test}, stopping_index: {stopping_index}")
 
                         for j in range(len(arr)):
                             arr[j] = arr[j][:i] + test[0][j] + arr[j][i+1:]
-
-                        #print(f"test: {test} after")
-                        #[print(asd) for asd in arr]
 
                     #ROTATE
                     arr = [list(asd) for asd in arr]
@@ -69,40 +63,31 @@ def part(part_num):
                     #convert back to my format
                     arr = ["".join(a) for a in arr]
                     nparr = arr[:]
-                    #[print(f"after rotate: {asd}") for asd in nparr]
-                    #print("\n")
 
-                #print(savedarr)
-                #print(nparr)
                 if(nparr == savedarr):
-                    #print(f"nparr: {nparr}")
-                    #print(f"savedarr: {savedarr}")
-                    #print(f"at: {x}")
-                    inc = x - 10000
+                    inc = x - 1000
                     while(x < (1_000_000_000 - inc)):
+                        #print(x)
                         x += inc
                     print(f"out at: {x}")
 
-                if (x == 10000):
+                if (x == 1000):
                     savedarr = nparr
 
                 x += 1
+                print(x)
+                #[print(a) for a in nparr]
+                #print("\n\n")
 
-
-            print("ASD")
-            load_per_row = 10
-            res = 0
-            print(nparr)
+            load_per_row = len(arr)
+            result = 0
             for i in range(len(arr)):
-                load_per_row = len(arr)
                 for j in range(len(arr[0])):
                     curr = arr[i][j]
                     if curr == "O":
                         result += load_per_row
 
                 load_per_row -= 1
-                
-            print(f"result after arr[j]: {arr[j]}: {result}")
 
     return result
 
