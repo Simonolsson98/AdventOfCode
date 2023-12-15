@@ -4,7 +4,6 @@ import time
 def part(part_num):
     result = 0
     with open(os.path.dirname(__file__)+"/day15_input.txt", 'r') as input_text:
-        result = 0
         for index, line in enumerate(input_text):
             hashes = line.split(",")
             if(part_num == "1"):
@@ -15,40 +14,35 @@ def part(part_num):
                 for hashh in hashes:
                     if("=" in hashh):
                         splitchar = "="
-                        split = hashh.split("=")
-                        hash_input = split[0]
-                        focalval = split[1]
                     else:
                         splitchar = "-"
-                        split = hashh.split("-")
-                        hash_input = split[0]
-
+                    
+                    split = hashh.split(splitchar)
+                    hash_input = split[0]
+                    focalval = split[1]
                     index = run_hash(hash_input)
-                    check_this_list = hashlist[index]
                     if splitchar == "-":
-                        if check_this_list == []:
+                        if hashlist[index] == []:
                             continue
                         else:
                             breakouter = False
-                            for i, l in enumerate(check_this_list):
+                            for i, l in enumerate(hashlist[index]):
                                 if hash_input == l[:-1]:
-                                    replaceindex = check_this_list.index(l)
-                                    check_this_list = check_this_list[:replaceindex] + check_this_list[replaceindex + 1:]
-                                    hashlist[index] = check_this_list
+                                    replaceindex = hashlist[index].index(l)
+                                    hashlist[index] = hashlist[index][:replaceindex] + hashlist[index][replaceindex + 1:]
                                     break
                                 if breakouter:
                                     break
                     else: # "="
-                        if check_this_list == []:
+                        if hashlist[index] == []:
                             hashlist[index] = [hash_input + focalval]
                         else:
                             breakouter = False
-                            for i, l in enumerate(check_this_list):
+                            for i, l in enumerate(hashlist[index]):
                                 if hash_input == l[:-1]:
-                                    replaceindex = check_this_list.index(l)
+                                    replaceindex = hashlist[index].index(l)
                                     newele = hash_input + focalval
-                                    check_this_list = check_this_list[:replaceindex] + [newele] + check_this_list[replaceindex + 1:]
-                                    hashlist[index] = check_this_list
+                                    hashlist[index] = hashlist[index][:replaceindex] + [newele] + hashlist[index][replaceindex + 1:]
                                     
                                     breakouter = True
                                     break
@@ -57,7 +51,7 @@ def part(part_num):
                                     break
                             
                             if not breakouter:
-                                hashlist[index] = hashlist[index] + [hash_input + focalval]
+                                hashlist[index] += [hash_input + focalval]
                         
                 for boxindex, box in enumerate(hashlist):
                     subres = 0
@@ -69,9 +63,9 @@ def part(part_num):
                     result += subres
 
     if part_num == "1":
-        print(f"day15: Python solution for part 1: {result}, time: {round(time.time() - start, 3)} s")
+        print(f"day15: Python solution for part 1: {result}, time: {round(time.time() - start, 4)} s")
     elif part_num == "2":
-        print(f"day15: Python solution for part 2: {result}, time: {round(time.time() - start, 3)} s")
+        print(f"day15: Python solution for part 2: {result}, time: {round(time.time() - start, 4)} s")
 
 def run_hash(hashh: str):
     val = 0
