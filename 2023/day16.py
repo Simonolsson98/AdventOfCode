@@ -2,7 +2,6 @@ import os
 import math
 import time
 
-global test
 def part(part_num):
     with open(os.path.dirname(__file__)+"/day16_input.txt", 'r') as input_text:
         mirrors = []
@@ -10,43 +9,32 @@ def part(part_num):
         for line in input_text:
             mirrors.append(line.rstrip("\n"))
 
-    global test
-    test = mirrors[:]
     if(part_num == "1"):
         traverse(mirrors, visited, 0, -1, "right")
-        result = 0
-        result = sum([row.count("x") for row in test])
-        return result
+        return len(list(set([(t[0], t[1]) for t in visited])))
     else:
-        result = 0
         energizes = []
-        for height in range(len(mirrors)):
-            test = mirrors[:]
+        # len(mirrors) == len(mirrors[i]), so we can use whichever for all directions
+        for span in range(len(mirrors)):
             visited = []
-            traverse(mirrors, visited, height, -1, "right")
-            energizes.append(sum([row.count("x") for row in test]))
+            traverse(mirrors, visited, len(mirrors), span, "up")
+            energizes.append(len(list(set([(t[0], t[1]) for t in visited]))))
 
-            test = mirrors[:]
             visited = []
-            traverse(mirrors, visited, height, len(mirrors[0]), "left")
-            energizes.append(sum([row.count("x") for row in test]))
+            traverse(mirrors, visited, -1, span, "down")
+            energizes.append(len(list(set([(t[0], t[1]) for t in visited]))))
 
-        for width in range(len(mirrors[0])):
-            test = mirrors[:]
             visited = []
-            traverse(mirrors, visited, -1, width, "down")
-            energizes.append(sum([row.count("x") for row in test]))
+            traverse(mirrors, visited, span, len(mirrors), "left")
+            energizes.append(len(list(set([(t[0], t[1]) for t in visited]))))
 
-            test = mirrors[:]
             visited = []
-            traverse(mirrors, visited, len(mirrors), width, "up")
-            energizes.append(sum([row.count("x") for row in test]))
+            traverse(mirrors, visited, span, -1, "right")
+            energizes.append(len(list(set([(t[0], t[1]) for t in visited]))))
 
-        print(max(energizes))
         return max(energizes)
 
 def traverse(mirrors: list, visited: list, height: int, width: int, direction: str):
-    global test
     while(True):
         match direction:
             case "left":
@@ -62,81 +50,73 @@ def traverse(mirrors: list, visited: list, height: int, width: int, direction: s
             return
 
         next_ele = mirrors[height][width]
-        if(next_ele == "."):
-            visited.append((height, width))
-            test[height] = test[height][:width] + "x" + test[height][width + 1:]
-        elif(next_ele == "\\"):
-            if direction == "right" or direction == "up":
-                if((height, width, "rightup")) in visited:
+        match next_ele:
+            case ".":
+                visited.append((height, width))
+            case "|":
+                if((height, width)) in visited:
                     return
+                visited.append((height, width))
 
-                visited.append((height, width, "rightup"))
-                test[height] = test[height][:width] + "x" + test[height][width + 1:]
-                if(direction == "right"):
-                    direction = "down"
-                else:
-                    direction = "left"
-            else: #direction == left or down
-                if((height, width, "leftdown")) in visited:
+                if direction == "right" or direction == "left":
+                    # split into both directions
+                    traverse(mirrors, visited, height, width, "up")
+                    traverse(mirrors, visited, height, width, "down")
                     return
+            case "-":
+                if((height, width)) in visited:
+                    return
+                visited.append((height, width))
 
-                visited.append((height, width, "leftdown"))
-                test[height] = test[height][:width] + "x" + test[height][width + 1:]
-                if(direction == "left"):
-                    direction = "up"
-                else:
-                    direction = "right"
-        elif(next_ele == "/"):
-            if direction == "right" or direction == "down":
-                if((height, width, "rightdown")) in visited:
+                if direction == "up" or direction == "down":
+                    # split into both directions
+                    traverse(mirrors, visited, height, width, "left")
+                    traverse(mirrors, visited, height, width, "right")
                     return
+            case "\\":
+                # special case, it matters what directions we come from for the 90 deg turns
+                if direction == "right" or direction == "up":
+                    if((height, width, "rightup")) in visited:
+                        return
 
-                visited.append((height, width, "rightdown"))
-                test[height] = test[height][:width] + "x" + test[height][width + 1:]
-                if(direction == "right"):
-                    direction = "up"
-                else:
-                    direction = "left"
-            else: #direction == left or up
-                if((height, width, "leftup")) in visited:
-                    return
+                    visited.append((height, width, "rightup"))
+                    # ¯|
+                    if(direction == "right"):
+                        direction = "down"
+                    else:
+                        direction = "left"
+                else: #direction == left or down
+                    if((height, width)) in visited:
+                        return
 
-                visited.append((height, width, "leftup"))
-                test[height] = test[height][:width] + "x" + test[height][width + 1:]
-                if(direction == "left"):
-                    direction = "down"
-                else:
-                    direction = "right"
-        elif next_ele == "|":
-            if direction == "up" or direction == "down":
-                if((height, width, "updown")) in visited:
-                    return
-                visited.append((height, width, "updown"))
-                test[height] = test[height][:width] + "x" + test[height][width + 1:]
-            else:
-                if((height, width, "leftright")) in visited:
-                    return
-                visited.append((height, width, "leftright"))
-                test[height] = test[height][:width] + "x" + test[height][width + 1:]
+                    visited.append((height, width))
+                    # |_
+                    if(direction == "left"):
+                        direction = "up"
+                    else:
+                        direction = "right"
+            case "/":
+                # special case, it matters what directions we come from for the 90 deg turns
+                if direction == "right" or direction == "down":
+                    if((height, width, "rightdown")) in visited:
+                        return
 
-                traverse(mirrors, visited, height, width, "up")
-                traverse(mirrors, visited, height, width, "down")
-                return
-        elif next_ele == "-":
-            if direction == "left" or direction == "right":
-                if((height, width, "leftright")) in visited:
-                    return
-                visited.append((height, width, "leftright"))
-                test[height] = test[height][:width] + "x" + test[height][width + 1:]
-            else:
-                if((height, width, "updown")) in visited:
-                    return
-                visited.append((height, width, "updown"))
-                test[height] = test[height][:width] + "x" + test[height][width + 1:]
+                    visited.append((height, width, "rightdown"))
+                    # _|
+                    if(direction == "right"):
+                        direction = "up"
+                    else:
+                        direction = "left"
+                else: #direction == left or up
+                    if((height, width)) in visited:
+                        return
 
-                traverse(mirrors, visited, height, width, "left")
-                traverse(mirrors, visited, height, width, "right")
-                return
+                    visited.append((height, width))
+                    # |¯
+                    if(direction == "left"):
+                        direction = "down"
+                    else:
+                        direction = "right"
 
 
 start = time.time()
