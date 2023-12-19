@@ -12,9 +12,6 @@ def part(part_num):
             workflowdict[removebraces[0]] = removebraces[1].split(",")
             line = input_text.readline().rstrip()
 
-        if part_num == "2":
-            for workflow in workflowdict:
-                print(workflow)
         elif(part_num == "1"):
             parts = input_text.readline().rstrip()
             winning = []
