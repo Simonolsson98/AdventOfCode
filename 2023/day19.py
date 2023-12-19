@@ -9,56 +9,61 @@ def part(part_num, start):
         workflowdict = {}
         while line != "":
             removebraces = line[:-1].split("{")
-            print(f"removebraces: {removebraces}")
-            
             workflowdict[removebraces[0]] = removebraces[1].split(",")
-            
             line = input_text.readline().rstrip()
 
         parts = input_text.readline().rstrip()
+        winning = []
         while parts != "":
             removebraces = "".join(parts[:-1].split("{"))
             values = removebraces.split(",")
             for i in range(len(values)):
                 values[i] = values[i][2:]
 
-            #print(values)
-
-            #print(workflowdict)
             currentdict = workflowdict["in"]
+            breakouter = False
+            i = 0
             while(True):
-                for workflow in currentdict:
-                    print(workflow)
-                    # real rule
-                    if('<' in workflow or '>' in workflow or '=' in workflow):
-                        if(workflow[0] == 'x'):
-                            check = values[0]
-                        elif(workflow[0] == 'm'):
-                            check = values[1]
-                        elif(workflow[0] == 'a'):
-                            check = values[2]
-                        elif(workflow[0] == 's'):
-                            check = values[3]
+                workflow = currentdict[i]
 
-                        asd = workflow.split(":")
-                        workflow = check + asd[0][1:]
-                        print(f"workflow: {workflow}")
-                        valid = eval(workflow)
+                if('<' in workflow or '>' in workflow or '=' in workflow):
+                    if(workflow[0] == 'x'):
+                        check = values[0]
+                    elif(workflow[0] == 'm'):
+                        check = values[1]
+                    elif(workflow[0] == 'a'):
+                        check = values[2]
+                    elif(workflow[0] == 's'):
+                        check = values[3]
 
-                        #print(f"valid: {valid}")
-                        if(valid):
-                            currentdict = workflowdict[asd[1]]
-                            #print(currentdict)
+                    asd = workflow.split(":")
+                    workflow = check + asd[0][1:]
+                    valid = eval(workflow)
+                    if(valid):
+                        if(asd[1] == "A"):
+                            winning.append(sum([int(x) for x in values]))
+                            break
+                        elif(asd[1] == "R"):
                             break
                         else:
-                            #currentdict = workflowdict
-
-
-
+                            currentdict = workflowdict[asd[1]]
+                            i = 0
+                        
+                    else:
+                        i += 1
+                else:
+                    if(workflow == "A"):
+                        winning.append(sum([int(x) for x in values]))
+                        break
+                    elif(workflow == "R"):
+                        break
+                    else:
+                        currentdict = workflowdict[workflow]
+                        i = 0
 
             parts = input_text.readline().rstrip()
 
-        return result
+        return sum(winning)
 
 start = time.time()
 result = part("1", start)
