@@ -19,13 +19,20 @@ func main() {
     
     safe := 0
     unsafe := 0
+    safe2 := 0
+    unsafe2 := 0
     for _, line := range strings.Split(strings.TrimSpace(input), "\n") {
         safetemp, unsafetemp := part1(line)
         safe += safetemp
         unsafe += unsafetemp 
+
+        safetemp2, unsafetemp2 := part2(line, false)
+        safe2 += safetemp2
+        unsafe2 += unsafetemp2
     }
-    fmt.Println("safe: ", safe)
-    fmt.Println("unsafe: ", unsafe)
+
+    fmt.Println("Day 1 Solution (Part 1):", safe)
+    fmt.Println("Day 1 Solution (Part 2):", safe2)
 }
 
 func part1(line string) (safe, unsafe int) {
@@ -36,12 +43,9 @@ func part1(line string) (safe, unsafe int) {
     var increasing bool
     if fst - snd <= 3 && fst - snd > 0 {
         increasing = false
-        fmt.Println("decreasing: first 2 elems: ", fst, snd)
     } else if fst-snd >= -3 && fst-snd < 0 {
         increasing = true
-        fmt.Println("increasing: first 2 elems: ", fst, snd)
     } else {
-        fmt.Println("unsafe: first 2 elems: ", fst, snd)
         return 0, 1
     }
 
@@ -49,14 +53,85 @@ func part1(line string) (safe, unsafe int) {
         ele1, _ := strconv.Atoi(fields[i])
         ele2, _ := strconv.Atoi(fields[i+1])
         if increasing && (ele1-ele2 >= 0 || ele1-ele2 < -3) {
-            fmt.Println("unsafe because ele1 - ele2 >= 0 or ele1 - ele2 < -3: ", ele1, ele2)
             return 0, 1
         }
         if !increasing && (ele1-ele2 <= 0 || ele1-ele2 > 3) {
-            fmt.Println("unsafe because ele1 - ele2 <= 0 or ele1 - ele2 > 3: ", ele1, ele2)
             return 0, 1
         }
     }
     
+    return 1, 0
+}
+
+
+func part2(line string, alreadyFailedOnce bool) (safe, unsafe int) {
+    fields := strings.Fields(line)
+    fst, _ := strconv.Atoi(fields[0])
+    snd, _ := strconv.Atoi(fields[1])
+
+    var increasing bool
+    if fst - snd <= 3 && fst - snd > 0 {
+        increasing = false
+    } else if fst-snd >= -3 && fst-snd < 0 {
+        increasing = true
+    } else if !alreadyFailedOnce {
+        excludeFirstElement := append(append([]string{}, fields[:0]...), fields[1:]...)
+        excludeSecondElement := append(append([]string{}, fields[:1]...), fields[2:]...)
+
+        safe, _ := part2(strings.Join(excludeFirstElement," "), true)
+        safe2, _ := part2(strings.Join(excludeSecondElement," "), true)
+
+        if safe == 1 || safe2 == 1 {
+            return 1, 0
+        } else {
+            return 0, 1
+        }
+    } else {
+        return 0, 1
+    }
+
+    for i := 1; i < len(fields)-1; i++ {
+        ele1, _ := strconv.Atoi(fields[i])
+        ele2, _ := strconv.Atoi(fields[i+1])
+        if increasing && (ele1-ele2 >= 0 || ele1-ele2 < -3) {
+            if !alreadyFailedOnce {
+                temp1 := append(append([]string{}, fields[:i-1]...), fields[i:]...)
+                temp2 := append(append([]string{}, fields[:i]...), fields[i+1:]...)
+                temp3 := append(append([]string{}, fields[:i+1]...), fields[i+2:]...)
+
+                safe, _ := part2(strings.Join(temp1," "), true)
+                safe2, _ := part2(strings.Join(temp2," "), true)
+                safe3, _ := part2(strings.Join(temp3," "), true)
+
+                if safe == 1 || safe2 == 1 || safe3 == 1 {
+                    return 1, 0
+                } else {
+                    return 0, 1
+                }
+            } else {
+                return 0, 1
+            }
+        }
+        if !increasing && (ele1-ele2 <= 0 || ele1-ele2 > 3) {
+            if !alreadyFailedOnce {
+                excludingPrevElement := append(append([]string{}, fields[:i-1]...), fields[i:]...)
+                excludingCurrElement := append(append([]string{}, fields[:i]...), fields[i+1:]...)
+                excludingNextElement := append(append([]string{}, fields[:i+1]...), fields[i+2:]...)
+
+                prevElementSafe, _ := part2(strings.Join(excludingPrevElement," "), true)
+                currentElementSafe, _ := part2(strings.Join(excludingCurrElement," "), true)
+                nextElementSafe, _ := part2(strings.Join(excludingNextElement," "), true)
+                
+                if prevElementSafe == 1 || currentElementSafe == 1 || nextElementSafe == 1 {
+                    return 1, 0
+                } else{
+                    return 0, 1
+                }
+            } else {
+                return 0, 1
+            }
+        }
+    }
+
     return 1, 0
 }
