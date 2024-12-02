@@ -26,23 +26,13 @@ func main() {
 
         fst, _ := strconv.Atoi(fields[0])
         snd, _ := strconv.Atoi(fields[1])
-        if fst - snd > 2 || fst - snd < -2 {
-            unsafe += 1
-            continue
-        }
-
-        if snd > fst{
-            temp := snd
-            snd = fst
-            fst = temp
-        }
 
         // FIXXXX
         increasing := false
         if fst - snd <= 3 && fst - snd > 0 {
             increasing = false
             fmt.Println("decreasing: first 2 eles: ", fst, snd)
-        } else if fst - snd <= -3 && fst - snd < 0 {
+        } else if fst - snd >= -3 && fst - snd < 0 {
             increasing = true
             fmt.Println("increasing: first 2 eles: ", fst, snd)
         } else {
@@ -53,16 +43,16 @@ func main() {
 
         breakOuter := false
         for i := 1; i < len(fields) - 1; i++ {
-            ele1, _ := strconv.Atoi(fields[0])
-            ele2, _ := strconv.Atoi(fields[1])
-            if increasing && ele1 - ele2 <= 0 {
-                fmt.Println("unsafe because ele1 - ele2 <= 0: ", ele1, ele2)
+            ele1, _ := strconv.Atoi(fields[i])
+            ele2, _ := strconv.Atoi(fields[i+1])
+            if increasing && (ele1 - ele2 >= 0 || ele1 - ele2 < -3) {
+                fmt.Println("unsafe because ele1 - ele2 >= 0 or ele1 - ele2 < -3: ", ele1, ele2)
                 unsafe += 1
                 breakOuter = true
                 break
             }
-            if !increasing && ele1 - ele2 >= 0 {
-                fmt.Println("unsafe because ele1 - ele2 >= 0: ", ele1, ele2)
+            if !increasing && (ele1 - ele2 <= 0  || ele1 - ele2 > 3) {
+                fmt.Println("unsafe because ele1 - ele2 <= 0 or ele1 - ele2 > 3: ", ele1, ele2)
                 unsafe += 1
                 breakOuter = true
                 break
