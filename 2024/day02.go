@@ -17,14 +17,11 @@ func main() {
         return
     }
     
-    safe := 0
-    safe2 := 0
+    var safe int
+    var safe2 int
     for _, line := range strings.Split(strings.TrimSpace(input), "\n") {
-        safetemp := part1(line)
-        safe += safetemp
-
-        safetemp2 := part2(line, false)
-        safe2 += safetemp2
+        safe += part1(line)
+        safe2 += part2(line, false)
     }
 
     fmt.Println("Day 1 Solution (Part 1):", safe)
@@ -42,21 +39,19 @@ func part1(line string) (safe int) {
     } else if fst-snd >= -3 && fst-snd < 0 {
         increasing = true
     } else {
-        return 0 // Unsafe case, directly return 0 for safety
+        return 0
     }
 
     for i := 1; i < len(fields)-1; i++ {
         ele1, _ := strconv.Atoi(fields[i])
         ele2, _ := strconv.Atoi(fields[i+1])
-        if increasing && (ele1-ele2 >= 0 || ele1-ele2 < -3) {
-            return 0 // Unsafe case, directly return 0 for safety
-        }
-        if !increasing && (ele1-ele2 <= 0 || ele1-ele2 > 3) {
-            return 0 // Unsafe case, directly return 0 for safety
+        if ( increasing && (ele1-ele2 >= 0 || ele1-ele2 < -3)) || 
+           (!increasing && (ele1-ele2 <= 0 || ele1-ele2 > 3)) {
+            return 0
         }
     }
 
-    return 1 // If none of the unsafe conditions are met, it's safe
+    return 1
 }
 
 func part2(line string, alreadyFailedOnce bool) (safe int) {
@@ -73,14 +68,12 @@ func part2(line string, alreadyFailedOnce bool) (safe int) {
         excludeFirstElement := append(append([]string{}, fields[:0]...), fields[1:]...)
         excludeSecondElement := append(append([]string{}, fields[:1]...), fields[2:]...)
 
-        safe := part2(strings.Join(excludeFirstElement, " "), true)
-        safe2 := part2(strings.Join(excludeSecondElement, " "), true)
-
-        if safe == 1 || safe2 == 1 {
+        if safe := part2(strings.Join(excludeFirstElement, " "), true); safe == 1 {
             return 1
-        } else {
-            return 0
+        } else if safe := part2(strings.Join(excludeSecondElement, " "), true); safe == 1 {
+            return 1
         }
+        return 0
     } else {
         return 0
     }
@@ -89,42 +82,38 @@ func part2(line string, alreadyFailedOnce bool) (safe int) {
         ele1, _ := strconv.Atoi(fields[i])
         ele2, _ := strconv.Atoi(fields[i+1])
         if increasing && (ele1-ele2 >= 0 || ele1-ele2 < -3) {
-            if !alreadyFailedOnce {
-                excludePrevElement := append(append([]string{}, fields[:i-1]...), fields[i:]...)
-                excludeCurrElement := append(append([]string{}, fields[:i]...), fields[i+1:]...)
-                excludeNextElement := append(append([]string{}, fields[:i+1]...), fields[i+2:]...)
-
-                safe := part2(strings.Join(excludePrevElement, " "), true)
-                safe2 := part2(strings.Join(excludeCurrElement, " "), true)
-                safe3 := part2(strings.Join(excludeNextElement, " "), true)
-
-                if safe == 1 || safe2 == 1 || safe3 == 1 {
-                    return 1
-                } else {
-                    return 0
-                }
-            } else {
+            if alreadyFailedOnce {
                 return 0
             }
+
+            excludePrevElement := append(append([]string{}, fields[:i-1]...), fields[i:]...)
+            excludeCurrElement := append(append([]string{}, fields[:i]...), fields[i+1:]...)
+            excludeNextElement := append(append([]string{}, fields[:i+1]...), fields[i+2:]...)
+            safeExcludingPrev := part2(strings.Join(excludePrevElement, " "), true)
+            safeExcludingCurr := part2(strings.Join(excludeCurrElement, " "), true)
+            safeExcludingNext := part2(strings.Join(excludeNextElement, " "), true)
+
+            if safeExcludingPrev == 1 || safeExcludingCurr == 1 || safeExcludingNext == 1 {
+                return 1
+            } 
+            return 0
         }
         if !increasing && (ele1-ele2 <= 0 || ele1-ele2 > 3) {
-            if !alreadyFailedOnce {
-                excludePrevElement := append(append([]string{}, fields[:i-1]...), fields[i:]...)
-                excludeCurrElement := append(append([]string{}, fields[:i]...), fields[i+1:]...)
-                excludeNextElement := append(append([]string{}, fields[:i+1]...), fields[i+2:]...)
-
-                prevElementSafe := part2(strings.Join(excludePrevElement, " "), true)
-                currentElementSafe := part2(strings.Join(excludeCurrElement, " "), true)
-                nextElementSafe := part2(strings.Join(excludeNextElement, " "), true)
-
-                if prevElementSafe == 1 || currentElementSafe == 1 || nextElementSafe == 1 {
-                    return 1
-                } else {
-                    return 0
-                }
-            } else {
+            if alreadyFailedOnce{
                 return 0
             }
+
+            excludePrevElement := append(append([]string{}, fields[:i-1]...), fields[i:]...)
+            excludeCurrElement := append(append([]string{}, fields[:i]...), fields[i+1:]...)
+            excludeNextElement := append(append([]string{}, fields[:i+1]...), fields[i+2:]...)
+            safeExcludingPrev := part2(strings.Join(excludePrevElement, " "), true)
+            safeExcludingCurr := part2(strings.Join(excludeCurrElement, " "), true)
+            safeExcludingNext := part2(strings.Join(excludeNextElement, " "), true)
+
+            if safeExcludingPrev == 1 || safeExcludingCurr == 1 || safeExcludingNext == 1 {
+                return 1
+            }
+            return 0
         }
     }
 
