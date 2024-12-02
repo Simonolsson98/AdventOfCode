@@ -18,49 +18,45 @@ func main() {
     }
     
     safe := 0
-    unsafe := 0
     safe2 := 0
-    unsafe2 := 0
     for _, line := range strings.Split(strings.TrimSpace(input), "\n") {
-        safetemp, unsafetemp := part1(line)
+        safetemp := part1(line)
         safe += safetemp
-        unsafe += unsafetemp 
 
-        safetemp2, unsafetemp2 := part2(line, false)
+        safetemp2 := part2(line, false)
         safe2 += safetemp2
-        unsafe2 += unsafetemp2
     }
 
     fmt.Println("Day 1 Solution (Part 1):", safe)
     fmt.Println("Day 1 Solution (Part 2):", safe2)
 }
 
-func part1(line string) (safe, unsafe int) {
+func part1(line string) (safe int) {
     fields := strings.Fields(line)
     fst, _ := strconv.Atoi(fields[0])
     snd, _ := strconv.Atoi(fields[1])
 
     var increasing bool
-    if fst - snd <= 3 && fst - snd > 0 {
+    if fst-snd <= 3 && fst-snd > 0 {
         increasing = false
     } else if fst-snd >= -3 && fst-snd < 0 {
         increasing = true
     } else {
-        return 0, 1
+        return 0 // Unsafe case, directly return 0 for safety
     }
 
     for i := 1; i < len(fields)-1; i++ {
         ele1, _ := strconv.Atoi(fields[i])
         ele2, _ := strconv.Atoi(fields[i+1])
         if increasing && (ele1-ele2 >= 0 || ele1-ele2 < -3) {
-            return 0, 1
+            return 0 // Unsafe case, directly return 0 for safety
         }
         if !increasing && (ele1-ele2 <= 0 || ele1-ele2 > 3) {
-            return 0, 1
+            return 0 // Unsafe case, directly return 0 for safety
         }
     }
-    
-    return 1, 0
+
+    return 1 // If none of the unsafe conditions are met, it's safe
 }
 
 func part2(line string, alreadyFailedOnce bool) (safe int) {
@@ -94,13 +90,13 @@ func part2(line string, alreadyFailedOnce bool) (safe int) {
         ele2, _ := strconv.Atoi(fields[i+1])
         if increasing && (ele1-ele2 >= 0 || ele1-ele2 < -3) {
             if !alreadyFailedOnce {
-                temp1 := append(append([]string{}, fields[:i-1]...), fields[i:]...)
-                temp2 := append(append([]string{}, fields[:i]...), fields[i+1:]...)
-                temp3 := append(append([]string{}, fields[:i+1]...), fields[i+2:]...)
+                excludePrevElement := append(append([]string{}, fields[:i-1]...), fields[i:]...)
+                excludeCurrElement := append(append([]string{}, fields[:i]...), fields[i+1:]...)
+                excludeNextElement := append(append([]string{}, fields[:i+1]...), fields[i+2:]...)
 
-                safe := part2(strings.Join(temp1, " "), true)
-                safe2 := part2(strings.Join(temp2, " "), true)
-                safe3 := part2(strings.Join(temp3, " "), true)
+                safe := part2(strings.Join(excludePrevElement, " "), true)
+                safe2 := part2(strings.Join(excludeCurrElement, " "), true)
+                safe3 := part2(strings.Join(excludeNextElement, " "), true)
 
                 if safe == 1 || safe2 == 1 || safe3 == 1 {
                     return 1
@@ -113,13 +109,13 @@ func part2(line string, alreadyFailedOnce bool) (safe int) {
         }
         if !increasing && (ele1-ele2 <= 0 || ele1-ele2 > 3) {
             if !alreadyFailedOnce {
-                excludingPrevElement := append(append([]string{}, fields[:i-1]...), fields[i:]...)
-                excludingCurrElement := append(append([]string{}, fields[:i]...), fields[i+1:]...)
-                excludingNextElement := append(append([]string{}, fields[:i+1]...), fields[i+2:]...)
+                excludePrevElement := append(append([]string{}, fields[:i-1]...), fields[i:]...)
+                excludeCurrElement := append(append([]string{}, fields[:i]...), fields[i+1:]...)
+                excludeNextElement := append(append([]string{}, fields[:i+1]...), fields[i+2:]...)
 
-                prevElementSafe := part2(strings.Join(excludingPrevElement, " "), true)
-                currentElementSafe := part2(strings.Join(excludingCurrElement, " "), true)
-                nextElementSafe := part2(strings.Join(excludingNextElement, " "), true)
+                prevElementSafe := part2(strings.Join(excludePrevElement, " "), true)
+                currentElementSafe := part2(strings.Join(excludeCurrElement, " "), true)
+                nextElementSafe := part2(strings.Join(excludeNextElement, " "), true)
 
                 if prevElementSafe == 1 || currentElementSafe == 1 || nextElementSafe == 1 {
                     return 1
@@ -134,3 +130,4 @@ func part2(line string, alreadyFailedOnce bool) (safe int) {
 
     return 1
 }
+
