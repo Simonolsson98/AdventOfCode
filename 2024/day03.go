@@ -54,7 +54,6 @@ func part2(input string) (result int) {
     }
 
     var sum int;
-    fmt.Println(re.FindAllString(input, -1))
     var include bool = true;
     for _, match := range re.FindAllString(input, -1) {
         if match == "do()" {
