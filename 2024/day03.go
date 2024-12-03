@@ -26,14 +26,8 @@ func main() {
 }
 
 func part1(input string) (result int) {
-    re, err := regexp.Compile(`mul\(\d{1,3},\d{1,3}\)`)
-    if err != nil {
-        fmt.Println("wtf")
-        return
-    }
-
     var sum int;
-    for _, match := range re.FindAllString(input, -1) {
+    for _, match := range regexp.MustCompile(`mul\(\d{1,3},\d{1,3}\)`).FindAllString(input, -1) {
         for _, nums := range regexp.MustCompile(`\d{1,3},\d{1,3}`).FindAllString(match, -1) {
             val := strings.Split(nums, ",")
             fst, _ := strconv.Atoi(val[0])
@@ -47,24 +41,14 @@ func part1(input string) (result int) {
 }
 
 func part2(input string) (result int) {
-    re, err := regexp.Compile(`mul\(\d{1,3},\d{1,3}\)|do(?:n't)?\(\)`)
-    if err != nil {
-        fmt.Println("wtf")
-        return
-    }
-
     var sum int;
     var include bool = true;
-    for _, match := range re.FindAllString(input, -1) {
+    for _, match := range regexp.MustCompile(`mul\(\d{1,3},\d{1,3}\)|do(?:n't)?\(\)`).FindAllString(input, -1) {
         if match == "do()" {
             include = true
-            continue
         } else if match == "don't()" {
             include = false
-            continue
-        }
-
-        if include {
+        } else if include {
             for _, nums := range regexp.MustCompile(`\d{1,3},\d{1,3}`).FindAllString(match, -1) {
                 val := strings.Split(nums, ",")
                 fst, _ := strconv.Atoi(val[0])
