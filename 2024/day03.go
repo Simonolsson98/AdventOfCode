@@ -5,7 +5,8 @@ import (
     "strings"
     "os"
     "2024/utils"
-    //"strconv"
+    "regexp"
+    "strconv"
     "path/filepath"
 )
 
@@ -17,6 +18,29 @@ func main() {
         return
     }
 
-    fmt.Println("Day 3 Solution (Part 1):")
+    sum := part1(input)
+
+    fmt.Println("Day 3 Solution (Part 1):", sum)
     fmt.Println("Day 3 Solution (Part 2):")
+}
+
+func part1(input string) (result int) {
+    re, err := regexp.Compile(`mul\(\d{1,3},\d{1,3}\)`)
+    if err != nil {
+        fmt.Println("wtf")
+        return
+    }
+
+    var sum int;
+    for _, match := range re.FindAllString(input, -1) {
+        for _, nums := range regexp.MustCompile(`\d{1,3},\d{1,3}`).FindAllString(match, -1) {
+            val := strings.Split(nums, ",")
+            fst, _ := strconv.Atoi(val[0])
+            snd, _ := strconv.Atoi(val[1])
+
+            sum += (fst * snd)
+        }
+    }
+
+    return sum
 }
