@@ -25,7 +25,6 @@ func main() {
     var sum int
     for i, row := range grid {
         for j, char := range row {
-            fmt.Printf("Character at [%d][%d]: %c\n", i, j, char)
             sum += CheckPart1Matches(char, grid, i, j)
         }
     }
