@@ -27,14 +27,11 @@ func main() {
 
 func part1(input string) (result int) {
     var sum int;
-    for _, match := range regexp.MustCompile(`mul\(\d{1,3},\d{1,3}\)`).FindAllString(input, -1) {
-        for _, nums := range regexp.MustCompile(`\d{1,3},\d{1,3}`).FindAllString(match, -1) {
-            val := strings.Split(nums, ",")
-            fst, _ := strconv.Atoi(val[0])
-            snd, _ := strconv.Atoi(val[1])
+    for _, match := range regexp.MustCompile(`mul\((\d{1,3}),(\d{1,3})\)`).FindAllStringSubmatch(input, -1) {
+        fst, _ := strconv.Atoi(match[1])
+        snd, _ := strconv.Atoi(match[2])
 
-            sum += (fst * snd)
-        }
+        sum += (fst * snd)
     }
 
     return sum
