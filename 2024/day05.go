@@ -31,9 +31,10 @@ func main() {
     }
 
     sum := part1(inputRows, constraints)
+    sum2 := part2(inputRows, constraints)
 
     fmt.Println("Day 5 Solution (Part 1):", sum)
-    fmt.Println("Day 5 Solution (Part 2):")
+    fmt.Println("Day 5 Solution (Part 2):", sum2-sum)
 }
 
 func part1(inputRows []string, constraints [][2]int) (int) {
@@ -69,14 +70,60 @@ func part1(inputRows []string, constraints [][2]int) (int) {
 
     for _, validPath := range validPaths {
         epiclist := strings.Split(validPath, ",")
-        ffs, _ := strconv.Atoi(epiclist[(len(epiclist)-1)/2])
-        sum += ffs
+        numberToAdd, _ := strconv.Atoi(epiclist[(len(epiclist)-1)/2])
+        sum += numberToAdd
     }
 
     return sum
 }
 
-// Helper function to find the index of a number in a slice
+var firstI int = -1
+var secondI int = -1
+func part2(inputRows []string, constraints [][2]int) (int) {
+    var sum int
+
+    for _, inputRow := range inputRows {
+        nums := strings.Split(inputRow, ",")
+        for ok := !check(nums, constraints); ok; ok = !check(nums, constraints) {
+            if firstI == -1 || secondI == -1 {
+                continue
+            }
+
+            temp := nums[firstI]
+            nums[firstI] = nums[secondI]
+            nums[secondI] = temp
+        }
+
+        numberToAdd, _ := strconv.Atoi(nums[(len(nums)-1)/2])
+        sum += numberToAdd
+    }
+
+    return sum
+}
+
+func check(nums []string, constraints [][2]int) (surely bool){
+    for _, constraint := range constraints {
+        firstNum, secondNum := constraint[0], constraint[1]
+
+        firstIndex := findIndex(nums, firstNum)
+        secondIndex := findIndex(nums, secondNum)
+
+        // Valid if either constraint is not part of it, or first element appears before second element
+        if (firstIndex == -1 || secondIndex == -1) || firstIndex < secondIndex {
+            firstI = -1
+            secondI = -1
+            continue
+        }
+
+        firstI = firstIndex
+        secondI = secondIndex
+
+        return false 
+    }
+
+    return true 
+}
+
 func findIndex(nums []string, target int) int {
     for i, num := range nums {
         realNum, _ := strconv.Atoi(num)
