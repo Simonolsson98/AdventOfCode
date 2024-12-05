@@ -17,15 +17,12 @@ func main() {
         return
     }
 
-    // Split the input on double newlines
     parts := strings.Split(input, "\n\n")
     rules := strings.Split(parts[0], "\n")
     inputRows := strings.Split(parts[1], "\n")
 
-    // Create a list to store the rules as pairs
     constraints := make([][2]int, 0)
 
-    // Parse the rules into the constraints list
     for _, rule := range rules {
         res := strings.Split(rule, "|")
         firstNum, _ := strconv.Atoi(res[0])
@@ -48,7 +45,6 @@ func part1(inputRows []string, constraints [][2]int) (int) {
         nums := strings.Split(inputRow, ",")
         valid := true
 
-        // Check each constraint
         for _, constraint := range constraints {
             firstNum, secondNum := constraint[0], constraint[1]
 
@@ -64,7 +60,6 @@ func part1(inputRows []string, constraints [][2]int) (int) {
             break
         }
 
-        // Append to valid or invalid paths
         if valid {
             validPaths = append(validPaths, inputRow)
         } else {
@@ -72,7 +67,6 @@ func part1(inputRows []string, constraints [][2]int) (int) {
         }
     }
 
-    // Calculate the sum of middle elements for valid paths
     for _, validPath := range validPaths {
         epiclist := strings.Split(validPath, ",")
         ffs, _ := strconv.Atoi(epiclist[(len(epiclist)-1)/2])
