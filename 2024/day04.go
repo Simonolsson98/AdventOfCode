@@ -6,8 +6,10 @@ import (
     "os"
     "2024/utils"
     "path/filepath"
+    "slices"
 )
 
+var checkthis = []string { "MAS", "SAM" }
 func main() {
     inputFile := strings.Split(filepath.Base(os.Args[0]), ".")[0] + "_input"
     input, err := utils.ReadInput(inputFile)
@@ -96,13 +98,16 @@ func CheckPart1Matches(character rune, grid [][]rune, i int, j int) (sum int){
 }
 
 func CheckPart2Matches(character rune, grid [][]rune, i int, j int) (sum int){
-    if i+1 < len(grid) && i-1 >= 0 && j-1 >= 0 && j+1 < len(grid[0]) && character == 'A' && 
-    (
+    if 
+        i+1 < len(grid) && 
+        i-1 >= 0 && 
+        j-1 >= 0 && 
+        j+1 < len(grid[0]) && 
         // M + S or S + M diagonal down right
-        ((grid[i+1][j+1] == 'M' && grid[i-1][j-1] == 'S') || (grid[i+1][j+1] == 'S' && grid[i-1][j-1] == 'M')) &&
+        slices.Contains(checkthis, fmt.Sprintf("%c", grid[i+1][j+1]) + fmt.Sprintf("%c", grid[i][j]) + fmt.Sprintf("%c", grid[i-1][j-1])) &&
         // M + S or S + M diagonal down left
-        ((grid[i+1][j-1] == 'M' && grid[i-1][j+1] == 'S') || (grid[i+1][j-1] == 'S' && grid[i-1][j+1] == 'M'))) {
-    sum += 1
+        slices.Contains(checkthis, fmt.Sprintf("%c", grid[i+1][j-1]) + fmt.Sprintf("%c", grid[i][j]) + fmt.Sprintf("%c", grid[i-1][j+1])) {
+        sum += 1
     }
 
     return sum
