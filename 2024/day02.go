@@ -28,7 +28,7 @@ func main() {
 
     fmt.Println("Day 1 Solution (Part 1):", safe)
     fmt.Println("Day 1 Solution (Part 2):", safe2)
-    fmt.Println("Part 1 + 2 execution time:", time.Since(start).Microseconds(), "microseconds")
+    fmt.Println("Part 1 + 2 execution time:", time.Since(start))
 }
 
 func part1(line string) (safe int) {

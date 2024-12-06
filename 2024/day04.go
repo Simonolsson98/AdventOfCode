@@ -36,7 +36,7 @@ func main() {
 
     fmt.Println("Day 4 Solution (Part 1):", sum)
     fmt.Println("Day 4 Solution (Part 2):", sum2)
-    fmt.Println("Part 1 + 2 execution time", time.Since(start).Milliseconds(), "milliseconds")
+    fmt.Println("Part 1 + 2 execution time", time.Since(start))
 }
 
 func CheckPart1Matches(character rune, grid [][]rune, i int, j int) (sum int){

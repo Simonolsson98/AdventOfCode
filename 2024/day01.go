@@ -27,10 +27,10 @@ func main() {
 
     start := time.Now()
     fmt.Println("Day 1 Solution (Part 1):", part1(list1, list2))
-    fmt.Println("Part 1 execution time:", time.Since(start).Nanoseconds(), "nanoseconds\n")
+    fmt.Println("Part 1 execution time:", time.Since(start), "\n")
     start = time.Now()
     fmt.Println("Day 1 Solution (Part 2):", part2(list1, list2))
-    fmt.Println("Part 2 execution time:", time.Since(start).Nanoseconds(), "nanoseconds")
+    fmt.Println("Part 2 execution time:", time.Since(start))
 }
 
 func parseInput(input string) ([]int, []int, error) {
