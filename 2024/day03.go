@@ -8,6 +8,7 @@ import (
     "regexp"
     "strconv"
     "path/filepath"
+    "time"
 )
 
 func main() {
@@ -18,11 +19,15 @@ func main() {
         return
     }
 
+    start := time.Now()
     sum := part1(input)
-    sum2 := part2(input)
-
     fmt.Println("Day 3 Solution (Part 1):", sum)
+    fmt.Println("Part 1 execution time:", time.Since(start).Microseconds(), "microseconds\n")
+
+    start = time.Now()
+    sum2 := part2(input)
     fmt.Println("Day 3 Solution (Part 2):", sum2)
+    fmt.Println("Part 2 execution time:", time.Since(start).Microseconds(), "microseconds")
 }
 
 func part1(input string) (result int) {

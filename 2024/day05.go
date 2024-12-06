@@ -7,6 +7,7 @@ import (
     "os"
     "path/filepath"
     "2024/utils"
+    "time"
 )
 
 func main() {
@@ -30,11 +31,15 @@ func main() {
         constraints = append(constraints, [2]int{firstNum, secondNum})
     }
 
+    start := time.Now()
     sum := part1(inputRows, constraints)
-    sum2 := part2(inputRows, constraints)
-
     fmt.Println("Day 5 Solution (Part 1):", sum)
+    fmt.Println("Part 1 execution time", time.Since(start).Milliseconds(), "milliseconds\n")
+    
+    start = time.Now()
+    sum2 := part2(inputRows, constraints)
     fmt.Println("Day 5 Solution (Part 2):", sum2-sum)
+    fmt.Println("Part 2 execution time:", time.Since(start).Milliseconds(), "milliseconds")
 }
 
 func part1(inputRows []string, constraints [][2]int) (int) {

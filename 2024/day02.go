@@ -7,6 +7,7 @@ import (
     "2024/utils"
     "strconv"
     "path/filepath"
+    "time"
 )
 
 func main() {
@@ -17,6 +18,7 @@ func main() {
         return
     }
     
+    start := time.Now()
     var safe int
     var safe2 int
     for _, line := range strings.Split(strings.TrimSpace(input), "\n") {
@@ -26,6 +28,7 @@ func main() {
 
     fmt.Println("Day 1 Solution (Part 1):", safe)
     fmt.Println("Day 1 Solution (Part 2):", safe2)
+    fmt.Println("Part 1 + 2 execution time:", time.Since(start).Microseconds(), "microseconds")
 }
 
 func part1(line string) (safe int) {
