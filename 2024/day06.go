@@ -7,6 +7,7 @@ import (
     "2024/utils"
     "strconv"
     "path/filepath"
+    "time"
 )
 
 type someStruct struct  {
@@ -29,7 +30,9 @@ var grid [][]string
 var startingPosX int
 var startingPosY int
 
+var start time.Time
 func main() {
+    start = time.Now()
     inputFile := strings.Split(filepath.Base(os.Args[0]), ".")[0] + "_input"
     input, err := utils.ReadInput(inputFile)
     if err != nil {
@@ -115,28 +118,30 @@ func GuardOutOfSight(){
         }
 
         fmt.Println("Day 6 Solution (Part 1):", len(uniqueVisited))
+        fmt.Println("Part 1 execution time:", time.Since(start))
     }
 
     var differentPositions int
-    for x, line := range grid {
-        for y, _ := range line {
-            uniqueMap = make(map[string]bool)
-            if grid[x][y] == "." {
-                grid[x][y] = "#"
-            } else{
-                continue
-            }
-
-            hmm := part2(grid)
-            if hmm {
-                differentPositions += 1
-            }
-
-            grid[x][y] = "."
+    for _, pos := range uniqueVisited {
+        x := pos.posX
+        y := pos.posY
+        uniqueMap = make(map[string]bool)
+        if grid[x][y] == "." {
+            grid[x][y] = "#"
+        } else{
+            continue
         }
+
+        hmm := part2(grid)
+        if hmm {
+            differentPositions += 1
+        }
+
+        grid[x][y] = "."
     }
 
     fmt.Println("Day 6 Solution (Part 2):", differentPositions)
+    fmt.Println("Part 2 execution time:", time.Since(start))
 }
 
 func part2(grid [][]string) (loop bool) {
