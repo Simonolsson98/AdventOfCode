@@ -21,10 +21,10 @@ func main() {
 	start := time.Now()
 	// exec part1()
     fmt.Println("Day 7 Solution (Part 1):")
-    fmt.Println("Part 1 execution time:", time.Since(start).Milliseconds(), "milliseconds\n")
+    fmt.Println("Part 1 execution time:", time.Since(start), "\n")
 
 	start = time.Now()
 	// exec part2()
     fmt.Println("Day 7 Solution (Part 2):")
-    fmt.Println("Part 2 execution time:", time.Since(start).Milliseconds(), "milliseconds")
+    fmt.Println("Part 2 execution time:", time.Since(start))
 }
