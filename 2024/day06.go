@@ -28,7 +28,6 @@ func main() {
         return
     }
 
-    defer GuardOutOfSight()
     
     var grid [][]string
     var currPosX int
@@ -46,46 +45,57 @@ func main() {
         grid = append(grid, col)
     }
 
-    visited = append(visited, someStruct { posX: currPosX, posY: currPosY})
-    direction := 0 
-    for ok := true; ok; ok = true {
-        if direction == 0 { // up
-            nextEle := grid[currPosX - 1][currPosY]
-            if nextEle == "#"{
-                direction += 1
-            } else{
-                currPosX = currPosX - 1
-                visited = append(visited, someStruct { posX: currPosX, posY: currPosY})
+
+    part1(grid, currPosX, currPosY)
+
+    fmt.Println("Day 6 Solution (Part 2):")
+}
+
+func part1(grid [][]string, startX, startY int) {
+    defer GuardOutOfSight()
+    currPosX, currPosY := startX, startY
+    direction := 0
+
+    // Add the starting position
+    visited = append(visited, someStruct{posX: currPosX, posY: currPosY})
+
+    for ok := true; ok; {
+        var nextEle string
+        switch direction {
+        case 0: // Up
+            nextEle = grid[currPosX-1][currPosY]
+            if nextEle == "#" {
+                direction = (direction + 1) % 4
+            } else {
+                currPosX--
+                visited = append(visited, someStruct{posX: currPosX, posY: currPosY})
             }
-        } else if direction == 1 { // right
-            nextEle := grid[currPosX][currPosY + 1]
-            if nextEle == "#"{
-                direction += 1
-            } else{
-                currPosY = currPosY + 1
-                visited = append(visited, someStruct { posX: currPosX, posY: currPosY})
+        case 1: // Right
+            nextEle = grid[currPosX][currPosY+1]
+            if nextEle == "#" {
+                direction = (direction + 1) % 4
+            } else {
+                currPosY++
+                visited = append(visited, someStruct{posX: currPosX, posY: currPosY})
             }
-        } else if direction == 2 { // down
-            nextEle := grid[currPosX + 1][currPosY]
-            if nextEle == "#"{
-                direction += 1
-            } else{
-                currPosX = currPosX + 1
-                visited = append(visited, someStruct { posX: currPosX, posY: currPosY})
+        case 2: // Down
+            nextEle = grid[currPosX+1][currPosY]
+            if nextEle == "#" {
+                direction = (direction + 1) % 4
+            } else {
+                currPosX++
+                visited = append(visited, someStruct{posX: currPosX, posY: currPosY})
             }
-        } else if direction == 3 { // left
-            nextEle := grid[currPosX][currPosY - 1]
-            if nextEle == "#"{
-                direction = 0
-            } else{
-                currPosY = currPosY - 1
-                visited = append(visited, someStruct { posX: currPosX, posY: currPosY})
+        case 3: // Left
+            nextEle = grid[currPosX][currPosY-1]
+            if nextEle == "#" {
+                direction = (direction + 1) % 4
+            } else {
+                currPosY--
+                visited = append(visited, someStruct{posX: currPosX, posY: currPosY})
             }
         }
     }
-
-
-    fmt.Println("Day 6 Solution (Part 2):")
 }
 
 func GuardOutOfSight(){
