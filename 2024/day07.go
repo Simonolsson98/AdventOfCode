@@ -19,42 +19,59 @@ func main() {
     }
 
     start := time.Now()
-    var validSum int64
-    lines := strings.Split(input, "\n")
-    for _, line := range lines {
-        nums := strings.Split(line, " ")
-        target, _ := strconv.ParseInt(strings.TrimRight(nums[0], ":"), 10, 64)
-        startSum, _ := strconv.ParseInt(nums[1], 10, 64)
-        // start at index 2, since 0 is target and 1 is first num
-        validity := checkLimit(target, "*", startSum, nums, 2)
-        if validity {
-            validSum += target
-            continue
-        }
-
-        validity = checkLimit(target, "+", startSum, nums, 2)
-        if validity {
-            validSum += target
-            continue
-        }
-    }
-
+    validSum := calculateValidSum(input, false)
     fmt.Println("Day 7 Solution (Part 1):", validSum)
     fmt.Println("Part 1 execution time:", time.Since(start), "\n")
 
 	start = time.Now()
-	// exec part2()
-    fmt.Println("Day 7 Solution (Part 2):")
+    validSum = calculateValidSum(input, true)
+    fmt.Println("Day 7 Solution (Part 2):", validSum)
     fmt.Println("Part 2 execution time:", time.Since(start))
 }
 
-func checkLimit(target int64, operator string, subSum int64, nums []string, index int) (valid bool){
-    var sum int64
-    nextNum, _ := strconv.ParseInt(nums[index], 10, 64)
+func calculateValidSum(input string, part2 bool) int {
+    var validSum int
+    lines := strings.Split(input, "\n")
+    for _, line := range lines {
+        nums := strings.Split(line, " ")
+        target, _ := strconv.Atoi(strings.TrimRight(nums[0], ":"))
+        startSum, _ := strconv.Atoi(nums[1])
+
+        validity := checkLimit(target, "*", startSum, nums, 2, part2)
+        if validity {
+            validSum += target
+            continue
+        }
+
+        validity = checkLimit(target, "+", startSum, nums, 2, part2)
+        if validity {
+            validSum += target
+            continue
+        }
+
+        if part2 {
+            validity = checkLimit(target, "||", startSum, nums, 2, true)
+            if validity {
+                validSum += target
+                continue
+            }
+        }
+    }
+
+    return validSum
+}
+
+func checkLimit(target int, operator string, subSum int, nums []string, index int, part2 bool) (valid bool){
+    var sum int
+    nextNum, _ := strconv.Atoi(nums[index])
     if operator == "*" {
         sum = subSum * nextNum
-    } else {
+    } else if operator == "+" {
         sum = subSum + nextNum
+    } else  {
+        part1 := strconv.Itoa(subSum)
+        part2 := strconv.Itoa(nextNum)
+        sum, _= strconv.Atoi(part1 + part2)
     }
 
     if sum > target {
@@ -67,18 +84,23 @@ func checkLimit(target int64, operator string, subSum int64, nums []string, inde
             return false
         }
 
-        val:= checkLimit(target, "*", sum, nums, index)
+        val:= checkLimit(target, "*", sum, nums, index, part2)
         if val {
             return val
         }
 
-        val = checkLimit(target, "+", sum, nums, index)
+        val = checkLimit(target, "+", sum, nums, index, part2)
         if val {
             return val
+        }
+
+        if part2 {
+            val = checkLimit(target, "||", sum, nums, index, part2)
+            if val {
+                return val
+            }
         }
 
         return false
     }
 }
-// wut   2654749936343
-// wrong 2654749936423
