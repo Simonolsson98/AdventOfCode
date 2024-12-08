@@ -23,8 +23,7 @@ func main() {
     fmt.Println("Part 1 execution time:", time.Since(start), "\n")
 
 	start = time.Now()
-	// exec part2()
-    fmt.Println("Day 8 Solution (Part 2):")
+    fmt.Println("Day 8 Solution (Part 2):", part2(input))
     fmt.Println("Part 2 execution time:", time.Since(start))
 }
 
@@ -53,36 +52,22 @@ func part1(input string) (antis int) {
 
                     newXAnti := existingPos.xPos + xdiff
                     newYAnti := existingPos.yPos + ydiff
-
-                    if  newXAnti < xLimit && 
-                        newXAnti >= 0 && 
-                        newYAnti < yLimit && 
-                        newYAnti >= 0 {
-                        antiNodes = addifunique(antiNodes, existingPos.xPos + xdiff, existingPos.yPos + ydiff)
+                    if  newXAnti < xLimit && newXAnti >= 0 && newYAnti < yLimit && newYAnti >= 0 {
+                        antiNodes = addifunique(antiNodes, newXAnti, newYAnti)
                     }
 
                     newXAnti = x - xdiff
                     newYAnti = y - ydiff
-                    if  newXAnti < xLimit && 
-                        newXAnti >= 0 && 
-                        newYAnti < yLimit && 
-                        newYAnti >= 0 {
-
-                        antiNodes = addifunique(antiNodes, x - xdiff, y - ydiff)
+                    if  newXAnti < xLimit && newXAnti >= 0 && newYAnti < yLimit && newYAnti >= 0 {
+                        antiNodes = addifunique(antiNodes, newXAnti, newYAnti)
                     }
-
                 }
-            } else {
-                fmt.Println("new pos: ", x, y)
             }
 
             antennas[char] = append(antennas[char], &position{ xPos: x, yPos: y })
         }
     }
 
-    for _, node := range antiNodes {
-        fmt.Println(node.xPos, node.yPos)
-    }
     return len(antiNodes)
 }
 
@@ -102,3 +87,65 @@ func addifunique(antiNodes []position, newXPos int, newYPos int) ([]position){
     return antiNodes
 }
 
+func part2(input string) (antis int) {
+    antiNodes := []position{}
+    antennas := make(map[string][]*position)
+
+    for x, line := range strings.Split(input, "\n") {
+        xLimit := len(line)
+        yLimit := len(strings.Split(line, ""))
+        for y, char := range strings.Split(line, "") {
+            if char == "." {
+                continue
+            }
+
+            existingPositions, exists := antennas[char]
+            if exists {
+                for _, existingPos := range existingPositions {
+                    antiNodes = addifunique(antiNodes, existingPos.xPos, existingPos.yPos)
+                    antiNodes = addifunique(antiNodes, x, y)
+
+                    origxdiff := existingPos.xPos - x
+                    origydiff := existingPos.yPos - y
+                    newxDiff := 0
+                    newyDiff := 0
+                    newXAnti := existingPos.xPos + origxdiff
+                    newYAnti := existingPos.yPos + origydiff
+                    for {
+                        if newXAnti >= xLimit || newXAnti < 0 || newYAnti >= yLimit || newYAnti < 0 {
+                            break
+                        }
+
+                        antiNodes = addifunique(antiNodes, newXAnti, newYAnti)
+                        
+                        newxDiff += origxdiff
+                        newyDiff += origydiff
+                        newXAnti = existingPos.xPos + newxDiff
+                        newYAnti = existingPos.yPos + newyDiff
+                    }
+
+                    newxDiff = 0
+                    newyDiff = 0
+                    newXAnti = x - origxdiff
+                    newYAnti = y - origydiff
+                    for {
+                        if newXAnti >= xLimit || newXAnti < 0 || newYAnti >= yLimit || newYAnti < 0 {
+                            break 
+                        }
+
+                        antiNodes = addifunique(antiNodes, newXAnti, newYAnti)
+                        
+                        newxDiff = newxDiff + origxdiff
+                        newyDiff = newyDiff + origydiff
+                        newXAnti = x - newxDiff
+                        newYAnti = y - newyDiff
+                    }
+                }
+            }
+
+            antennas[char] = append(antennas[char], &position{ xPos: x, yPos: y })
+        }
+    }
+
+    return len(antiNodes)
+}
