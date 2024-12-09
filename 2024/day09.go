@@ -119,14 +119,12 @@ func main() {
             }
             num, _ := strconv.Atoi(char)
             for j := 0; j < num; j++ {
-                // fmt.Println("MUL:", compIndex, (i / 2), "=", compIndex * (i / 2))
                 sum += (compIndex * (i / 2))
                 compIndex += 1
             }
         } else {
             currentCharIsNotZero = false
             for _, bruh := range mapOfMovedDiskFiles[thisIndexLol] {
-                // fmt.Println("MUL:", compIndex, bruh, "=", compIndex * bruh)
                 sum += (compIndex * bruh)
 
                 compIndex += 1
