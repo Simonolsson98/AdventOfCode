@@ -8,6 +8,7 @@ import (
     "strconv"
     "path/filepath"
     "time"
+    "math"
 )
 
 type test struct {
@@ -24,9 +25,13 @@ func main() {
         return
     }
 
+    start := time.Now()
     var currentPickingIndex int
     var lol = []test{}
     splitted := strings.Split(input, "")
+    if(len(splitted) % 2 != 0){
+        splitted = append(splitted, "0")
+    }
     for i := 0; i < len(splitted); i+=2 {
         if i + 1 >= len(splitted){
             break
@@ -38,68 +43,101 @@ func main() {
         currentPickingIndex = i
     }
 
-    fmt.Println(lol)
-    return
+    testMap := make(map[int][]int)
+
     for i, val := range lol {
+        if i == len(lol) {
+            break
+        }
+
         freeSpacesToReplace := val.freespace
-        fmt.Println("running for:", freeSpacesToReplace, "in: ", val)
         for {
-            if currentPickingIndex < 0 {
+            if currentPickingIndex < 0 || currentPickingIndex <= 2 * i {
                 break
             }
 
-            piecesToBeMoved, _ := strconv.Atoi(splitted[currentPickingIndex]) // 4 out of 4 0 16
-            fmt.Println("piecesToBeMoved: ", piecesToBeMoved)
+            piecesToBeMoved, _ := strconv.Atoi(splitted[currentPickingIndex])
             if piecesToBeMoved == 0 {
                 currentPickingIndex -= 2
                 continue
             }
             
             if freeSpacesToReplace > piecesToBeMoved{
-                fmt.Println("freeSpacesToReplace > piecesToBeMoved", freeSpacesToReplace, piecesToBeMoved)
-                freeSpacesToReplace -= piecesToBeMoved
-                piecesToBeMoved = 0
-                fmt.Println(splitted)
-                splitted[currentPickingIndex - 1] = "0"
-                fmt.Println(splitted)
-                val.freespace = freeSpacesToReplace
-                currentPickingIndex -= 2
-                lol[i] = val
+                diff := freeSpacesToReplace - piecesToBeMoved
+
+                splitted[2*i+1] = strconv.Itoa(diff)
+                splitted[currentPickingIndex] = "0"
+
+                self, _ := strconv.Atoi(splitted[currentPickingIndex+1])
+                splitted[currentPickingIndex+1] = strconv.Itoa(self + piecesToBeMoved)
+                
+                for j := 0; j < piecesToBeMoved; j++ {
+                    testMap[i] = append(testMap[i], int(math.Ceil(float64(currentPickingIndex/2))))
+                }
+
+                freeSpacesToReplace = diff
                 continue
+            } else if freeSpacesToReplace == piecesToBeMoved {
+                splitted[2*i+1] = "0"
+
+                splitted[currentPickingIndex] = "0"
+
+                asd2, _ := strconv.Atoi(splitted[currentPickingIndex + 1])
+                splitted[currentPickingIndex + 1] = strconv.Itoa(asd2 + piecesToBeMoved)
+                
+                for j := 0; j < piecesToBeMoved; j++ {
+                    testMap[i] = append(testMap[i], int(math.Ceil(float64(currentPickingIndex/2))))
+                }
+                
+                break
             } else { // more than enough to move
-                fmt.Println("freeSpacesToReplace <= piecesToBeMoved", freeSpacesToReplace, piecesToBeMoved)
-                piecesToBeMoved -= freeSpacesToReplace
-                val.freespace = 0
-                valOfMovedStuff := currentPickingIndex/2
-                val.index = valOfMovedStuff
-                fmt.Println("valOfMovedStuff:", valOfMovedStuff)
-                fmt.Println("currpick:", currentPickingIndex)
-                lol[i] = val
-                break
-            }
+                diff := piecesToBeMoved - freeSpacesToReplace
+                splitted[2*i+1] = "0"
 
-            check, _ := strconv.Atoi(splitted[currentPickingIndex])
-            if check <= 0 {
-                currentPickingIndex -= 2
-            }
-            if freeSpacesToReplace <= 0 {
+                splitted[currentPickingIndex] = strconv.Itoa(diff)
+
+                asd2, _ := strconv.Atoi(splitted[currentPickingIndex + 1])
+                splitted[currentPickingIndex + 1] = strconv.Itoa(asd2 + diff)
+                
+
+                for j := 0; j < freeSpacesToReplace; j++ {
+                    testMap[i] = append(testMap[i], int(math.Ceil(float64(currentPickingIndex/2))))
+                }
+
                 break
             }
         }
     }
 
+    thisIndexLol := 0
     sum := 0
-    for i := 0; i < len(lol); i++ {
-        if i + 1 >= len(lol){
-            break
-        }
+    compIndex := 0
+    currentCharIsNotZero := false
+    for i, char := range splitted {
+        if char != "0" {
+            if currentCharIsNotZero {
+                break
+            } else {
+                currentCharIsNotZero = true
+            }
+            num, _ := strconv.Atoi(char)
+            for j := 0; j < num; j++ {
+                // fmt.Println("MUL:", compIndex, (i / 2), "=", compIndex * (i / 2))
+                sum += (compIndex * (i / 2))
+                compIndex += 1
+            }
+        } else {
+            currentCharIsNotZero = false
+            for _, bruh := range testMap[thisIndexLol] {
+                // fmt.Println("MUL:", compIndex, bruh, "=", compIndex * bruh)
+                sum += (compIndex * bruh)
 
-        sum += (i * lol[i].file + (i + 1) * (lol[i].index * (lol[i+1].file - lol[i].file)))
+                compIndex += 1
+            } 
+            thisIndexLol += 1
+        }
     }
 
-    fmt.Println(lol)
-	start := time.Now()
-	// exec part1()
     fmt.Println("Day 9 Solution (Part 1):", sum)
     fmt.Println("Part 1 execution time:", time.Since(start), "\n")
 
