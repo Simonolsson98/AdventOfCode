@@ -14,7 +14,6 @@ import (
 type test struct {
     file int
     freespace int
-    index int
 }
 
 func main() {
@@ -26,37 +25,35 @@ func main() {
     }
 
     start := time.Now()
-    var currentPickingIndex int
-    var lol = []test{}
-    splitted := strings.Split(input, "")
-    if(len(splitted) % 2 != 0){
-        splitted = append(splitted, "0")
-    }
-    for i := 0; i < len(splitted); i+=2 {
-        if i + 1 >= len(splitted){
-            break
-        }
-        fileVal, _ := strconv.Atoi(splitted[i])
-        freespaceVal, _ := strconv.Atoi(splitted[i + 1])
+    var fileFreespaceTuple = []test{}
+    diskMap := strings.Split(input, "")
 
-        lol = append(lol, test{file: fileVal, freespace: freespaceVal, index: i})
-        currentPickingIndex = i
+    // extra 0 for the last "pair of values" to represent 0 free spaces
+    if(len(diskMap) % 2 != 0){
+        diskMap = append(diskMap, "0")
     }
 
-    testMap := make(map[int][]int)
-
-    for i, val := range lol {
-        if i == len(lol) {
+    for i := 0; i < len(diskMap); i+=2 {
+        fileVal, _ := strconv.Atoi(diskMap[i])
+        freespaceVal, _ := strconv.Atoi(diskMap[i + 1])
+        fileFreespaceTuple = append(fileFreespaceTuple, test{file: fileVal, freespace: freespaceVal})
+    }
+    
+    currentPickingIndex := len(diskMap) - 2
+    mapOfMovedDiskFiles := make(map[int][]int)
+    for i, val := range fileFreespaceTuple {
+        if i == len(fileFreespaceTuple) {
             break
         }
 
         freeSpacesToReplace := val.freespace
         for {
-            if currentPickingIndex < 0 || currentPickingIndex <= 2 * i {
+            if currentPickingIndex <= 2 * i {
                 break
             }
 
-            piecesToBeMoved, _ := strconv.Atoi(splitted[currentPickingIndex])
+            piecesToBeMoved, _ := strconv.Atoi(diskMap[currentPickingIndex])
+            // nothing left to take from in this pair, go to next candidate
             if piecesToBeMoved == 0 {
                 currentPickingIndex -= 2
                 continue
@@ -65,43 +62,43 @@ func main() {
             if freeSpacesToReplace > piecesToBeMoved{
                 diff := freeSpacesToReplace - piecesToBeMoved
 
-                splitted[2*i+1] = strconv.Itoa(diff)
-                splitted[currentPickingIndex] = "0"
+                diskMap[2*i+1] = strconv.Itoa(diff)
+                diskMap[currentPickingIndex] = "0"
 
-                self, _ := strconv.Atoi(splitted[currentPickingIndex+1])
-                splitted[currentPickingIndex+1] = strconv.Itoa(self + piecesToBeMoved)
+                self, _ := strconv.Atoi(diskMap[currentPickingIndex+1])
+                diskMap[currentPickingIndex+1] = strconv.Itoa(self + piecesToBeMoved)
                 
                 for j := 0; j < piecesToBeMoved; j++ {
-                    testMap[i] = append(testMap[i], int(math.Ceil(float64(currentPickingIndex/2))))
+                    mapOfMovedDiskFiles[i] = append(mapOfMovedDiskFiles[i], int(math.Ceil(float64(currentPickingIndex/2))))
                 }
 
                 freeSpacesToReplace = diff
                 continue
             } else if freeSpacesToReplace == piecesToBeMoved {
-                splitted[2*i+1] = "0"
+                diskMap[2*i+1] = "0"
 
-                splitted[currentPickingIndex] = "0"
+                diskMap[currentPickingIndex] = "0"
 
-                asd2, _ := strconv.Atoi(splitted[currentPickingIndex + 1])
-                splitted[currentPickingIndex + 1] = strconv.Itoa(asd2 + piecesToBeMoved)
+                asd2, _ := strconv.Atoi(diskMap[currentPickingIndex + 1])
+                diskMap[currentPickingIndex + 1] = strconv.Itoa(asd2 + piecesToBeMoved)
                 
                 for j := 0; j < piecesToBeMoved; j++ {
-                    testMap[i] = append(testMap[i], int(math.Ceil(float64(currentPickingIndex/2))))
+                    mapOfMovedDiskFiles[i] = append(mapOfMovedDiskFiles[i], int(math.Ceil(float64(currentPickingIndex/2))))
                 }
                 
                 break
             } else { // more than enough to move
                 diff := piecesToBeMoved - freeSpacesToReplace
-                splitted[2*i+1] = "0"
+                diskMap[2*i+1] = "0"
 
-                splitted[currentPickingIndex] = strconv.Itoa(diff)
+                diskMap[currentPickingIndex] = strconv.Itoa(diff)
 
-                asd2, _ := strconv.Atoi(splitted[currentPickingIndex + 1])
-                splitted[currentPickingIndex + 1] = strconv.Itoa(asd2 + diff)
+                asd2, _ := strconv.Atoi(diskMap[currentPickingIndex + 1])
+                diskMap[currentPickingIndex + 1] = strconv.Itoa(asd2 + diff)
                 
 
                 for j := 0; j < freeSpacesToReplace; j++ {
-                    testMap[i] = append(testMap[i], int(math.Ceil(float64(currentPickingIndex/2))))
+                    mapOfMovedDiskFiles[i] = append(mapOfMovedDiskFiles[i], int(math.Ceil(float64(currentPickingIndex/2))))
                 }
 
                 break
@@ -113,7 +110,7 @@ func main() {
     sum := 0
     compIndex := 0
     currentCharIsNotZero := false
-    for i, char := range splitted {
+    for i, char := range diskMap {
         if char != "0" {
             if currentCharIsNotZero {
                 break
@@ -128,7 +125,7 @@ func main() {
             }
         } else {
             currentCharIsNotZero = false
-            for _, bruh := range testMap[thisIndexLol] {
+            for _, bruh := range mapOfMovedDiskFiles[thisIndexLol] {
                 // fmt.Println("MUL:", compIndex, bruh, "=", compIndex * bruh)
                 sum += (compIndex * bruh)
 
