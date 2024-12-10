@@ -29,24 +29,15 @@ func main() {
         return
     }
 
-    
-    zeroes := []position{}
-    for x, line := range strings.Split(input, "\n") {
-        for y, char := range strings.Split(line, ""){
-            if char == "0"{
-                zeroes = append(zeroes, position{xpos: x, ypos: y})
-            }
-        }
-    }
+    rows := strings.Split(input, "\n")
+    zeroes := collectZeroes(rows)
 
     start := time.Now()
     var numberOfStuff int; 
     for _, startingPos := range zeroes {
-        numberOfStuff += (
-            checkPos(strings.Split(input, "\n"), startingPos, 0, 0, startingPos) + 
-            checkPos(strings.Split(input, "\n"), startingPos, 0, 1, startingPos) + 
-            checkPos(strings.Split(input, "\n"), startingPos, 0, 2, startingPos) +
-            checkPos(strings.Split(input, "\n"), startingPos, 0, 3, startingPos)) 
+        for i := 0; i < 4; i++ {
+            numberOfStuff += checkPos(rows, startingPos, 0, i, startingPos)
+        }
     }
 
     fmt.Println("Day 10 Solution (Part 1):", numberOfStuff)
@@ -55,11 +46,9 @@ func main() {
 	start = time.Now()
     numberOfStuff = 0; 
     for _, startingPos := range zeroes {
-        numberOfStuff += (
-            checkPos2(strings.Split(input, "\n"), startingPos, 0, 0, []position{}) + 
-            checkPos2(strings.Split(input, "\n"), startingPos, 0, 1, []position{}) + 
-            checkPos2(strings.Split(input, "\n"), startingPos, 0, 2, []position{}) +
-            checkPos2(strings.Split(input, "\n"), startingPos, 0, 3, []position{})) 
+        for i := 0; i < 4; i++ {
+            numberOfStuff += checkPos2(rows, startingPos, 0, i, []position{})
+        }
     }
 
     fmt.Println("Day 10 Solution (Part 2):", numberOfStuff)
@@ -259,4 +248,16 @@ func checkPos2(splitInput []string, startPos position, value int, dir int, entir
 
         return 0
     }
+}
+
+func collectZeroes(lines []string) []position {
+    var zeroes []position
+    for x, line := range lines {
+        for y, char := range line {
+            if char == '0' {
+                zeroes = append(zeroes, position{xpos: x, ypos: y})
+            }
+        }
+    }
+    return zeroes
 }
