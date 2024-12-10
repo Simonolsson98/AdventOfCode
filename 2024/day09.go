@@ -168,17 +168,20 @@ func main() {
                 }
 
                 thisIndex += 1
+                if thisIndex >= len(test) {
+                    intervalOfDots[i] = thisIndex - i
+                    break
+                }
             }
 
             i += (thisIndex - i)
         }
-        
     }
-    
+
+    lockedIndices := []int{}
     currentPickingIndex = 0
-    firstEle, _ := strconv.Atoi(test[0])
-    for i := len(test) - 1; i > firstEle; i-- {
-        if test[i] == "." {
+    for i := len(test) - 1; i > 0; i-- {
+        if test[i] == "." || slices.Contains(lockedIndices, i) || test[i] == "0" {
             continue
         }
 
@@ -193,35 +196,45 @@ func main() {
             j -= 1
             lengthOfShitToMove += 1
         }
-        for j, keyOfIntervalOfDots := range slices.Sorted(maps.Keys(intervalOfDots)) {
+
+        for _, keyOfIntervalOfDots := range slices.Sorted(maps.Keys(intervalOfDots)) {
             interval := intervalOfDots[keyOfIntervalOfDots]
-            if j > i - lengthOfShitToMove {
+            if keyOfIntervalOfDots > i {
                 break
             }
             if interval >= lengthOfShitToMove{
                 for topLevel := i; topLevel > i - lengthOfShitToMove; topLevel-- {
+                    lockedIndices = append(lockedIndices, keyOfIntervalOfDots + (i - topLevel))
+                    lockedIndices = append(lockedIndices, topLevel)
                     toMove := test[topLevel]
                     test[topLevel] = "."
                     test[keyOfIntervalOfDots + (i - topLevel)] = toMove
                 }
 
-                intervalOfDots[keyOfIntervalOfDots + lengthOfShitToMove] = intervalOfDots[keyOfIntervalOfDots] - lengthOfShitToMove
-                intervalOfDots[keyOfIntervalOfDots] = 0
-                currentPickingIndex = keyOfIntervalOfDots
+                if intervalOfDots[keyOfIntervalOfDots] - lengthOfShitToMove == 0{
+                    delete(intervalOfDots, keyOfIntervalOfDots + lengthOfShitToMove)
+                } else {
+                    intervalOfDots[keyOfIntervalOfDots + lengthOfShitToMove] = intervalOfDots[keyOfIntervalOfDots] - lengthOfShitToMove
+                }
+
+                delete(intervalOfDots, keyOfIntervalOfDots)
+                intervalOfDots[j + 1] = lengthOfShitToMove
+                for _, key := range slices.Sorted(maps.Keys(intervalOfDots)) {
+                    _, exists := intervalOfDots[key + intervalOfDots[key]]
+                    if exists {
+                        removeThisIndex := key + intervalOfDots[key]
+                        intervalOfDots[key] = intervalOfDots[key] + intervalOfDots[key + intervalOfDots[key]]
+                        delete(intervalOfDots, removeThisIndex)
+                    }
+                }
+
                 break
             } 
         }
 
         i -= (lengthOfShitToMove - 1)
-
-        // surely
-        if currentPickingIndex > i{
-            fmt.Println(currentPickingIndex, i)
-            break
-        }
     }
 
-    fmt.Println("OUT: ", test)
     sum = 0
     for i, char := range test {
         if char == "." {
@@ -232,7 +245,6 @@ func main() {
         sum += (i * num)
     }
 
-    //6478232739671 - 
     fmt.Println("Day 9 Solution (Part 2):", sum)
     fmt.Println("Part 2 execution time:", time.Since(start))
 }
