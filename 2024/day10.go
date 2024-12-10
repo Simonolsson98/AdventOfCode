@@ -14,12 +14,8 @@ type position struct {
     xpos int
     ypos int
 }
-type disgusting struct {
-    exist bool
-    hikeTrail position
-}
 
-var visited map[position][]disgusting = make(map[position][]disgusting)
+var visited map[position][]position = make(map[position][]position)
 func main() {
     inputFile := strings.Split(filepath.Base(os.Args[0]), ".")[0] + "_input"
     input, err := utils.ReadInput(inputFile)
@@ -67,12 +63,12 @@ func checkPos(splitInput []string, startPos position, value int, dir int, OGPos 
             if up == 9 && up == value + 1 {
                 reallies := visited[position{x-1, y}]
                 for _, real := range reallies {
-                    if real.hikeTrail == OGPos {
+                    if real == OGPos {
                         return 0
                     }
                 }
 
-                visited[position{x-1, y}] = append(visited[position{x-1, y}], disgusting{true, OGPos})
+                visited[position{x-1, y}] = append(visited[position{x-1, y}], OGPos)
                 return 1
             } else if up == value + 1 {
                 return checkPos(splitInput, position{xpos: x-1, ypos: y}, up, 0, OGPos) +
@@ -89,12 +85,12 @@ func checkPos(splitInput []string, startPos position, value int, dir int, OGPos 
             if right == 9 && right == value + 1 {
                 reallies := visited[position{x, y+1}]
                 for _, real := range reallies {
-                    if real.hikeTrail == OGPos {
+                    if real == OGPos {
                         return 0
                     } 
                 }
 
-                visited[position{x, y+1}] = append(visited[position{x, y+1}], disgusting{true, OGPos})
+                visited[position{x, y+1}] = append(visited[position{x, y+1}], OGPos)
                 return 1
             } else if right == value + 1 {
                 return checkPos(splitInput, position{xpos: x, ypos: y+1}, right, 0, OGPos) +
@@ -111,12 +107,12 @@ func checkPos(splitInput []string, startPos position, value int, dir int, OGPos 
             if left == 9 && left == value + 1 {
                 reallies := visited[position{x, y-1}]
                 for _, real := range reallies {
-                    if real.hikeTrail == OGPos {
+                    if real == OGPos {
                         return 0
                     } 
                 }
 
-                visited[position{x, y-1}] = append(visited[position{x, y-1}], disgusting{true, OGPos})
+                visited[position{x, y-1}] = append(visited[position{x, y-1}], OGPos)
                 return 1
             } else if left == value + 1 {
                 return checkPos(splitInput, position{xpos: x, ypos: y-1}, left, 0, OGPos) +
@@ -133,12 +129,12 @@ func checkPos(splitInput []string, startPos position, value int, dir int, OGPos 
             if down == 9 && down == value + 1 {
                 reallies := visited[position{x+1, y}]
                 for _, real := range reallies {
-                    if real.hikeTrail == OGPos {
+                    if real == OGPos {
                         return 0
                     } 
                 }
 
-                visited[position{x+1, y}] = append(visited[position{x+1, y}], disgusting{true, OGPos})
+                visited[position{x+1, y}] = append(visited[position{x+1, y}], OGPos)
                 return 1
             } else if down == value + 1 {
                 return checkPos(splitInput, position{xpos: x+1, ypos: y}, down, 0, OGPos) +
