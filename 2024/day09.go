@@ -8,6 +8,8 @@ import (
     "strconv"
     "path/filepath"
     "time"
+    "maps"
+    "slices"
     "math"
 )
 
@@ -142,66 +144,92 @@ func main() {
         freespaceVal, _ := strconv.Atoi(diskMap[i + 1])
         fileFreespaceTuple = append(fileFreespaceTuple, test{file: fileVal, freespace: freespaceVal})
     }
-    
-    currentPickingIndex = 0
-    mapOfMovedDiskFiles = make(map[int][]int)
 
-    for i := len(fileFreespaceTuple) - 1; i >= 0; i-- {
-        currentPickingIndex = 0
-        val := fileFreespaceTuple[i]
-        fileToMove := val.file
-        for {
-            if currentPickingIndex >= i * 2 {
-                break
+    test := []string{}
+    intervalOfDots := make(map[int]int)
+    for i := 0; i < len(diskMap); i++ {
+        char, _ := strconv.Atoi(diskMap[i])
+        for j := 0; j < char; j++ {
+            if i % 2 == 0 {
+                test = append(test, strconv.Itoa(i/2))
+            } else {
+                test = append(test, ".")
             }
-
-            fitInThis, _ := strconv.Atoi(diskMap[currentPickingIndex + 1])
-
-            if fileToMove <= fitInThis{
-                diskMap[2*i+1] = strconv.Itoa(fileToMove)
-                diskMap[2*i] = "0"
-
-                self, _ := strconv.Atoi(diskMap[currentPickingIndex+1])
-                diskMap[currentPickingIndex+1] = strconv.Itoa(self - fileToMove)
-                
-                for j := 0; j < fileToMove; j++ {
-                    mapOfMovedDiskFiles[currentPickingIndex + 1] = append(mapOfMovedDiskFiles[currentPickingIndex + 1], int(math.Ceil(float64(i))))
-                }
-
-                break
-            }
-
-            currentPickingIndex += 2
         }
     }
 
-    thisIndexLol = 0
-    sum = 0
-    compIndex = 0
-    for i, char := range diskMap {
-        if i % 2 == 0 {
-            num, _ := strconv.Atoi(char)
-            if num == 0 {
-                compIndex += 1
-            }
-            for j := 0; j < num; j++ {
-                // fmt.Println("zero, mul: compIndex * bruh", compIndex, "*", (i / 2), "=", compIndex * (i / 2))
-                sum += (compIndex * (i / 2))
-                compIndex += 1
-            }
-        } else {
-            for _, bruh := range mapOfMovedDiskFiles[thisIndexLol] {
-                // fmt.Println("zero, mul: compIndex * bruh", compIndex, "*", bruh, "=", compIndex * bruh)
-                sum += (compIndex * bruh)
-                compIndex += 1
-            } 
+    for i := 0; i < len(test); i++ {
+        if test[i] == "."{
+            thisIndex := i
+            for {
+                if test[thisIndex] != "." {
+                    intervalOfDots[i] = thisIndex - i
+                    break
+                }
 
-            inc, _ := strconv.Atoi(char)
-            // fmt.Println("Skipping dot here: ", char)
-            compIndex += inc
+                thisIndex += 1
+            }
+
+            i += (thisIndex - i)
+        }
+        
+    }
+    
+    currentPickingIndex = 0
+    firstEle, _ := strconv.Atoi(test[0])
+    for i := len(test) - 1; i > firstEle; i-- {
+        if test[i] == "." {
+            continue
         }
 
-        thisIndexLol += 1
+        first := test[i]
+        j := i
+        lengthOfShitToMove := 0
+        for {
+            if test[j] != first {
+                break
+            }
+
+            j -= 1
+            lengthOfShitToMove += 1
+        }
+        for j, keyOfIntervalOfDots := range slices.Sorted(maps.Keys(intervalOfDots)) {
+            interval := intervalOfDots[keyOfIntervalOfDots]
+            if j > i - lengthOfShitToMove {
+                break
+            }
+            if interval >= lengthOfShitToMove{
+                for topLevel := i; topLevel > i - lengthOfShitToMove; topLevel-- {
+                    toMove := test[topLevel]
+                    test[topLevel] = "."
+                    test[keyOfIntervalOfDots + (i - topLevel)] = toMove
+                }
+
+                intervalOfDots[keyOfIntervalOfDots + lengthOfShitToMove] = intervalOfDots[keyOfIntervalOfDots] - lengthOfShitToMove
+                intervalOfDots[keyOfIntervalOfDots] = 0
+                currentPickingIndex = keyOfIntervalOfDots
+                break
+            } 
+        }
+
+        i -= (lengthOfShitToMove - 1)
+
+        // surely
+        if currentPickingIndex > i{
+            fmt.Println(currentPickingIndex, i)
+            break
+        }
+    }
+
+    fmt.Println("OUT: ", test)
+    sum = 0
+    for i, char := range test {
+        if char == "." {
+            continue
+        }
+
+        num, _ := strconv.Atoi(char)
+        sum += (i * num)
     }
 
     //6478232739671 - 
