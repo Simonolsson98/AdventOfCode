@@ -20,7 +20,7 @@ type trail struct {
 }
 
 var visited map[position][]position = make(map[position][]position)
-var visited2 map[position][]trail = make(map[position][]trail)
+var mapOfEndPositionsToTrails map[position][]trail = make(map[position][]trail)
 func main() {
     inputFile := strings.Split(filepath.Base(os.Args[0]), ".")[0] + "_input"
     input, err := utils.ReadInput(inputFile)
@@ -152,29 +152,29 @@ func checkPos(splitInput []string, startPos position, value int, dir int, OGPos 
     }
 }
 
-func checkPos2(splitInput []string, startPos position, value int, dir int, entireTrail []position) (res int){
+func checkPos2(splitInput []string, startPos position, value int, dir int, entireTrailSoFar []position) (res int){
     for {
         x := startPos.xpos
         y := startPos.ypos
-        entireTrail = append(entireTrail, position{x, y})
+        entireTrailSoFar = append(entireTrailSoFar, position{x, y})
 
         if dir == 0 && x-1 >= 0{
             up, _ := strconv.Atoi(strings.Split(splitInput[x-1], "")[y])
             if up == 9 && up == value + 1 {
-                finalPosTrails := visited2[position{x-1, y}]
+                finalPosTrails := mapOfEndPositionsToTrails[position{x-1, y}]
                 for _, trailToCheck := range finalPosTrails {
-                    if reflect.DeepEqual(trailToCheck.listOfPositions, entireTrail) {
+                    if reflect.DeepEqual(trailToCheck.listOfPositions, entireTrailSoFar) {
                         return 0
                     }
                 }
 
-                visited2[position{x-1, y}] = append(visited2[position{x-1, y}], trail{entireTrail})
+                mapOfEndPositionsToTrails[position{x-1, y}] = append(mapOfEndPositionsToTrails[position{x-1, y}], trail{entireTrailSoFar})
                 return 1
             } else if up == value + 1 {
-                return checkPos2(splitInput, position{xpos: x-1, ypos: y}, up, 0, entireTrail) +
-                    checkPos2(splitInput, position{xpos: x-1, ypos: y}, up, 1, entireTrail) +
-                    checkPos2(splitInput, position{xpos: x-1, ypos: y}, up, 2, entireTrail) +
-                    checkPos2(splitInput, position{xpos: x-1, ypos: y}, up, 3, entireTrail)
+                return checkPos2(splitInput, position{xpos: x-1, ypos: y}, up, 0, entireTrailSoFar) +
+                    checkPos2(splitInput, position{xpos: x-1, ypos: y}, up, 1, entireTrailSoFar) +
+                    checkPos2(splitInput, position{xpos: x-1, ypos: y}, up, 2, entireTrailSoFar) +
+                    checkPos2(splitInput, position{xpos: x-1, ypos: y}, up, 3, entireTrailSoFar)
             } else {
                 return 0
             }
@@ -183,20 +183,20 @@ func checkPos2(splitInput []string, startPos position, value int, dir int, entir
         if dir == 1 && y+1 < len(splitInput[0]){
             right, _ := strconv.Atoi(strings.Split(splitInput[x], "")[y+1])
             if right == 9 && right == value + 1 {
-                finalPosTrails := visited2[position{x, y+1}]
+                finalPosTrails := mapOfEndPositionsToTrails[position{x, y+1}]
                 for _, trailToCheck := range finalPosTrails {
-                    if reflect.DeepEqual(trailToCheck, entireTrail) {
+                    if reflect.DeepEqual(trailToCheck, entireTrailSoFar) {
                         return 0
                     }
                 }
 
-                visited2[position{x, y+1}] = append(visited2[position{x, y+1}], trail{entireTrail})
+                mapOfEndPositionsToTrails[position{x, y+1}] = append(mapOfEndPositionsToTrails[position{x, y+1}], trail{entireTrailSoFar})
                 return 1
             } else if right == value + 1 {
-                return checkPos2(splitInput, position{xpos: x, ypos: y+1}, right, 0, entireTrail) +
-                    checkPos2(splitInput, position{xpos: x, ypos: y+1}, right, 1, entireTrail) +
-                    checkPos2(splitInput, position{xpos: x, ypos: y+1}, right, 2, entireTrail) +
-                    checkPos2(splitInput, position{xpos: x, ypos: y+1}, right, 3, entireTrail)
+                return checkPos2(splitInput, position{xpos: x, ypos: y+1}, right, 0, entireTrailSoFar) +
+                    checkPos2(splitInput, position{xpos: x, ypos: y+1}, right, 1, entireTrailSoFar) +
+                    checkPos2(splitInput, position{xpos: x, ypos: y+1}, right, 2, entireTrailSoFar) +
+                    checkPos2(splitInput, position{xpos: x, ypos: y+1}, right, 3, entireTrailSoFar)
             } else {
                 return 0
             }
@@ -207,18 +207,18 @@ func checkPos2(splitInput []string, startPos position, value int, dir int, entir
             if left == 9 && left == value + 1 {
                 finalPosTrails := visited[position{x, y-1}]
                 for _, trailToCheck := range finalPosTrails {
-                    if reflect.DeepEqual(trailToCheck, entireTrail) {
+                    if reflect.DeepEqual(trailToCheck, entireTrailSoFar) {
                         return 0
                     }
                 }
 
-                visited2[position{x, y-1}] = append(visited2[position{x, y-1}], trail{entireTrail})
+                mapOfEndPositionsToTrails[position{x, y-1}] = append(mapOfEndPositionsToTrails[position{x, y-1}], trail{entireTrailSoFar})
                 return 1
             } else if left == value + 1 {
-                return checkPos2(splitInput, position{xpos: x, ypos: y-1}, left, 0, entireTrail) +
-                    checkPos2(splitInput, position{xpos: x, ypos: y-1}, left, 1, entireTrail) +
-                    checkPos2(splitInput, position{xpos: x, ypos: y-1}, left, 2, entireTrail) +
-                    checkPos2(splitInput, position{xpos: x, ypos: y-1}, left, 3, entireTrail)
+                return checkPos2(splitInput, position{xpos: x, ypos: y-1}, left, 0, entireTrailSoFar) +
+                    checkPos2(splitInput, position{xpos: x, ypos: y-1}, left, 1, entireTrailSoFar) +
+                    checkPos2(splitInput, position{xpos: x, ypos: y-1}, left, 2, entireTrailSoFar) +
+                    checkPos2(splitInput, position{xpos: x, ypos: y-1}, left, 3, entireTrailSoFar)
             } else {
                 return 0
             }
@@ -229,18 +229,18 @@ func checkPos2(splitInput []string, startPos position, value int, dir int, entir
             if down == 9 && down == value + 1 {
                 finalPosTrails := visited[position{x+1, y}]
                 for _, trailToCheck := range finalPosTrails {
-                    if reflect.DeepEqual(trailToCheck, entireTrail) {
+                    if reflect.DeepEqual(trailToCheck, entireTrailSoFar) {
                         return 0
                     }
                 }
 
-                visited2[position{x+1, y}] = append(visited2[position{x+1, y}], trail{entireTrail})
+                mapOfEndPositionsToTrails[position{x+1, y}] = append(mapOfEndPositionsToTrails[position{x+1, y}], trail{entireTrailSoFar})
                 return 1
             } else if down == value + 1 {
-                return checkPos2(splitInput, position{xpos: x+1, ypos: y}, down, 0, entireTrail) +
-                    checkPos2(splitInput, position{xpos: x+1, ypos: y}, down, 1, entireTrail) +
-                    checkPos2(splitInput, position{xpos: x+1, ypos: y}, down, 2, entireTrail) +
-                    checkPos2(splitInput, position{xpos: x+1, ypos: y}, down, 3, entireTrail)
+                return checkPos2(splitInput, position{xpos: x+1, ypos: y}, down, 0, entireTrailSoFar) +
+                    checkPos2(splitInput, position{xpos: x+1, ypos: y}, down, 1, entireTrailSoFar) +
+                    checkPos2(splitInput, position{xpos: x+1, ypos: y}, down, 2, entireTrailSoFar) +
+                    checkPos2(splitInput, position{xpos: x+1, ypos: y}, down, 3, entireTrailSoFar)
             } else {
                 return 0
             } 
