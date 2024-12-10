@@ -13,7 +13,7 @@ import (
     "math"
 )
 
-type test struct {
+type fileAndFreespaceStruct struct {
     file int
     freespace int
 }
@@ -27,7 +27,7 @@ func main() {
     }
 
     start := time.Now()
-    var fileFreespaceTuple = []test{}
+    var fileFreespaceTuple = []fileAndFreespaceStruct{}
     diskMap := strings.Split(input, "")
 
     // extra 0 for the last "pair of values" to represent 0 free spaces
@@ -38,7 +38,7 @@ func main() {
     for i := 0; i < len(diskMap); i+=2 {
         fileVal, _ := strconv.Atoi(diskMap[i])
         freespaceVal, _ := strconv.Atoi(diskMap[i + 1])
-        fileFreespaceTuple = append(fileFreespaceTuple, test{file: fileVal, freespace: freespaceVal})
+        fileFreespaceTuple = append(fileFreespaceTuple, fileAndFreespaceStruct{file: fileVal, freespace: freespaceVal})
     }
     
     currentPickingIndex := len(diskMap) - 2
@@ -131,7 +131,7 @@ func main() {
     fmt.Println("Part 1 execution time:", time.Since(start), "\n")
 
 	start = time.Now()
-    fileFreespaceTuple = []test{}
+    fileFreespaceTuple = []fileAndFreespaceStruct{}
     diskMap = strings.Split(input, "")
 
     // extra 0 for the last "pair of values" to represent 0 free spaces
@@ -142,33 +142,33 @@ func main() {
     for i := 0; i < len(diskMap); i+=2 {
         fileVal, _ := strconv.Atoi(diskMap[i])
         freespaceVal, _ := strconv.Atoi(diskMap[i + 1])
-        fileFreespaceTuple = append(fileFreespaceTuple, test{file: fileVal, freespace: freespaceVal})
+        fileFreespaceTuple = append(fileFreespaceTuple, fileAndFreespaceStruct{file: fileVal, freespace: freespaceVal})
     }
 
-    test := []string{}
+    fileAndFreespaceStruct := []string{}
     intervalOfDots := make(map[int]int)
     for i := 0; i < len(diskMap); i++ {
         char, _ := strconv.Atoi(diskMap[i])
         for j := 0; j < char; j++ {
             if i % 2 == 0 {
-                test = append(test, strconv.Itoa(i/2))
+                fileAndFreespaceStruct = append(fileAndFreespaceStruct, strconv.Itoa(i/2))
             } else {
-                test = append(test, ".")
+                fileAndFreespaceStruct = append(fileAndFreespaceStruct, ".")
             }
         }
     }
 
-    for i := 0; i < len(test); i++ {
-        if test[i] == "."{
+    for i := 0; i < len(fileAndFreespaceStruct); i++ {
+        if fileAndFreespaceStruct[i] == "."{
             thisIndex := i
             for {
-                if test[thisIndex] != "." {
+                if fileAndFreespaceStruct[thisIndex] != "." {
                     intervalOfDots[i] = thisIndex - i
                     break
                 }
 
                 thisIndex += 1
-                if thisIndex >= len(test) {
+                if thisIndex >= len(fileAndFreespaceStruct) {
                     intervalOfDots[i] = thisIndex - i
                     break
                 }
@@ -180,16 +180,17 @@ func main() {
 
     lockedIndices := []int{}
     currentPickingIndex = 0
-    for i := len(test) - 1; i > 0; i-- {
-        if test[i] == "." || slices.Contains(lockedIndices, i) || test[i] == "0" {
+    for i := len(fileAndFreespaceStruct) - 1; i > 0; i-- {
+        if fileAndFreespaceStruct[i] == "." || slices.Contains(lockedIndices, i) || fileAndFreespaceStruct[i] == "0" {
             continue
         }
 
-        first := test[i]
+        firstEleInFile := fileAndFreespaceStruct[i]
         j := i
         lengthOfShitToMove := 0
         for {
-            if test[j] != first {
+            // hit a dot means the block that should be moved is "complete"
+            if fileAndFreespaceStruct[j] != firstEleInFile {
                 break
             }
 
@@ -206,9 +207,9 @@ func main() {
                 for topLevel := i; topLevel > i - lengthOfShitToMove; topLevel-- {
                     lockedIndices = append(lockedIndices, keyOfIntervalOfDots + (i - topLevel))
                     lockedIndices = append(lockedIndices, topLevel)
-                    toMove := test[topLevel]
-                    test[topLevel] = "."
-                    test[keyOfIntervalOfDots + (i - topLevel)] = toMove
+                    toMove := fileAndFreespaceStruct[topLevel]
+                    fileAndFreespaceStruct[topLevel] = "."
+                    fileAndFreespaceStruct[keyOfIntervalOfDots + (i - topLevel)] = toMove
                 }
 
                 if intervalOfDots[keyOfIntervalOfDots] - lengthOfShitToMove == 0{
@@ -236,7 +237,7 @@ func main() {
     }
 
     sum = 0
-    for i, char := range test {
+    for i, char := range fileAndFreespaceStruct {
         if char == "." {
             continue
         }
