@@ -29,6 +29,7 @@ func main() {
         return
     }
 
+    
     zeroes := []position{}
     for x, line := range strings.Split(input, "\n") {
         for y, char := range strings.Split(line, ""){
@@ -37,7 +38,7 @@ func main() {
             }
         }
     }
-    
+
     start := time.Now()
     var numberOfStuff int; 
     for _, startingPos := range zeroes {
