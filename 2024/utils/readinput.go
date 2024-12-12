@@ -27,3 +27,10 @@ func ReadInput(day string) (string, error) {
 
     return strings.Join(lines, "\n"), nil
 }
+
+func CalcAbs(value int) int {
+    if value < 0 {
+        return -value
+    }
+    return value
+}
