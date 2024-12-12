@@ -31,7 +31,7 @@ func main() {
     fmt.Println("Part 2 execution time:", time.Since(start))
 }
 
-var cache = map[int]int{0: 1}
+var cache = map[int]int{}
 func test(iters int, nums []string) (res int){
     total := 0
     for _, strnum := range nums {
@@ -45,24 +45,32 @@ func test(iters int, nums []string) (res int){
 func runNum(iters int, currIter int, num int) (res int){
     for i := currIter; i < iters; i++ {
         val, exists := cache[num]
-        if exists {
-            num = val
-            continue
+        if exists && val == i {
+            // fmt.Println("cache hit for:", num, ":", val)
+            return 1
         }
 
         numAsStr := strconv.Itoa(num)
-        if (len(numAsStr) % 2 == 0){
+        if numAsStr == "0"{
+            numAsStr = "1"
+            num = 1
+        } else if (len(numAsStr) % 2 == 0){
+            // fmt.Println("splitting:", num)
             //trims leading zeroes
             firstNum, _ := strconv.Atoi(numAsStr[0:len(numAsStr)/2])
             secondNum, _ := strconv.Atoi(numAsStr[len(numAsStr)/2:])
 
+            // fmt.Println("firstNum:", firstNum, "secondNum:", secondNum)
             return runNum(iters, i + 1, firstNum) + runNum(iters, i + 1, secondNum)
         } else {
-            cache[num] = num * 2024
+            // fmt.Println("add to cache mul:", num, ":", i)
+            cache[num] = i
             num *= 2024
         }
     } 
     
+    // fmt.Println("add to cache end:", num, ":", iters)
+    cache[num] = iters
     return 1
 }
 

@@ -55,7 +55,6 @@ func main() {
                 return perim[i].xpos < perim[j].xpos
             })
 
-
             for _, item := range perim {
                 if !uniqueMap[item] {
                     uniqueMap[item] = true
@@ -63,7 +62,34 @@ func main() {
                 } 
             }
 
-            count = len(uniqueSlice)
+            count := len(uniqueSlice)
+            corners := 0
+            usedInCalc := map[field]int{}
+            for i := 0; i < len(uniqueSlice); i++ {
+                fmt.Println("checking:", uniqueSlice[i])
+                // Compare the current element with every other element
+                for j := 0; j < len(uniqueSlice); j++ {
+                    if i == j {
+                        continue
+                    }
+
+                    // Check if both xpos and ypos differs by 1 => corner!
+                    if utils.CalcAbs(uniqueSlice[j].ypos-uniqueSlice[i].ypos) == 1 && utils.CalcAbs(uniqueSlice[j].xpos-uniqueSlice[i].xpos) == 1 {
+                        fmt.Println("ASD:", uniqueSlice[i], uniqueSlice[j])
+                        checkIfUsed, _ := usedInCalc[uniqueSlice[i]]
+                        checkIfUsed2, _ := usedInCalc[uniqueSlice[j]]
+                        if checkIfUsed == 0 && checkIfUsed2 == 0{
+                            corners += 2
+                        }
+                        usedInCalc[uniqueSlice[i]] += 1
+                        usedInCalc[uniqueSlice[j]] += 1
+                    }
+                }
+            }
+
+
+            fmt.Println(usedInCalc, corners)
+            return
             total += (r * count)
         }
     }
