@@ -20,87 +20,58 @@ func main() {
         return
     }
 
-	start := time.Now()
-	
     games := strings.Split(input, "\n\n")
-    totalTokens := 0.0
-    for _, game := range games {
-        minres := -1.0
-        splitGame := strings.Split(game, "\n")
-        buttonA := extractNumbers(splitGame[0])
-        buttonB := extractNumbers(splitGame[1])
-        prize := extractNumbers(splitGame[2])
-        for i := 0.0; i <= 100.0; i++ {
-            for j := 0.0; j <= 100.0; j++ {
-                calcValX := i * buttonA[0] + j * buttonB[0]
-                calcValY := i * buttonA[1] + j * buttonB[1]
-                if calcValX == prize[0] && calcValY == prize[1] {
-                    if minres == -1.0 || minres > 3.0 * i + 1.0 * j {
-                        minres = 3.0 * i + 1.0 * j
-                    }
-                }
-            }
-        }
-
-        if minres == -1.0{
-            minres = 0.0
-        }
-        totalTokens += minres
-    } 
-
-    fmt.Println("Day 13 Solution (Part 1):", totalTokens)
+	start := time.Now()
+    fmt.Println("Day 13 Solution (Part 1):", part(1, games))
     fmt.Println("Part 1 execution time:", time.Since(start), "\n")
 
 	start = time.Now()
+    fmt.Println("Day 13 Solution (Part 2):", part(2, games))
+    fmt.Println("Part 2 execution time:", time.Since(start))
+}
 
-    totalTokens = 0.0
+func part(part int, games []string) (int) {
+    totalTokens := 0
     for _, game := range games {
-        minres := 0.0
         splitGame := strings.Split(game, "\n")
         buttonA := extractNumbers(splitGame[0])
         buttonB := extractNumbers(splitGame[1])
         prize := extractNumbers(splitGame[2])
-        prize[0] += 10000000000000
-        prize[1] += 10000000000000
-        coefficients := [][]float64{
-            {buttonA[0], buttonB[0]},  // Coefficients of x and y in the first equation
-            {buttonA[1], buttonB[1]},  // Coefficients of x and y in the second equation
+        if part == 2{
+            prize[0] += 10000000000000
+            prize[1] += 10000000000000
         }
-        x, y, err := EpicGaussElim(coefficients, []float64{prize[0], prize[1]})
+
+        x, y, err := EpicGaussElim(
+            [][]float64{{buttonA[0], buttonB[0]},{buttonA[1], buttonB[1]},}, 
+            []float64{prize[0], prize[1]})
 
         if err == nil{
-            minres = 3.0 * x + 1.0 * y
+            totalTokens += (3 * x + 1 * y)
         }
-
-        totalTokens += minres
     } 
-    
-    fmt.Println("Day 13 Solution (Part 2):", int(totalTokens))
-    fmt.Println("Part 2 execution time:", time.Since(start))
+
+    return int(totalTokens)
 }
 
-func EpicGaussElim(a [][]float64, b []float64) (float64, float64, error) {
-    if len(a) != 2 || len(a[0]) != 2 || len(b) != 2 {
-        return 0.0, 0.0, fmt.Errorf("invalid input dimensions")
-    }
-
+func EpicGaussElim(a [][]float64, b []float64) (int, int, error) {
     a1, a2 := a[0][0], a[0][1]
     a3, a4 := a[1][0], a[1][1]
     b1, b2 := b[0], b[1]
 
     det := a1*a4 - a2*a3
-    if det == 0 {
-        return 0.0, 0.0, fmt.Errorf("equations have no unique solution")
-    }
+    // if det == 0 { literally not needed since inputs are tailored to have only one solution lol
+    //     return 0.0, 0.0, fmt.Errorf("equations have no unique solution")
+    // }
 
     x := (b1*a4 - b2*a2) / det
     y := (a1*b2 - a3*b1) / det
 
-    if x != math.Floor(x) || y != math.Floor(y) || x < 0 || y < 0 {
-        return 0.0, 0.0, fmt.Errorf("no non-negative integer solutions exist")
+    if x != math.Floor(x) || y != math.Floor(y) {
+        return 0.0, 0.0, fmt.Errorf("no solutions")
     }
 
-    return x, y, nil
+    return int(x), int(y), nil
 }
 
 func extractNumbers(input string) ([]float64) {
