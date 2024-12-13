@@ -8,7 +8,6 @@ import (
     "path/filepath"
     "time"
     "slices"
-    "sort"
 )
 
 type field struct {
@@ -47,50 +46,10 @@ func main() {
     for i := 0; i < len(rows); i++ {
         row := strings.Split(rows[i], "")
         for j := 0; j < len(row); j++ {
-            uniqueMap := make(map[field]bool)
-            uniqueSlice := []field{}
-            
-            r, perim := DFSWithPerimeter(rows, i, j, 0, []field{})
-            sort.Slice(perim, func(i, j int) bool {
-                return perim[i].xpos < perim[j].xpos
-            })
+            r, corners := DFSWithPerimeter(rows, i, j, 0, 0)
 
-            for _, item := range perim {
-                if !uniqueMap[item] {
-                    uniqueMap[item] = true
-                    uniqueSlice = append(uniqueSlice, item)
-                } 
-            }
-
-            count := len(uniqueSlice)
-            corners := 0
-            usedInCalc := map[field]int{}
-            for i := 0; i < len(uniqueSlice); i++ {
-                fmt.Println("checking:", uniqueSlice[i])
-                // Compare the current element with every other element
-                for j := 0; j < len(uniqueSlice); j++ {
-                    if i == j {
-                        continue
-                    }
-
-                    // Check if both xpos and ypos differs by 1 => corner!
-                    if utils.CalcAbs(uniqueSlice[j].ypos-uniqueSlice[i].ypos) == 1 && utils.CalcAbs(uniqueSlice[j].xpos-uniqueSlice[i].xpos) == 1 {
-                        fmt.Println("ASD:", uniqueSlice[i], uniqueSlice[j])
-                        checkIfUsed, _ := usedInCalc[uniqueSlice[i]]
-                        checkIfUsed2, _ := usedInCalc[uniqueSlice[j]]
-                        if checkIfUsed == 0 && checkIfUsed2 == 0{
-                            corners += 2
-                        }
-                        usedInCalc[uniqueSlice[i]] += 1
-                        usedInCalc[uniqueSlice[j]] += 1
-                    }
-                }
-            }
-
-
-            fmt.Println(usedInCalc, corners)
-            return
-            total += (r * count)
+            fmt.Println(r, corners * 2)
+            total += (r * corners * 2)
         }
     }
 
@@ -135,39 +94,60 @@ func DFS(rows []string, x int, y int, regionCount int, perimeterCount int) (int,
     return regionCount, perimeterCount
 }
 
-func DFSWithPerimeter(rows []string, x int, y int, regionCount int, perimeterSlice []field) (int, []field) {
+func DFSWithPerimeter(rows []string, x int, y int, regionCount int, corners int) (int, int) {
     if slices.Contains(visitedfield, field{xpos: x, ypos: y}){
-        return regionCount, perimeterSlice
+        return regionCount, corners
     }
 
     regionCount += 1
     actualField := strings.Split(rows[x], "")[y]
 
+    east := false
+    west := false
+    north := false
+    south := false
     visitedfield = append(visitedfield, field{xpos: x, ypos: y})
     if x + 1 < len(rows) && strings.Split(rows[x+1], "")[y] == actualField{
-        r, p := DFSWithPerimeter(rows, x + 1, y, regionCount, perimeterSlice)
-        regionCount = r; perimeterSlice = p
-    } else {
-        perimeterSlice = append(perimeterSlice, field{xpos: x + 1, ypos: y})
-    }
+        south = true
+        r, core := DFSWithPerimeter(rows, x + 1, y, regionCount, corners)
+        regionCount = r
+        corners = core
+    } 
     if x - 1 >= 0 && strings.Split(rows[x-1], "")[y] == actualField {
-        r, p := DFSWithPerimeter(rows, x-1, y, regionCount, perimeterSlice)
-        regionCount = r; perimeterSlice = p
-    } else {
-        perimeterSlice = append(perimeterSlice, field{xpos: x - 1, ypos: y})
-    }
+        north = true
+        r, core := DFSWithPerimeter(rows, x-1, y, regionCount, corners)
+        regionCount = r
+        corners = core
+    } 
     if y + 1 < len(rows[x]) && strings.Split(rows[x], "")[y+1] == actualField {
-        r, p := DFSWithPerimeter(rows, x, y+1, regionCount, perimeterSlice)
-        regionCount = r; perimeterSlice = p
-    } else {
-        perimeterSlice = append(perimeterSlice, field{xpos: x, ypos: y + 1})
-    }
+        east = true
+        r, core := DFSWithPerimeter(rows, x, y+1, regionCount, corners)
+        regionCount = r
+        corners = core
+    } 
     if y - 1 >= 0  && strings.Split(rows[x], "")[y-1] == actualField {
-        r, p := DFSWithPerimeter(rows, x, y - 1, regionCount, perimeterSlice)
-        regionCount = r; perimeterSlice = p
-    } else {
-        perimeterSlice = append(perimeterSlice, field{xpos: x, ypos: y - 1})
+        west = true
+        r, core := DFSWithPerimeter(rows, x, y - 1, regionCount, corners)
+        regionCount = r
+        corners = core
     }
 
-    return regionCount, perimeterSlice
+    if  (!west && !north && !south && east) || 
+        (!west && !north && south && !east) || 
+        (!west && north && !south && !east) || 
+        (west && !north && !south && !east) {
+        corners += 1
+        fmt.Println("tripl:", west, north, east, south, x, y)
+    } else if 
+        ((west && north) || 
+        (north && east) || 
+        (east && south) || 
+        (south && west)) {
+        fmt.Println("wut:", west, north, east, south, x, y)
+        corners += 1
+    } else if !west && !east && !north && !south {
+        corners += 2
+    }
+
+    return regionCount, corners
 }
