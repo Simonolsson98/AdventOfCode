@@ -15,8 +15,14 @@ type position struct {
     y int
 }
 
-var warehouse2dArr = [][]string{}
-var startingPos = position{}
+var (
+    numberOfBoxesToMove int;
+    lastBoxXPos int;
+    boxesToMove []position
+    warehouse2dArr = [][]string{}
+    startingPos = position{}
+)
+
 func main() {
     inputFile := strings.Split(filepath.Base(os.Args[0]), ".")[0] + "_input"
     input, err := utils.ReadInput(inputFile)
@@ -139,47 +145,6 @@ func Part1(moves string){
                     warehouse2dArr[startingPos.x][startingPos.y] = "@"
                 }
             }
-        }
-    }
-}
-
-var numberOfBoxesToMove int;
-var lastBoxXPos int;
-var boxesToMove []position
-func CheckRecursiveValidity(x int, y int, dir string) (bool){
-    if dir == "up" {
-        if warehouse2dArr[x][y] == "[" && warehouse2dArr[x][y + 1] == "]" {
-            boxesToMove = append(boxesToMove, position{x, y})
-            boxesToMove = append(boxesToMove, position{x, y + 1})
-            lastBoxXPos = x - 1
-            return (CheckRecursiveValidity(x - 1, y, dir) || warehouse2dArr[x - 1][y] == ".") && 
-                (CheckRecursiveValidity(x - 1, y + 1, dir) || warehouse2dArr[x - 1][y + 1] == ".")
-        } else if warehouse2dArr[x][y] == "]" && warehouse2dArr[x][y - 1] == "["{
-            lastBoxXPos = x - 1
-            boxesToMove = append(boxesToMove, position{x, y})
-            boxesToMove = append(boxesToMove, position{x, y - 1})
-            return (CheckRecursiveValidity(x - 1, y - 1, dir) || warehouse2dArr[x - 1][y - 1] == ".") && 
-                (CheckRecursiveValidity(x - 1, y, dir) || warehouse2dArr[x - 1][y] == ".")
-        } else {
-            lastBoxXPos = x
-            return warehouse2dArr[x][y] == "."
-        }
-    } else {
-        if warehouse2dArr[x][y] == "[" && warehouse2dArr[x][y + 1] == "]" {
-            boxesToMove = append(boxesToMove, position{x, y})
-            boxesToMove = append(boxesToMove, position{x, y+1})
-            lastBoxXPos = x + 1
-            return (CheckRecursiveValidity(x + 1, y, dir) || warehouse2dArr[x + 1][y] == ".") && 
-                (CheckRecursiveValidity(x + 1, y + 1, dir) || warehouse2dArr[x + 1][y + 1] == ".")
-        } else if warehouse2dArr[x][y] == "]" && warehouse2dArr[x][y - 1] == "["{
-            boxesToMove = append(boxesToMove, position{x, y})
-            boxesToMove = append(boxesToMove, position{x, y-1})
-            lastBoxXPos = x + 1
-            return (CheckRecursiveValidity(x + 1, y - 1, dir) || warehouse2dArr[x + 1][y - 1] == ".") && 
-                (CheckRecursiveValidity(x + 1, y, dir) || warehouse2dArr[x + 1][y] == ".")
-        } else {
-            lastBoxXPos = x
-            return warehouse2dArr[x][y] == "."
         }
     }
 }
@@ -320,12 +285,42 @@ func Part2(moves string){
     }
 }
 
-func debuggrid(){
-        fmt.Println()
-    for _, line := range warehouse2dArr {
-        fmt.Println(line)
+func CheckRecursiveValidity(x int, y int, dir string) (bool){
+    if dir == "up" {
+        if warehouse2dArr[x][y] == "[" && warehouse2dArr[x][y + 1] == "]" {
+            boxesToMove = append(boxesToMove, position{x, y})
+            boxesToMove = append(boxesToMove, position{x, y + 1})
+            lastBoxXPos = x - 1
+            return (CheckRecursiveValidity(x - 1, y, dir) || warehouse2dArr[x - 1][y] == ".") && 
+                (CheckRecursiveValidity(x - 1, y + 1, dir) || warehouse2dArr[x - 1][y + 1] == ".")
+        } else if warehouse2dArr[x][y] == "]" && warehouse2dArr[x][y - 1] == "["{
+            lastBoxXPos = x - 1
+            boxesToMove = append(boxesToMove, position{x, y})
+            boxesToMove = append(boxesToMove, position{x, y - 1})
+            return (CheckRecursiveValidity(x - 1, y - 1, dir) || warehouse2dArr[x - 1][y - 1] == ".") && 
+                (CheckRecursiveValidity(x - 1, y, dir) || warehouse2dArr[x - 1][y] == ".")
+        } else {
+            lastBoxXPos = x
+            return warehouse2dArr[x][y] == "."
+        }
+    } else {
+        if warehouse2dArr[x][y] == "[" && warehouse2dArr[x][y + 1] == "]" {
+            boxesToMove = append(boxesToMove, position{x, y})
+            boxesToMove = append(boxesToMove, position{x, y+1})
+            lastBoxXPos = x + 1
+            return (CheckRecursiveValidity(x + 1, y, dir) || warehouse2dArr[x + 1][y] == ".") && 
+                (CheckRecursiveValidity(x + 1, y + 1, dir) || warehouse2dArr[x + 1][y + 1] == ".")
+        } else if warehouse2dArr[x][y] == "]" && warehouse2dArr[x][y - 1] == "["{
+            boxesToMove = append(boxesToMove, position{x, y})
+            boxesToMove = append(boxesToMove, position{x, y-1})
+            lastBoxXPos = x + 1
+            return (CheckRecursiveValidity(x + 1, y - 1, dir) || warehouse2dArr[x + 1][y - 1] == ".") && 
+                (CheckRecursiveValidity(x + 1, y, dir) || warehouse2dArr[x + 1][y] == ".")
+        } else {
+            lastBoxXPos = x
+            return warehouse2dArr[x][y] == "."
+        }
     }
-        fmt.Println()
 }
 
 func InitWarehouse2dArr(warehouse string){
@@ -339,25 +334,27 @@ func InitWarehouse2dArr(warehouse string){
         warehouse2dArr = append(warehouse2dArr, splitLine)
     }
 }
-func InitWarehouse2dArrPart2(warehouse string){
+
+func InitWarehouse2dArrPart2(warehouse string) {
     for x, line := range strings.Split(warehouse, "\n") {
         splitLine := strings.Split(line, "")
         newSplit := make([]string, 2*len(splitLine))
         for y, char := range splitLine {
-            if char == "@" {
-                startingPos = position{x, 2 * y}
-                newSplit[2 * y] = "@"
-                newSplit[2 * y + 1] = "."
-            } else if char == "O"{
-                newSplit[2 * y] = "["
-                newSplit[2 * y + 1] = "]"
-            } else if char == "#"{
-                newSplit[2 * y] = "#"
-                newSplit[2 * y + 1] = "#"
-            } else if char == "."{
-                newSplit[2 * y] = "."
-                newSplit[2 * y + 1] = "."
-            } 
+            switch char {
+                case "@":
+                    startingPos = position{x, 2 * y}
+                    newSplit[2 * y] = "@"
+                    newSplit[2 * y + 1] = "."
+                case "O":
+                    newSplit[2 * y] = "["
+                    newSplit[2 * y + 1] = "]"
+                case "#":
+                    newSplit[2 * y] = "#"
+                    newSplit[2 * y + 1] = "#"
+                case ".":
+                    newSplit[2 * y] = "."
+                    newSplit[2 * y + 1] = "."
+            }
         }
         warehouse2dArr = append(warehouse2dArr, newSplit)
     }
