@@ -10,6 +10,12 @@ import (
     "time"
 )
 
+type numAndIter struct {
+    num int
+    iter int
+}
+var cache = map[numAndIter]int{}
+
 func main() {
     inputFile := strings.Split(filepath.Base(os.Args[0]), ".")[0] + "_input"
     input, err := utils.ReadInput(inputFile)
@@ -19,66 +25,55 @@ func main() {
     }
 
 	start := time.Now()
-
     nums := strings.Split(input, " ")
-
-    fmt.Println("Day 11 Solution (Part 1):", test(25, nums))
+    fmt.Println("Day 11 Solution (Part 1):", test(75, nums))
     fmt.Println("Part 1 execution time:", time.Since(start), "\n")
 
 	start = time.Now()
-	// exec part2()
+    cache = map[numAndIter]int{}
     fmt.Println("Day 11 Solution (Part 2):")
     fmt.Println("Part 2 execution time:", time.Since(start))
 }
 
-var cache = map[int]int{}
 func test(iters int, nums []string) (res int){
     total := 0
     for _, strnum := range nums {
         num, _ := strconv.Atoi(strnum)
-        total += runNum(iters, 0, num)
+        total += stoneBlink(iters, num)
     }
 
     return total
 }
 
-func runNum(iters int, currIter int, num int) (res int){
-    for i := currIter; i < iters; i++ {
-        val, exists := cache[num]
-        if exists && val == i {
-            // fmt.Println("cache hit for:", num, ":", val)
-            return 1
-        }
-
-        numAsStr := strconv.Itoa(num)
-        if numAsStr == "0"{
-            numAsStr = "1"
-            num = 1
-        } else if (len(numAsStr) % 2 == 0){
-            // fmt.Println("splitting:", num)
-            //trims leading zeroes
-            firstNum, _ := strconv.Atoi(numAsStr[0:len(numAsStr)/2])
-            secondNum, _ := strconv.Atoi(numAsStr[len(numAsStr)/2:])
-
-            // fmt.Println("firstNum:", firstNum, "secondNum:", secondNum)
-            return runNum(iters, i + 1, firstNum) + runNum(iters, i + 1, secondNum)
-        } else {
-            // fmt.Println("add to cache mul:", num, ":", i)
-            cache[num] = i
-            num *= 2024
-        }
-    } 
-    
-    // fmt.Println("add to cache end:", num, ":", iters)
-    cache[num] = iters
-    return 1
-}
-
-func remove(slice []int, ele int) []int {
-    for idx, item := range slice {
-        if item == ele {
-            return append(slice[:idx], slice[idx+1:]...)
-        }
+func stoneBlink(iters int, num int) (int){
+    if iters == 0{
+        return 1
     }
-    return slice
+    _, exists := cache[numAndIter{num, iters}]
+    if exists {
+        return cache[numAndIter{num, iters}]
+    }
+
+    numAsStr := strconv.Itoa(num)
+    nextNums := []int{}
+    if num == 0{
+        nextNums = append(nextNums, 1)
+    } else if (len(numAsStr) % 2 == 0){
+        //trims leading zeroes
+        firstNum, _ := strconv.Atoi(numAsStr[0:len(numAsStr)/2])
+        secondNum, _ := strconv.Atoi(numAsStr[len(numAsStr)/2:])
+
+        nextNums = append(nextNums, firstNum)
+        nextNums = append(nextNums, secondNum)
+    } else {
+        nextNums = append(nextNums, num * 2024)
+    }
+
+    count := 0
+    for _, recNum := range nextNums {
+        count += stoneBlink(iters - 1, recNum)
+    }
+
+    cache[numAndIter{num, iters}] = count
+    return count
 }
