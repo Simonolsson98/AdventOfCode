@@ -31,7 +31,7 @@ func main() {
 
 	start = time.Now()
     cache = map[numAndIter]int{}
-    fmt.Println("Day 11 Solution (Part 2):", test(25, nums))
+    fmt.Println("Day 11 Solution (Part 2):", test(75, nums))
     fmt.Println("Part 2 execution time:", time.Since(start))
 }
 
