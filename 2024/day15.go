@@ -29,14 +29,14 @@ func main() {
     warehouseAndMoves := strings.Split(input, "\n\n")
     InitWarehouse2dArr(warehouseAndMoves[0])
     Part1(warehouseAndMoves[1])
-    fmt.Println("Day 15 Solution (Part 1):", CalcTotalGPSCoords())
+    fmt.Println("Day 15 Solution (Part 1):", CalcTotalGPSCoords(1))
     fmt.Println("Part 1 execution time:", time.Since(start), "\n")
 
 	start = time.Now()
     warehouse2dArr = [][]string{}
     InitWarehouse2dArrPart2(warehouseAndMoves[0])
 	Part2(warehouseAndMoves[1])
-    fmt.Println("Day 15 Solution (Part 2):", CalcTotalGPSCoords())
+    fmt.Println("Day 15 Solution (Part 2):", CalcTotalGPSCoords(2))
     fmt.Println("Part 2 execution time:", time.Since(start))
 }
 
@@ -48,7 +48,7 @@ func Part1(moves string){
             if individualMove == "^" {
                 validity := false
                 numberOfBoxesToMove := 0
-                for i := startingPos.x - 1; i > 0; i-- {
+                for i := startingPos.x-1; i > 0; i-- {
                     if warehouse2dArr[i][startingPos.y] == "."{
                         validity = true
                         break
@@ -189,7 +189,6 @@ func Part2(moves string){
     ylen := len(warehouse2dArr[0])
     for _, move := range strings.Split(moves, "\n") {
         for _, individualMove := range strings.Split(move, "") {
-            fmt.Println(individualMove)
             boxesToMove = []position{}
             if individualMove == "^" {
                 validity := false
@@ -364,12 +363,18 @@ func InitWarehouse2dArrPart2(warehouse string){
     }
 }
 
-func CalcTotalGPSCoords() (int){
+func CalcTotalGPSCoords(part int) (int){
     total := 0
     for x, row := range warehouse2dArr {
         for y, char := range row {
-            if char == "["{
-                total += (100 * x + y)
+            if part == 1{
+                if char == "O"{
+                    total += (100 * x + y)
+                }
+            } else {
+                if char == "["{
+                    total += (100 * x + y)
+                }
             }
         }
     }
