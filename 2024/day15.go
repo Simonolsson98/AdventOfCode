@@ -15,6 +15,8 @@ type position struct {
     y int
 }
 
+var warehouse2dArr = [][]string{}
+var startingPos = position{}
 func main() {
     inputFile := strings.Split(filepath.Base(os.Args[0]), ".")[0] + "_input"
     input, err := utils.ReadInput(inputFile)
@@ -24,22 +26,20 @@ func main() {
     }
 
     start := time.Now()
-    var startingPos position
     warehouseAndMoves := strings.Split(input, "\n\n")
-    warehouse := warehouseAndMoves[0]
-    moves := warehouseAndMoves[1]
+    InitWarehouse2dArr(warehouseAndMoves[0])
+    Part1(warehouseAndMoves[1])
     
-    var warehouse2dArr [][]string
-    for x, line := range strings.Split(warehouse, "\n") {
-        splitLine := strings.Split(line, "")
-        for y, char := range splitLine {
-            if char == "@" {
-                startingPos = position{x, y}
-            }
-        }
-        warehouse2dArr = append(warehouse2dArr, strings.Split(line, ""))
-    }
+    fmt.Println("Day 15 Solution (Part 1):", CalcTotalGPSCoords())
+    fmt.Println("Part 1 execution time:", time.Since(start), "\n")
 
+	start = time.Now()
+	// exec part2()
+    fmt.Println("Day 15 Solution (Part 2):")
+    fmt.Println("Part 2 execution time:", time.Since(start))
+}
+
+func Part1(moves string){
     xlen := len(warehouse2dArr)
     ylen := len(warehouse2dArr[0])
     for _, move := range strings.Split(moves, "\n") {
@@ -140,7 +140,21 @@ func main() {
             }
         }
     }
+}
 
+func InitWarehouse2dArr(warehouse string){
+    for x, line := range strings.Split(warehouse, "\n") {
+        splitLine := strings.Split(line, "")
+        for y, char := range splitLine {
+            if char == "@" {
+                startingPos = position{x, y}
+            }
+        }
+        warehouse2dArr = append(warehouse2dArr, strings.Split(line, ""))
+    }
+}
+
+func CalcTotalGPSCoords() (int){
     total := 0
     for x, row := range warehouse2dArr {
         for y, char := range row {
@@ -149,11 +163,6 @@ func main() {
             }
         }
     }
-    fmt.Println("Day 15 Solution (Part 1):", total)
-    fmt.Println("Part 1 execution time:", time.Since(start), "\n")
 
-	start = time.Now()
-	// exec part2()
-    fmt.Println("Day 15 Solution (Part 2):")
-    fmt.Println("Part 2 execution time:", time.Since(start))
+    return total
 }
