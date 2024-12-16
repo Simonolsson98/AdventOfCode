@@ -54,7 +54,7 @@ func main() {
     }
 
     start := time.Now()
-    BFS(0, currPos, []position{currPos}, 1)
+    DFS(0, currPos, []position{currPos}, 1)
     fmt.Println("Day 16 Solution (Part 1):", valueOfDestination)
     fmt.Println("Part 1 execution time:", time.Since(start), "\n")
 
@@ -68,7 +68,7 @@ func main() {
         }
     }
 
-    BFS(0, currPos, []position{currPos}, 2)
+    DFS(0, currPos, []position{currPos}, 2)
 
     unique := map[position]bool{}
     for _, v := range tilesInBestPath {
@@ -79,7 +79,7 @@ func main() {
     fmt.Println("Part 2 execution time:", time.Since(start))
 }
 
-func BFS(count int, currPos position, partOfPath []position, part int){
+func DFS(count int, currPos position, partOfPath []position, part int){
     if grid[currPos.x][currPos.y] == "E" {
         if part == 1{
             if count < visited[position{currPos.x, currPos.y, currPos.dir}] {
@@ -164,6 +164,6 @@ func BFS(count int, currPos position, partOfPath []position, part int){
                 panic("lol")
         }
 
-        BFS(tempCount, neighbour, partOfPath, part)
+        DFS(tempCount, neighbour, partOfPath, part)
     }
 }
