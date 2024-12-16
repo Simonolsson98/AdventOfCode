@@ -13,8 +13,9 @@ import (
 type position struct {
     x int
     y int
+    dir string
 }
- 
+
 var (
     valueOfDestination int;
     grid [][]string
@@ -34,7 +35,7 @@ func main() {
     for x, row := range rows {
         for y, char := range row {
             if char == 'S' {
-                currPos = position{x, y}
+                currPos = position{x, y, "e"}
             }
 
         }
@@ -44,16 +45,17 @@ func main() {
     visited = make(map[position]int)
     for x := 0; x < len(grid); x++ {
         for y := 0; y < len(grid[x]); y++ {
-            pos := position{x, y}
-            visited[pos] = 99999999999
+            visited[position{x, y, "e"}] = 99999999999
+            visited[position{x, y, "s"}] = 99999999999
+            visited[position{x, y, "w"}] = 99999999999
+            visited[position{x, y, "n"}] = 99999999999
         }
     }
 
-    BFS(0, "e")
 
 
 	start := time.Now()
-	// 147584 too high
+    BFS(0, currPos)
     fmt.Println("Day 16 Solution (Part 1):", valueOfDestination)
     fmt.Println("Part 1 execution time:", time.Since(start), "\n")
 
@@ -63,86 +65,76 @@ func main() {
     fmt.Println("Part 2 execution time:", time.Since(start))
 }
 
-func BFS(count int, dir string){
+func BFS(count int, currPos position){
     if grid[currPos.x][currPos.y] == "E" {
-
-        fmt.Println("HERE WITH:", count)
-        if count < visited[position{currPos.x, currPos.y}] {
-            visited[position{currPos.x, currPos.y}] = count
+        if count < visited[position{currPos.x, currPos.y, currPos.dir}] {
+            visited[position{currPos.x, currPos.y, currPos.dir}] = count
             valueOfDestination = count
         }
         return
     }
     
-    if visited[position{currPos.x, currPos.y}] < count{
+    if visited[position{currPos.x, currPos.y, currPos.dir}] <= count{
         return
     }
 
-    visited[position{currPos.x, currPos.y}] = count
-    neighbours := []position{position{currPos.x-1, currPos.y}, position{currPos.x, currPos.y+1}, position{currPos.x+1, currPos.y}, position{currPos.x, currPos.y-1}}
+    visited[position{currPos.x, currPos.y, currPos.dir}] = count
+    neighbours := []position{
+        position{currPos.x-1, currPos.y, "n"}, 
+        position{currPos.x, currPos.y+1, "e"}, 
+        position{currPos.x+1, currPos.y, "s"}, 
+        position{currPos.x, currPos.y-1, "w"}}
     for _, neighbour := range neighbours {
         if grid[neighbour.x][neighbour.y] == "#"{
             continue
         }
         
         tempCount := count
-        var nextDir string
-        switch dir {
+        switch currPos.dir {
             case "e":
                 if neighbour.x == currPos.x - 1{ //neighbour north
-                    nextDir = "n"
                     tempCount += 1001
                 } else if neighbour.y == currPos.y + 1{ //neighbour east
-                    nextDir = "e"
                     tempCount += 1
                 } else if neighbour.y == currPos.y - 1{ //neighbour west
                     continue
                 } else { //neighbour south
-                    nextDir = "s"
                     tempCount += 1001
                 }
             case "s":
                 if neighbour.x == currPos.x - 1{ //neighbour north
                     continue
                 } else if neighbour.y == currPos.y + 1{ //neighbour east
-                    nextDir = "e"
                     tempCount += 1001
                 } else if neighbour.y == currPos.y - 1{ //neighbour west
-                    nextDir = "w"
                     tempCount += 1001
                 } else { //neighbour south
-                    nextDir = "s"
                     tempCount += 1
                 }
             case "w":
                 if neighbour.x == currPos.x - 1{ //neighbour north
-                    nextDir = "n"
                     tempCount += 1001
                 } else if neighbour.y == currPos.y + 1{ //neighbour east
                     continue
                 } else if neighbour.y == currPos.y - 1{ //neighbour west
-                    nextDir = "w"
                     tempCount += 1
                 } else { //neighbour south
-                    nextDir = "s"
                     tempCount += 1001
                 }
             case "n":
                 if neighbour.x == currPos.x - 1{ //neighbour north
-                    nextDir = "n"
                     tempCount += 1
                 } else if neighbour.y == currPos.y + 1{ //neighbour east
-                    nextDir = "e"
                     tempCount += 1001
                 } else if neighbour.y == currPos.y - 1{ //neighbour west
-                    nextDir = "w"
                     tempCount += 1001
                 } else { //neighbour south
                     continue
                 }
+            default:
+                panic("lol")
         }
 
-        currPos = neighbour
-        BFS(tempCount, nextDir)
+        BFS(tempCount, neighbour)
     }
 }
