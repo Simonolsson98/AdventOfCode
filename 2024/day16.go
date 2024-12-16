@@ -17,7 +17,8 @@ type position struct {
 }
 
 var (
-    valueOfDestination int;
+    valueOfDestination int
+    tilesInBestPath []position
     grid [][]string
     currPos position
     visited map[position]int
@@ -52,31 +53,59 @@ func main() {
         }
     }
 
-
-
-	start := time.Now()
-    BFS(0, currPos)
+    start := time.Now()
+    BFS(0, currPos, []position{currPos}, 1)
     fmt.Println("Day 16 Solution (Part 1):", valueOfDestination)
     fmt.Println("Part 1 execution time:", time.Since(start), "\n")
 
-	start = time.Now()
-	// exec part2()
-    fmt.Println("Day 16 Solution (Part 2):")
+    start = time.Now()
+    for x := 0; x < len(grid); x++ {
+        for y := 0; y < len(grid[x]); y++ {
+            visited[position{x, y, "e"}] = 99999999999
+            visited[position{x, y, "s"}] = 99999999999
+            visited[position{x, y, "w"}] = 99999999999
+            visited[position{x, y, "n"}] = 99999999999
+        }
+    }
+
+    BFS(0, currPos, []position{currPos}, 2)
+
+    unique := map[position]bool{}
+    for _, v := range tilesInBestPath {
+        unique[v] = true
+    }
+
+    fmt.Println("Day 16 Solution (Part 2):", len(unique))
     fmt.Println("Part 2 execution time:", time.Since(start))
 }
 
-func BFS(count int, currPos position){
+func BFS(count int, currPos position, partOfPath []position, part int){
     if grid[currPos.x][currPos.y] == "E" {
-        if count < visited[position{currPos.x, currPos.y, currPos.dir}] {
-            visited[position{currPos.x, currPos.y, currPos.dir}] = count
-            valueOfDestination = count
+        if part == 1{
+            if count < visited[position{currPos.x, currPos.y, currPos.dir}] {
+                visited[position{currPos.x, currPos.y, currPos.dir}] = count
+                valueOfDestination = count
+            }
+        } else {
+            if count == valueOfDestination{
+                tilesInBestPath = append(tilesInBestPath, partOfPath...)
+            }
         }
+
         return
     }
     
-    if visited[position{currPos.x, currPos.y, currPos.dir}] <= count{
-        return
+    if part == 1{
+        if visited[position{currPos.x, currPos.y, currPos.dir}] <= count{
+            return
+        }
+    } else {
+        if visited[position{currPos.x, currPos.y, currPos.dir}] < count{
+            return
+        }
     }
+
+    partOfPath = append(partOfPath, position{currPos.x, currPos.y, "x"})
 
     visited[position{currPos.x, currPos.y, currPos.dir}] = count
     neighbours := []position{
@@ -135,6 +164,6 @@ func BFS(count int, currPos position){
                 panic("lol")
         }
 
-        BFS(tempCount, neighbour)
+        BFS(tempCount, neighbour, partOfPath, part)
     }
 }
