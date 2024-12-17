@@ -67,9 +67,9 @@ func main() {
             case 5: // 
                 printthis = printthis + strconv.Itoa((operand % 8 + 8) % 8) + ","
             case 6: // bdv A / 2^operand => B
-                registers["B"] = int(math.Pow(float64(registers["A"]), float64(operand)))
+                registers["B"] = int(float64(registers["A"]) / math.Pow(2.0, float64(operand)))
             case 7: // cdv A / 2^operand => C
-                registers["C"] = int(math.Pow(float64(registers["A"]), float64(operand)))
+                registers["C"] = int(float64(registers["A"]) / math.Pow(2.0, float64(operand)))
         }
     }
 
