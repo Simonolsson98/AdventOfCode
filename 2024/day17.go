@@ -38,6 +38,18 @@ func main() {
     opcodes := strings.Split(strings.Split(program, ": ")[1], ",")
 
     start := time.Now()
+    printthis := part1(registers, opcodes)
+
+    printthis = strings.TrimRight(printthis, ",")
+    fmt.Println("Day 17 Solution (Part 1):", printthis)
+    fmt.Println("Part 1 execution time:", time.Since(start), "\n")
+
+	start = time.Now()
+    fmt.Println("Day 17 Solution (Part 2):", part2(strings.Split(program, ": ")[1], registers, opcodes))
+    fmt.Println("Part 2 execution time:", time.Since(start))
+}
+
+func part1(registers map[string]int, opcodes []string) (string){
     printthis := ""
     for i := 0; i < len(opcodes); i+=2 {
         instr, _ := strconv.Atoi(opcodes[i])
@@ -76,12 +88,19 @@ func main() {
         }
     }
 
-    printthis = strings.TrimRight(printthis, ",")
-    fmt.Println("Day 17 Solution (Part 1):", printthis)
-    fmt.Println("Part 1 execution time:", time.Since(start), "\n")
+    return printthis
+}
 
-	start = time.Now()
-	// exec part2()
-    fmt.Println("Day 17 Solution (Part 2):")
-    fmt.Println("Part 2 execution time:", time.Since(start))
+func part2(instrs string, registers map[string]int, opcodes []string) (int){
+    for i := 0; true; i++ {
+        registers["A"] = i
+        test := part1(registers, opcodes)
+
+        fmt.Println(i)
+        if strings.TrimRight(test, ",") == instrs {
+            return i
+        }
+    }
+
+    return -1
 }
