@@ -32,8 +32,8 @@ func main() {
     regAVal, _ := strconv.Atoi(regAAndVal[1])
     regBVal, _ := strconv.Atoi(regBAndVal[1])
     regCVal, _ := strconv.Atoi(regCAndVal[1])
-    registers := map[string]int{regAAndVal[0]: regAVal, regBAndVal[0]: regBVal, regCAndVal[0]: regCVal}
 
+    registers := map[string]int{regAAndVal[0]: regAVal, regBAndVal[0]: regBVal, regCAndVal[0]: regCVal}
     program := splitInput[1]
     opcodes := strings.Split(strings.Split(program, ": ")[1], ",")
 
@@ -53,26 +53,26 @@ func main() {
         }
 
         switch instr {
-            case 0: // adv A / 2^literaloperand => A
+            case 0:
                 registers["A"] = int(float64(registers["A"]) / math.Pow(2.0, float64(combooperand)))
-            case 1: // B xor literaloperand => B
+            case 1:
                 registers["B"] = registers["B"] ^ literaloperand
-            case 2: // literaloperand % 8 => B
-                registers["B"] = ((combooperand % 8) + 8) % 8
-            case 3: // jump if A != 0
+            case 2:
+                registers["B"] = combooperand % 8
+            case 3:
                 if registers["A"] != 0{
                     i = literaloperand - 2
                 }
-            case 4: // B XOR C => B
+            case 4:
                 registers["B"] = registers["B"] ^ registers["C"]
-            case 5: // 
-                printthis = printthis + strconv.Itoa(((combooperand % 8) + 8) % 8) + ","
-            case 6: // bdv A / 2^literaloperand => B
+            case 5:
+                printthis = printthis + strconv.Itoa(combooperand % 8) + ","
+            case 6:
                 registers["B"] = int(float64(registers["A"]) / math.Pow(2.0, float64(combooperand)))
-            case 7: // cdv A / 2^literaloperand => C
+            case 7:
                 registers["C"] = int(float64(registers["A"]) / math.Pow(2.0, float64(combooperand)))
             default:
-                panic("NOOOOOOOOOOO")
+                panic("should not reach here")
         }
     }
 
