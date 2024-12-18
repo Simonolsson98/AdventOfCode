@@ -17,13 +17,13 @@ func main() {
         fmt.Println("Error reading input:", err)
         return
     }
-    
+
     start := time.Now()
     // exec part 1
     fmt.Println("Day 19 Solution (Part 1):")
     fmt.Println("Part 1 execution time:", time.Since(start), "\n")
 
-    start := time.Now()
+    start = time.Now()
     // exec part 2
     fmt.Println("Day 19 Solution (Part 2):")
     fmt.Println("Part 2 execution time:", time.Since(start))
