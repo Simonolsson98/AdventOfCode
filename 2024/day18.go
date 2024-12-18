@@ -64,7 +64,7 @@ func main() {
 
     start := time.Now()
     DFS(0, currPos)
-    fmt.Println("Day 16 Solution (Part 1):", valueOfDestination)
+    fmt.Println("Day 18 Solution (Part 1):", valueOfDestination)
     fmt.Println("Part 1 execution time:", time.Since(start), "\n")
 
     valueOfDestination = -1
@@ -102,7 +102,7 @@ func main() {
     }
 
     res := mazeBlocker[0]+","+mazeBlocker[1]
-    fmt.Println("Day 16 Solution (Part 2):", res)
+    fmt.Println("Day 18 Solution (Part 2):", res)
     fmt.Println("Part 2 execution time:", time.Since(start))
 }
 
