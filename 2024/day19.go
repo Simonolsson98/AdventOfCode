@@ -58,22 +58,22 @@ func main() {
 }
 
 func checkAll(validTowel string) (bool) {
+    if len(validTowel) == 0{
+        checkedParts[validTowel] = 1
+        return true
+    }
+
     for _, availablePattern := range sortedStripes[validTowel[0]] {
         if len(availablePattern) > len(validTowel){
             continue
         }
 
-        if checkedParts[validTowel] == -1 || checkedParts[validTowel] == 1{
-            return checkedParts[validTowel] == 1
+        if checkedParts[validTowel] == -1 {
+            return false
         }
 
         if checkPattern(validTowel, availablePattern){
             newTowel := validTowel[len(availablePattern):]
-            if len(newTowel) == 0{
-                checkedParts[newTowel] = 1
-                return true
-            }
-
             if checkAll(newTowel){
                 return true
             }
