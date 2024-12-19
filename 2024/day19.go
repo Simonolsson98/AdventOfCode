@@ -8,11 +8,13 @@ import (
     //"strconv"
     "path/filepath"
     "time"
+    "sort"
 )
 
 var (
     allAvailablePatterns []string
     sortedStripes = make(map[byte][]string, 0)
+    checkedParts map[string]int
 )
 
 func main() {
@@ -25,6 +27,10 @@ func main() {
 
     splitInput := strings.Split(input, "\n\n")
     allAvailablePatterns = strings.Split(splitInput[0], ", ")
+    sort.Slice(allAvailablePatterns, func(i, j int) bool {
+        return len(allAvailablePatterns[i]) > len(allAvailablePatterns[j])
+    })
+
     for _, pattern := range allAvailablePatterns {
         sortedStripes[pattern[0]] = append(sortedStripes[pattern[0]], pattern)
     }
@@ -33,20 +39,15 @@ func main() {
     availableTowels := 0
     
     start := time.Now()
-    for i, towelToCheck := range towelsToCheck {
-        available := checkAll([]string{towelToCheck})
+    checkedParts = make(map[string]int)
+    for _, towelToCheck := range towelsToCheck {
+        available := checkAll(towelToCheck, 0, len(towelToCheck))
 
-        if !available {
-            fmt.Println("unavailable:", towelToCheck)
-        } else {
+        if available {
             availableTowels++
         }
-
-        fmt.Println("i: ", i, "done and available was:", available)
     }
 
-
-    // exec part 1
     fmt.Println("Day 19 Solution (Part 1):", availableTowels)
     fmt.Println("Part 1 execution time:", time.Since(start), "\n")
 
@@ -56,34 +57,33 @@ func main() {
     fmt.Println("Part 2 execution time:", time.Since(start))
 }
 
-func checkPattern(towel string, pattern string) (bool){
-    return strings.HasPrefix(towel, pattern)
-}
+func checkAll(validTowel string, skippedIndex int, i int) (bool) {
+    for _, availablePattern := range sortedStripes[validTowel[0]] {
+        if len(availablePattern) > len(validTowel){
+            continue
+        }
 
-func checkAll(validTowels []string) (bool) {
-    var atleastOnePassing bool = false
-    var newTowels []string
-    for _, validTowel := range validTowels {
-        for _, availablePattern := range sortedStripes[validTowel[0]] {
-            if len(availablePattern) > len(validTowel){
-                continue
+        if checkedParts[validTowel] == -1 || checkedParts[validTowel] == 1{
+            return checkedParts[validTowel] == 1
+        }
+
+        if checkPattern(validTowel, availablePattern){
+            newTowel := validTowel[len(availablePattern):]
+            if len(newTowel) == 0{
+                checkedParts[newTowel] = 1
+                return true
             }
 
-            if checkPattern(validTowel, availablePattern){
-                atleastOnePassing = true
-                newTowel := validTowel[len(availablePattern):]
-                if len(newTowel) == 0{
-                    return true
-                }
-
-                newTowels = append(newTowels, newTowel)
+            if checkAll(newTowel, skippedIndex + len(availablePattern), i){
+                return true
             }
         }
     }
-    
-    if !atleastOnePassing {
-        return false
-    }
 
-    return checkAll(newTowels)
+    checkedParts[validTowel] = -1
+    return false
+}
+
+func checkPattern(towel string, pattern string) (bool){
+    return strings.HasPrefix(towel, pattern)
 }
