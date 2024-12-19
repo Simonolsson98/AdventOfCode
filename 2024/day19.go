@@ -41,7 +41,7 @@ func main() {
     start := time.Now()
     checkedParts = make(map[string]int)
     for _, towelToCheck := range towelsToCheck {
-        available := checkAll(towelToCheck, 0, len(towelToCheck))
+        available := checkAll(towelToCheck)
 
         if available {
             availableTowels++
@@ -57,7 +57,7 @@ func main() {
     fmt.Println("Part 2 execution time:", time.Since(start))
 }
 
-func checkAll(validTowel string, skippedIndex int, i int) (bool) {
+func checkAll(validTowel string) (bool) {
     for _, availablePattern := range sortedStripes[validTowel[0]] {
         if len(availablePattern) > len(validTowel){
             continue
@@ -74,7 +74,7 @@ func checkAll(validTowel string, skippedIndex int, i int) (bool) {
                 return true
             }
 
-            if checkAll(newTowel, skippedIndex + len(availablePattern), i){
+            if checkAll(newTowel){
                 return true
             }
         }
