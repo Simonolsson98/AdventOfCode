@@ -5,7 +5,7 @@ import (
     "strings"
     "os"
     "2024/utils"
-    //"strconv"
+    "strconv"
     "path/filepath"
     "time"
 )
@@ -18,9 +18,30 @@ func main() {
         return
     }
 
+    nums := strings.Split(input, "\n")
+
     start := time.Now()
-    // exec part 1
-    fmt.Println("Day 22 Solution (Part 1):")
+    var result int
+    for _, num := range nums {
+        secretNum, _ := strconv.Atoi(num)
+        for i := 0; i < 2000; i++ {
+            subResult := secretNum * 64
+            secretNum = subResult ^ secretNum
+            secretNum = secretNum % 16777216
+
+            subResult = secretNum / 32
+            secretNum = subResult ^ secretNum
+            secretNum = secretNum % 16777216
+
+            subResult = secretNum * 2048
+            secretNum = subResult ^ secretNum
+            secretNum = secretNum % 16777216
+        }
+
+        result += secretNum
+    }
+
+    fmt.Println("Day 22 Solution (Part 1):", result)
     fmt.Println("Part 1 execution time:", time.Since(start), "\n")
 
     start = time.Now()
