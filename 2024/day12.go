@@ -47,9 +47,7 @@ func main() {
         row := strings.Split(rows[i], "")
         for j := 0; j < len(row); j++ {
             r, corners := DFSWithPerimeter(rows, i, j, 0, 0)
-
-            fmt.Println(r, corners * 2)
-            total += (r * corners * 2)
+            total += (r * corners)
         }
     }
 
@@ -132,22 +130,85 @@ func DFSWithPerimeter(rows []string, x int, y int, regionCount int, corners int)
         corners = core
     }
 
-    if  (!west && !north && !south && east) || 
-        (!west && !north && south && !east) || 
-        (!west && north && !south && !east) || 
-        (west && !north && !south && !east) {
-        corners += 1
-        fmt.Println("tripl:", west, north, east, south, x, y)
-    } else if 
-        ((west && north) || 
-        (north && east) || 
-        (east && south) || 
-        (south && west)) {
-        fmt.Println("wut:", west, north, east, south, x, y)
-        corners += 1
-    } else if !west && !east && !north && !south {
-        corners += 2
-    }
+    corners += countCorners(rows, actualField, x, y, north, east, south, west)
 
     return regionCount, corners
+}
+
+func countCorners(rows []string, actualField string, x int, y int, north bool, east bool, south bool, west bool) (int){
+    corners := 0
+    if west && north && east && south{
+        if strings.Split(rows[x-1], "")[y-1] != actualField{
+            corners++
+        }
+        if strings.Split(rows[x+1], "")[y-1] != actualField{
+            corners++
+        }
+        if strings.Split(rows[x-1], "")[y+1] != actualField{
+            corners++
+        }
+        if strings.Split(rows[x+1], "")[y+1] != actualField{
+            corners++
+        }
+    } else if !west && !north && !east && !south{ // region of 1 single letter => 4 corners
+        corners += 4
+    } else if west && north && east && !south{
+        if strings.Split(rows[x-1], "")[y+1] != actualField{
+            corners++
+        }
+        if strings.Split(rows[x-1], "")[y-1] != actualField{
+            corners++
+        }
+    } else if west && north && !east && south {
+        if strings.Split(rows[x-1], "")[y-1] != actualField{
+            corners++
+        }
+        if strings.Split(rows[x+1], "")[y-1] != actualField{
+            corners++
+        }
+    } else if west && !north && east && south {
+        if strings.Split(rows[x+1], "")[y+1] != actualField{
+            corners++
+        }
+        if strings.Split(rows[x+1], "")[y-1] != actualField{
+            corners++
+        }
+    } else if !west && north && east && south {
+        if strings.Split(rows[x-1], "")[y+1] != actualField{
+            corners++
+        }
+        if strings.Split(rows[x+1], "")[y+1] != actualField{
+            corners++
+        }
+    } else if west && north && !east && !south {
+        corners++
+        if strings.Split(rows[x-1], "")[y-1] != actualField{
+            corners++
+        }
+    } else if north && east && !west && !south{
+        corners++
+        if strings.Split(rows[x-1], "")[y+1] != actualField{
+            corners++
+        }
+    } else if east && south && !west && !north{
+        corners++
+        if strings.Split(rows[x+1], "")[y+1] != actualField{
+            corners++
+        }
+    } else if south && west && !north && !east{
+        corners++
+        if strings.Split(rows[x+1], "")[y-1] != actualField{
+            corners++
+        }
+    } else if east && !west && !north && !south{
+        corners+=2
+    } else if !east && west && !north && !south{
+        corners+=2
+    } else if !east && !west && north && !south{
+        corners+=2
+    } else if !east && !west && !north && south{
+        corners+=2
+    }
+
+    return corners
 }
