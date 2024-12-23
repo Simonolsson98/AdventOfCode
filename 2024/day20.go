@@ -8,11 +8,17 @@ import (
     //"strconv"
     "path/filepath"
     "time"
+    "slices"
 )
 
 type position struct {
     x int
     y int
+}
+
+type beforeend struct{
+    before position
+    after position
 }
 
 var (
@@ -23,6 +29,10 @@ var (
     ylength int
     DFSDoneValue int
     potentialCheatPaths []position
+    posBeforeCheating position
+    posAfterCheating position
+    savedEndPositions map[beforeend]bool
+    timeNoCheating int = 84 // CHANGE HERE
 )
 
 func main() {
@@ -65,8 +75,9 @@ func main() {
             }
         }
     }
-    
+
     start := time.Now()
+    
     DFS(0, currPos)
     timeNoCheating := DFSDoneValue
     savedAtleast100 := 0
@@ -92,8 +103,13 @@ func main() {
     fmt.Println("Part 1 execution time:", time.Since(start), "\n")
 
     start = time.Now()
+
+    origCurrPos := currPos
+    savedEndPositions = make(map[beforeend]bool, 0)
+    Part2DFS(0, origCurrPos, 0, false, []position{currPos}, currPos)
+
     // exec part 2
-    fmt.Println("Day 20 Solution (Part 2):")
+    fmt.Println("Day 20 Solution (Part 2):", len(savedEndPositions))
     fmt.Println("Part 2 execution time:", time.Since(start))
 }
 
@@ -129,4 +145,69 @@ func DFS(count int, currPos position) {
         
         DFS(count + 1, neighbour)
     }
+}
+
+func Part2DFS(count int, currPos position, cheatsUsed int, currentlyCheating bool, sliceVisited []position, posAfterCheating position) {
+    // fmt.Println("for currPos:", currPos, "with count: ", count)
+    // time.Sleep(10*time.Millisecond)
+    if count > timeNoCheating - 72 {
+        // fmt.Println("EARLY RETURN: ", currPos)
+        return
+    }
+
+    if grid[currPos.x][currPos.y] == "E" {
+        if currentlyCheating{
+            posAfterCheating = currPos
+        }
+        DFSDoneValue = count
+        fmt.Println("wut:", count, "pos:", posBeforeCheating, posAfterCheating)
+        savedEndPositions[beforeend{posBeforeCheating, posAfterCheating}] = true
+
+        return
+    }
+
+    neighbours := []position{
+        position{currPos.x+1, currPos.y}, 
+        position{currPos.x, currPos.y+1}, 
+        position{currPos.x-1, currPos.y}, 
+        position{currPos.x, currPos.y-1}}
+
+    for _, neighbour := range neighbours {
+        if slices.Contains(sliceVisited, position{neighbour.x, neighbour.y}) || 
+            neighbour.x > xlength - 1 ||
+            neighbour.x < 0 ||
+            neighbour.y > ylength - 1 ||
+            neighbour.y < 0 {
+            continue
+        }
+
+        if grid[neighbour.x][neighbour.y] == "#"{
+            if cheatsUsed > 20 {
+                continue
+            }
+
+            if !currentlyCheating {
+                posBeforeCheating = currPos
+            }
+
+            Part2DFS(count + 1, neighbour, cheatsUsed + 1, true, append(sliceVisited, neighbour), posAfterCheating)
+        } else {
+            if cheatsUsed <= 20{
+                if !currentlyCheating {
+                    posBeforeCheating = neighbour
+                }
+
+                Part2DFS(count + 1, neighbour, cheatsUsed + 1, true, append(sliceVisited, neighbour), posAfterCheating)
+            }
+
+            if currentlyCheating {
+                posAfterCheating = position{neighbour.x, neighbour.y}
+                cheatsUsed = 420
+            }
+
+            Part2DFS(count + 1, neighbour, cheatsUsed, false, append(sliceVisited, neighbour), posAfterCheating)
+        }
+    }
+
+    // fmt.Println("DONE FOR:", currPos)
 }
