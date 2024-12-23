@@ -18,22 +18,7 @@ func main() {
         return
     }
 
-    connections := make(map[string][]string, 0)
-    for _, line := range strings.Split(input, "\n") {
-        split := strings.Split(line, "-")
-        _, exists := connections[split[0]]
-        _, exists2 := connections[split[1]]
-        if exists {
-            connections[split[0]] = append(connections[split[0]], split[1])
-        } else {
-            connections[split[0]] = []string{split[1]}
-        }
-        if exists2 {
-            connections[split[1]] = append(connections[split[1]], split[0])
-        } else {
-            connections[split[1]] = []string{split[0]}
-        }
-    }
+    connections := parseInput(input)
 
     start := time.Now()
     count := part1(connections)
@@ -41,36 +26,7 @@ func main() {
     fmt.Println("Part 1 execution time:", time.Since(start), "\n")
 
     start = time.Now()
-    var mostConnectedComputers []string
-    for key, val := range connections{
-        stuff := []string{}
-        for _, asd := range val {
-            if !slices.Contains(stuff, key){
-                stuff = append(stuff, key)
-            }
-            for _, otherVal := range connections[asd] {
-                if slices.Contains(val, otherVal) {
-                    if !slices.Contains(stuff, asd){
-                        willAppend := true
-                        for _, inStuff := range stuff {
-                            if !slices.Contains(connections[inStuff], asd){
-                                willAppend = false
-                                break
-                            }
-                        }
-                        if willAppend{
-                            stuff = append(stuff, asd)
-                        }
-                    }
-                }
-            }
-        }
-        
-        if len(stuff) > len(mostConnectedComputers){
-            mostConnectedComputers = stuff
-        }   
-    }
-
+    mostConnectedComputers := part2(connections)
     slices.Sort(mostConnectedComputers)
     fmt.Println("Day 23 Solution (Part 2):", strings.Join(mostConnectedComputers, ","))
     fmt.Println("Part 2 execution time:", time.Since(start))
@@ -94,4 +50,59 @@ func part1(connections map[string][]string) (int){
     }
 
     return count/6
+}
+
+func part2(connections map[string][]string) ([]string) {
+    var mostConnectedComputers []string 
+    for key, val := range connections{
+        currentConnections := []string{}
+        for _, currentComputer := range val {
+            if !slices.Contains(currentConnections, key){
+                currentConnections = append(currentConnections, key)
+            }
+            for _, otherVal := range connections[currentComputer] {
+                if slices.Contains(val, otherVal) {
+                    if !slices.Contains(currentConnections, currentComputer){
+                        connectedToAllOthers := true
+                        for _, inStuff := range currentConnections {
+                            if !slices.Contains(connections[inStuff], currentComputer){
+                                connectedToAllOthers = false
+                                break
+                            }
+                        }
+                        if connectedToAllOthers{
+                            currentConnections = append(currentConnections, currentComputer)
+                        }
+                    }
+                }
+            }
+        }
+        
+        if len(currentConnections) > len(mostConnectedComputers){
+            mostConnectedComputers = currentConnections
+        }   
+    }
+
+    return mostConnectedComputers
+}
+
+func parseInput(input string) (map[string][]string){
+    connections := make(map[string][]string, 0)
+    for _, line := range strings.Split(input, "\n") {
+        split := strings.Split(line, "-")
+        _, exists := connections[split[0]]
+        _, exists2 := connections[split[1]]
+        if exists {
+            connections[split[0]] = append(connections[split[0]], split[1])
+        } else {
+            connections[split[0]] = []string{split[1]}
+        }
+        if exists2 {
+            connections[split[1]] = append(connections[split[1]], split[0])
+        } else {
+            connections[split[1]] = []string{split[0]}
+        }
+    }
+    
+    return connections
 }
