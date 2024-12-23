@@ -5,7 +5,6 @@ import (
     "strings"
     "os"
     "2024/utils"
-    //"strconv"
     "path/filepath"
     "time"
     "slices"
@@ -19,45 +18,42 @@ func main() {
         return
     }
 
-    yes := make(map[string][]string, 0)
-
+    connections := make(map[string][]string, 0)
     for _, line := range strings.Split(input, "\n") {
         split := strings.Split(line, "-")
-        _, exists := yes[split[0]]
-        _, exists2 := yes[split[1]]
+        _, exists := connections[split[0]]
+        _, exists2 := connections[split[1]]
         if exists {
-            yes[split[0]] = append(yes[split[0]], split[1])
+            connections[split[0]] = append(connections[split[0]], split[1])
         } else {
-            yes[split[0]] = []string{split[1]}
+            connections[split[0]] = []string{split[1]}
         }
         if exists2 {
-            yes[split[1]] = append(yes[split[1]], split[0])
+            connections[split[1]] = append(connections[split[1]], split[0])
         } else {
-            yes[split[1]] = []string{split[0]}
+            connections[split[1]] = []string{split[0]}
         }
     }
 
     start := time.Now()
-    count := part1(yes)
-    
-
-    fmt.Println("Day 23 Solution (Part 1):", count/6)
+    count := part1(connections)
+    fmt.Println("Day 23 Solution (Part 1):", count)
     fmt.Println("Part 1 execution time:", time.Since(start), "\n")
 
     start = time.Now()
     var mostConnectedComputers []string
-    for key, val := range yes{
+    for key, val := range connections{
         stuff := []string{}
         for _, asd := range val {
             if !slices.Contains(stuff, key){
                 stuff = append(stuff, key)
             }
-            for _, otherVal := range yes[asd] {
+            for _, otherVal := range connections[asd] {
                 if slices.Contains(val, otherVal) {
                     if !slices.Contains(stuff, asd){
                         willAppend := true
                         for _, inStuff := range stuff {
-                            if !slices.Contains(yes[inStuff], asd){
+                            if !slices.Contains(connections[inStuff], asd){
                                 willAppend = false
                                 break
                             }
@@ -80,9 +76,9 @@ func main() {
     fmt.Println("Part 2 execution time:", time.Since(start))
 }
 
-func part1(yes map[string][]string) (int){
+func part1(connections map[string][]string) (int){
     var count int
-    for key, val := range yes {
+    for key, val := range connections {
         for i := 0; i < len(val); i++ {
             for j := 0; j < len(val); j++ {
                 if i == j {
@@ -90,12 +86,12 @@ func part1(yes map[string][]string) (int){
                 }
 
                 if (strings.HasPrefix(key, "t") || strings.HasPrefix(val[i], "t") || strings.HasPrefix(val[j], "t")) && 
-                    (slices.Contains(yes[val[i]], val[j]) || slices.Contains(yes[val[j]], val[i])) {
+                    (slices.Contains(connections[val[i]], val[j]) || slices.Contains(connections[val[j]], val[i])) {
                     count++
                 }
             }
         }
     }
 
-    return count
+    return count/6
 }
