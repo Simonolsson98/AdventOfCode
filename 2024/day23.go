@@ -38,7 +38,50 @@ func main() {
     }
 
     start := time.Now()
-    count := 0
+    count := part1(yes)
+    
+
+    fmt.Println("Day 23 Solution (Part 1):", count/6)
+    fmt.Println("Part 1 execution time:", time.Since(start), "\n")
+
+    start = time.Now()
+    var mostConnectedComputers []string
+    for key, val := range yes{
+        stuff := []string{}
+        for _, asd := range val {
+            if !slices.Contains(stuff, key){
+                stuff = append(stuff, key)
+            }
+            for _, otherVal := range yes[asd] {
+                if slices.Contains(val, otherVal) {
+                    if !slices.Contains(stuff, asd){
+                        willAppend := true
+                        for _, inStuff := range stuff {
+                            if !slices.Contains(yes[inStuff], asd){
+                                willAppend = false
+                                break
+                            }
+                        }
+                        if willAppend{
+                            stuff = append(stuff, asd)
+                        }
+                    }
+                }
+            }
+        }
+        
+        if len(stuff) > len(mostConnectedComputers){
+            mostConnectedComputers = stuff
+        }   
+    }
+
+    slices.Sort(mostConnectedComputers)
+    fmt.Println("Day 23 Solution (Part 2):", strings.Join(mostConnectedComputers, ","))
+    fmt.Println("Part 2 execution time:", time.Since(start))
+}
+
+func part1(yes map[string][]string) (int){
+    var count int
     for key, val := range yes {
         for i := 0; i < len(val); i++ {
             for j := 0; j < len(val); j++ {
@@ -53,11 +96,6 @@ func main() {
             }
         }
     }
-    fmt.Println("Day 23 Solution (Part 1):", count/6)
-    fmt.Println("Part 1 execution time:", time.Since(start), "\n")
 
-    start = time.Now()
-    // exec part 2
-    fmt.Println("Day 23 Solution (Part 2):")
-    fmt.Println("Part 2 execution time:", time.Since(start))
+    return count
 }
