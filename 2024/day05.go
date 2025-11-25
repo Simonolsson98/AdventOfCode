@@ -6,7 +6,7 @@ import (
     "strconv"
     "os"
     "path/filepath"
-    "2024/utils"
+    "github.com/simonolsson98/adventofcode/utils"
     "time"
 )
 

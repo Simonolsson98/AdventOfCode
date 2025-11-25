@@ -2,7 +2,7 @@ package main
 
 import (
     "fmt"
-    "2024/utils"
+    "github.com/simonolsson98/adventofcode/utils"
     "os"
     "path/filepath"
     "sort"
