@@ -4,6 +4,7 @@ import (
     "bufio"
     "os"
     "strings"
+    "math"
 )
 
 // ReadInput reads the input from a file for a given day.
@@ -33,4 +34,12 @@ func CalcAbs(value int) int {
         return -value
     }
     return value
+}
+
+func CalcFloor(a, b int) int {
+  return int(math.Floor(float64(a)/float64(b)))
+}
+
+func PythonMod(a, b int) int {
+    return (a % b + b) % b
 }
