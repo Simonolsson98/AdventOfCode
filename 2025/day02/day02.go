@@ -4,9 +4,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
-
 	"github.com/simonolsson98/adventofcode/utils"
-
 	//"strconv"
 	"path/filepath"
 	"time"
@@ -23,7 +21,7 @@ func main() {
 	start := time.Now()
 	result := part1(input)
 	fmt.Println("Day 2 Solution (Part 1):", result)
-	fmt.Println("Part 1 execution time:", time.Since(start), "\n")
+	fmt.Println("Part 1 execution time:", time.Since(start))
 
 	start = time.Now()
 	result = part2(input)
