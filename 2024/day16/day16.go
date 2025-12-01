@@ -56,7 +56,7 @@ func main() {
     start := time.Now()
     DFS(0, currPos, []position{currPos}, 1)
     fmt.Println("Day 16 Solution (Part 1):", valueOfDestination)
-    fmt.Println("Part 1 execution time:", time.Since(start), "\n")
+    fmt.Println("Part 1 execution time:", time.Since(start))
 
     start = time.Now()
     for x := 0; x < len(grid); x++ {

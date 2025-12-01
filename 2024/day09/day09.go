@@ -128,7 +128,7 @@ func main() {
     }
 
     fmt.Println("Day 9 Solution (Part 1):", sum)
-    fmt.Println("Part 1 execution time:", time.Since(start), "\n")
+    fmt.Println("Part 1 execution time:", time.Since(start))
 
 	start = time.Now()
     fileFreespaceTuple = []fileAndFreespaceStruct{}

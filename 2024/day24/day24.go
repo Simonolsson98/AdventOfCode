@@ -114,7 +114,7 @@ func main() {
     }
 
     fmt.Println("Day 24 Solution (Part 1):", total)
-    fmt.Println("Part 1 execution time:", time.Since(start), "\n")
+    fmt.Println("Part 1 execution time:", time.Since(start))
 
     start = time.Now()
     // exec part 2

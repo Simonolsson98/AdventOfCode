@@ -100,7 +100,7 @@ func main() {
     }
 
     fmt.Println("Day 20 Solution (Part 1):", savedAtleast100)
-    fmt.Println("Part 1 execution time:", time.Since(start), "\n")
+    fmt.Println("Part 1 execution time:", time.Since(start))
 
     start = time.Now()
 

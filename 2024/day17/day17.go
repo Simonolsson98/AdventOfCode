@@ -42,7 +42,7 @@ func main() {
 
     printthis = strings.TrimRight(printthis, ",")
     fmt.Println("Day 17 Solution (Part 1):", printthis)
-    fmt.Println("Part 1 execution time:", time.Since(start), "\n")
+    fmt.Println("Part 1 execution time:", time.Since(start))
 
 	start = time.Now()
     fmt.Println("Day 17 Solution (Part 2):", part2(strings.Split(program, ": ")[1], registers, opcodes))

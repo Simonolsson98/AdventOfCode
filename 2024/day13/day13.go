@@ -23,7 +23,7 @@ func main() {
     games := strings.Split(input, "\n\n")
 	start := time.Now()
     fmt.Println("Day 13 Solution (Part 1):", part(1, games))
-    fmt.Println("Part 1 execution time:", time.Since(start), "\n")
+    fmt.Println("Part 1 execution time:", time.Since(start))
 
 	start = time.Now()
     fmt.Println("Day 13 Solution (Part 2):", part(2, games))

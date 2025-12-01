@@ -27,7 +27,7 @@ func main() {
 	start := time.Now()
     nums := strings.Split(input, " ")
     fmt.Println("Day 11 Solution (Part 1):", test(25, nums))
-    fmt.Println("Part 1 execution time:", time.Since(start), "\n")
+    fmt.Println("Part 1 execution time:", time.Since(start))
 
 	start = time.Now()
     cache = map[numAndIter]int{}

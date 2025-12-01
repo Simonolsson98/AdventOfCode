@@ -34,7 +34,7 @@ func main() {
     start := time.Now()
     sum := part1(inputRows, constraints)
     fmt.Println("Day 5 Solution (Part 1):", sum)
-    fmt.Println("Part 1 execution time:", time.Since(start), "\n")
+    fmt.Println("Part 1 execution time:", time.Since(start))
     
     start = time.Now()
     sum2 := part2(inputRows, constraints)

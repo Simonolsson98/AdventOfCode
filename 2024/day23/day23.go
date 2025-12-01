@@ -23,7 +23,7 @@ func main() {
     start := time.Now()
     count := part1(connections)
     fmt.Println("Day 23 Solution (Part 1):", count)
-    fmt.Println("Part 1 execution time:", time.Since(start), "\n")
+    fmt.Println("Part 1 execution time:", time.Since(start))
 
     start = time.Now()
     mostConnectedComputers := part2(connections)

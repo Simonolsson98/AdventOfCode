@@ -22,7 +22,7 @@ func main() {
     start := time.Now()
     sum := part1(input)
     fmt.Println("Day 3 Solution (Part 1):", sum)
-    fmt.Println("Part 1 execution time:", time.Since(start), "\n")
+    fmt.Println("Part 1 execution time:", time.Since(start))
 
     start = time.Now()
     sum2 := part2(input)
