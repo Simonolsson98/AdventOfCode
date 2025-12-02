@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"slices"
 	"strconv"
 	"strings"
 	"time"
@@ -59,6 +60,40 @@ func part1(input string) int {
 }
 
 func part2(input string) int {
+	invalid_ids := 0
+	for _, line := range strings.Split(input, ",") {
+		actualRange := strings.Split(line, "-")
+		first_number := actualRange[0]
+		second_number := actualRange[1]
 
-	return 0
+		start, _ := strconv.Atoi(first_number)
+		end, _ := strconv.Atoi(second_number)
+
+		// each number in the range
+		for i := start; i <= end; i++ {
+			strRange := strconv.Itoa(i)
+			for j := 1; j <= len(strRange)/2; j++ {
+				if len(strRange)%j != 0 {
+					continue
+				}
+
+				// divide number into chunks of size j to check for equality
+				chunks := slices.Collect(slices.Chunk([]rune(strRange), j))
+				chunksAreEqual := true
+				for k := 1; k < len(chunks); k++ {
+					if !slices.Equal(chunks[0], chunks[k]) {
+						chunksAreEqual = false
+						break
+					}
+				}
+
+				if chunksAreEqual {
+					value, _ := strconv.Atoi(strRange)
+					invalid_ids += value
+					break
+				}
+			}
+		}
+	}
+	return invalid_ids
 }
