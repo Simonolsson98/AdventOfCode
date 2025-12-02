@@ -3,11 +3,12 @@ package main
 import (
 	"fmt"
 	"os"
-	"strings"
-	"github.com/simonolsson98/adventofcode/utils"
-	//"strconv"
 	"path/filepath"
+	"strconv"
+	"strings"
 	"time"
+
+	"github.com/simonolsson98/adventofcode/utils"
 )
 
 func main() {
@@ -30,8 +31,31 @@ func main() {
 }
 
 func part1(input string) int {
+	invalid_ids := 0
+	for _, line := range strings.Split(input, ",") {
+		actualRange := strings.Split(line, "-")
+		first_half := actualRange[0]
+		second_half := actualRange[1]
 
-	return 0
+		if len(first_half) == len(second_half) && (len(first_half)%2 != 0 && len(second_half)%2 != 0) {
+			continue
+		}
+
+		start, _ := strconv.Atoi(first_half)
+		end, _ := strconv.Atoi(second_half)
+		for i := start; i <= end; i++ {
+			strRange := strconv.Itoa(i)
+			if len(strRange)%2 != 0 {
+				continue
+			}
+
+			if strRange[:len(strRange)/2] == strRange[len(strRange)/2:] {
+				value, _ := strconv.Atoi(strRange)
+				invalid_ids += value
+			}
+		}
+	}
+	return invalid_ids
 }
 
 func part2(input string) int {
