@@ -21,13 +21,15 @@ func main() {
 
 	start := time.Now()
 	result := bothParts(input, 2)
+	elapsed := time.Since(start)
 	fmt.Println("Day 3 Solution (Part 1):", result)
-	fmt.Println("Part 1 execution time:", time.Since(start))
+	fmt.Printf("Part 1 execution time: %.2fµs\n", float64(elapsed.Nanoseconds())/1000.0)
 
 	start = time.Now()
 	result = bothParts(input, 12)
+	elapsed = time.Since(start)
 	fmt.Println("Day 3 Solution (Part 2):", result)
-	fmt.Println("Part 2 execution time:", time.Since(start))
+	fmt.Printf("Part 2 execution time: %.2fµs\n", float64(elapsed.Nanoseconds())/1000.0)
 }
 
 func bothParts(input string, numOfBatteries int) int {
