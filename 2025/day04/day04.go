@@ -1,40 +1,96 @@
 package main
 
 import (
-    "fmt"
-    "strings"
-    "os"
-    "github.com/simonolsson98/adventofcode/utils"
-    //"strconv"
-    "path/filepath"
-    "time"
+	"fmt"
+	"os"
+	"strings"
+
+	"github.com/simonolsson98/adventofcode/utils"
+
+	//"strconv"
+	"path/filepath"
+	"time"
 )
 
 func main() {
-    inputFile := strings.Split(filepath.Base(os.Args[0]), ".")[0] + "_input"
-    input, err := utils.ReadInput(inputFile)
-    if err != nil {
-        fmt.Println("Error reading input:", err)
-        return
-    }
+	inputFile := strings.Split(filepath.Base(os.Args[0]), ".")[0] + "_input"
+	input, err := utils.ReadInput(inputFile)
+	if err != nil {
+		fmt.Println("Error reading input:", err)
+		return
+	}
 
-    start := time.Now()
-    result := part1(input)
-    fmt.Println("Day 4 Solution (Part 1):", result)
-    fmt.Println("Part 1 execution time:", time.Since(start), "\n")
+	var grid [][]rune
+	for _, line := range strings.Split(input, "\n") {
+		grid = append(grid, []rune(line))
+	}
 
-    start = time.Now()
-    result = part2(input)
-    fmt.Println("Day 4 Solution (Part 2):", result)
-    fmt.Println("Part 2 execution time:", time.Since(start))
+	start := time.Now()
+	result := part1(grid)
+	fmt.Println("Day 4 Solution (Part 1):", result)
+	fmt.Println("Part 1 execution time:", time.Since(start))
+
+	start = time.Now()
+	result = part2(input)
+	fmt.Println("Day 4 Solution (Part 2):", result)
+	fmt.Println("Part 2 execution time:", time.Since(start))
 }
 
-func part1(input string) int {
-    
-    return 0
+func part1(grid [][]rune) int {
+	var sum int
+	for i, row := range grid {
+		for j, char := range row {
+			var neighbours int = 0
+			if char == '.' {
+				continue
+			}
+
+			neighbours = countNeighbours(grid, i, j)
+
+			if neighbours < 4 {
+				sum += 1
+			}
+		}
+	}
+	return sum
 }
 
 func part2(input string) int {
-    
-    return 0
+
+	return 0
+}
+
+func countNeighbours(grid [][]rune, i, j int) int {
+	var neighbours int = 0
+	row := grid[i]
+	if i-1 >= 0 { // up
+		if grid[i-1][j] == '@' {
+			neighbours++
+		}
+		if j-1 >= 0 && grid[i-1][j-1] == '@' {
+			neighbours++
+		}
+		if j+1 < len(row) && grid[i-1][j+1] == '@' {
+			neighbours++
+		}
+	}
+	if i+1 < len(grid) { // down
+		if grid[i+1][j] == '@' {
+			neighbours++
+		}
+		if j-1 >= 0 && grid[i+1][j-1] == '@' {
+			neighbours++
+		}
+		if j+1 < len(row) && grid[i+1][j+1] == '@' {
+			neighbours++
+		}
+	}
+	if j-1 >= 0 && grid[i][j-1] == '@' { // left
+		neighbours++
+	}
+	if j+1 < len(row) && grid[i][j+1] == '@' { // right
+		neighbours++
+	}
+
+	return neighbours
 }
