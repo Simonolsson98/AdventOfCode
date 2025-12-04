@@ -3,13 +3,11 @@ package main
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/simonolsson98/adventofcode/utils"
-
-	//"strconv"
-	"path/filepath"
-	"time"
 )
 
 func main() {
@@ -31,7 +29,7 @@ func main() {
 	fmt.Println("Part 1 execution time:", time.Since(start))
 
 	start = time.Now()
-	result = part2(input)
+	result = part2(grid)
 	fmt.Println("Day 4 Solution (Part 2):", result)
 	fmt.Println("Part 2 execution time:", time.Since(start))
 }
@@ -55,9 +53,31 @@ func part1(grid [][]rune) int {
 	return sum
 }
 
-func part2(input string) int {
+func part2(grid [][]rune) int {
+	var totalRemovedRolls int = 0
+	var rollWasRemoved bool = true
+	for rollWasRemoved {
+		rollWasRemoved = false
 
-	return 0
+		for i, row := range grid {
+			for j, char := range row {
+				var neighbours int = 0
+				if char == '.' {
+					continue
+				}
+
+				neighbours = countNeighbours(grid, i, j)
+
+				if neighbours < 4 {
+					totalRemovedRolls++
+					grid[i][j] = '.'
+					rollWasRemoved = true
+				}
+			}
+		}
+	}
+
+	return totalRemovedRolls
 }
 
 func countNeighbours(grid [][]rune, i, j int) int {
