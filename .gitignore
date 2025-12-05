@@ -132,4 +132,4 @@ dmypy.json
 .vs
 .vscode/
 
-*/aoc_session.json
+**/aoc_session.json
