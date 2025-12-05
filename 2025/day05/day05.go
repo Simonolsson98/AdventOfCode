@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -50,7 +51,46 @@ func part1(input string) int {
 	return validIngredients
 }
 
-func part2(input string) int {
+type IntRange struct {
+	start int
+	end   int
+}
 
-	return 0
+func part2(input string) int {
+	foo := strings.Split(input, "\n\n")
+	ranges := foo[0]
+	rangesList := []IntRange{}
+
+	for _, r := range strings.Split(ranges, "\n") {
+		parts := strings.Split(r, "-")
+		startingIndex, _ := strconv.Atoi(parts[0])
+		endingIndex, _ := strconv.Atoi(parts[1])
+
+		rangesList = append(rangesList, IntRange{start: startingIndex, end: endingIndex})
+	}
+
+	sort.Slice(rangesList, func(i, j int) bool {
+		return rangesList[i].start < rangesList[j].start
+	})
+
+	for index := 0; index < len(rangesList)-1; index++ {
+		currentRange := rangesList[index]
+		nextRange := rangesList[index+1]
+		if currentRange.end >= nextRange.start {
+			// merge overlaps
+			mergedRange := IntRange{
+				start: currentRange.start,
+				end:   max(currentRange.end, nextRange.end),
+			}
+			rangesList = append(rangesList[:index], append([]IntRange{mergedRange}, rangesList[index+2:]...)...)
+			index--
+		}
+	}
+
+	tot := 0
+	for _, r := range rangesList {
+		tot += r.end - r.start + 1
+	}
+
+	return tot
 }
