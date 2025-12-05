@@ -131,3 +131,5 @@ dmypy.json
 *.txt
 .vs
 .vscode/
+
+*/aoc_session.json
