@@ -4,12 +4,22 @@ import (
 	"bufio"
 	"math"
 	"os"
+	"path/filepath"
+	"runtime"
 	"strings"
 )
 
 // ReadInput reads the input from a file for a given day.
 func ReadInput(day string) (string, error) {
-	path := "input/" + day + ".txt"
+	// Get the caller's file path (the dayXX.go file)
+	_, callerFile, _, _ := runtime.Caller(1)
+	
+	// The caller file is expected to be in .../AdventOfCode/YYYY/dayXX/dayXX.go
+	// So we go up two levels to get to .../AdventOfCode/YYYY
+	yearDir := filepath.Dir(filepath.Dir(callerFile))
+	
+	path := filepath.Join(yearDir, "input", day+".txt")
+
 	file, err := os.Open(path)
 	if err != nil {
 		return "", err

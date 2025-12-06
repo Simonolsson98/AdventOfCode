@@ -20,6 +20,8 @@ func main() {
         return
     }
 
+   
+
     start := time.Now()
     result := part1(input)
     fmt.Println("Day 6 Solution (Part 1):", result)
@@ -34,21 +36,24 @@ func main() {
 func part1(input string) int {
     var grid [][]string
     for _, line := range strings.Split(input, "\n") {
-        grid = append(grid, strings.Fields(line))
+        var row []string
+        for _, field := range strings.Fields(line) {
+            row = append(row, field)
+        }
+        grid = append(grid, row)
     }
 
-    total := 0
+    var total int = 0
     colSize := len(grid[0])
     rowSize := len(grid)
-    
     for i := range colSize {
-        operation := grid[rowSize-1][i]
+        var operation string = grid[rowSize - 1][i] 
         startingValue := 0
         if operation == "*" {
             startingValue = 1
         }
-
-        for j := 0; j < rowSize-1; j++ {
+            
+        for j := 0; j < rowSize - 1; j++ {
             val, _ := strconv.Atoi(grid[j][i])
 
             switch operation {
@@ -66,55 +71,58 @@ func part1(input string) int {
 
 func part2(input string) int {
     rows := strings.Split(input, "\n")
-    height := len(rows)
-    if height == 0 {
-        return 0
-    }
-    width := len(rows[0])
+    rowLength := len(rows)
+    colIndexLength := len(rows[0])
 
-    total := 0
-    var pendingNums []int
+    var total int = 0
+    nums := []int{}
+    for colIndex := colIndexLength - 1; colIndex >= 0; colIndex-- {
+        var digit string = ""
+        for rowIndex := range rowLength {
+            char := rows[rowIndex][colIndex]
+            if string(char) == "" {
+                continue
+            }
 
-    for col := width - 1; col >= 0; col-- {
-        var currentNumStr string
+            numToAdd , _ := strconv.Atoi(digit)
 
-        for row := 0; row < height; row++ {
-            char := string(rows[row][col])
-            trimmed := strings.TrimSpace(char)
-
-            if trimmed == "+" || trimmed == "*" {
-                if currentNumStr != "" {
-                    val, _ := strconv.Atoi(currentNumStr)
-                    pendingNums = append(pendingNums, val)
+            // reached operator, so perform operation
+            if strings.TrimSpace(string(char)) == "+" {
+                nums = append(nums, numToAdd)
+                
+                sum := 0
+                for i := 0; i < len(nums); i++ {
+                    numToAdd = nums[i]
+                    sum += numToAdd
                 }
 
-                if trimmed == "+" {
-                    sum := 0
-                    for _, n := range pendingNums {
-                        sum += n
-                    }
-                    total += sum
-                } else {
-                    prod := 1
-                    for _, n := range pendingNums {
-                        prod *= n
-                    }
-                    total += prod
-                }
+                total += sum
+                digit = ""
+                nums = []int{}
+                break
+            } else if strings.TrimSpace(string(char)) == "*" {
+                nums = append(nums, numToAdd)
 
-                // reset
-                pendingNums = []int{}
-                currentNumStr = ""
+                product := 1
+                for i := 0; i < len(nums); i++ {
+                    numToAdd = nums[i]
+                    product *= numToAdd
+                }
+                
+                total += product
+                digit = ""
+                nums = []int{}
                 break
             }
 
-            currentNumStr += trimmed
+            digit = digit + strings.TrimSpace(string(char))
         }
 
-        if currentNumStr != "" {
-            val, _ := strconv.Atoi(currentNumStr)
-            pendingNums = append(pendingNums, val)
+        if strings.TrimSpace(digit) == "" {
+            continue
         }
+        numToAdd, _ := strconv.Atoi(strings.TrimSpace(digit))
+        nums = append(nums, numToAdd)
     }
 
     return total
