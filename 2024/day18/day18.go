@@ -1,7 +1,7 @@
 package main
 
 import (
-	"2024/utils"
+	"github.com/simonolsson98/adventofcode/utils"
 	"fmt"
 	"os"
 	"path/filepath"

@@ -4,7 +4,7 @@ import (
     "fmt"
     "strings"
     "os"
-    "2024/utils"
+    "github.com/simonolsson98/adventofcode/utils"
     //"strconv"
     "path/filepath"
     "time"
