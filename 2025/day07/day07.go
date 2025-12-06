@@ -21,7 +21,7 @@ func main() {
     start := time.Now()
     result := part1(input)
     fmt.Println("Day 7 Solution (Part 1):", result)
-    fmt.Println("Part 1 execution time:", time.Since(start), "\n")
+    fmt.Println("Part 1 execution time:", time.Since(start))
 
     start = time.Now()
     result = part2(input)
