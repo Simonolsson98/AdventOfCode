@@ -44,13 +44,15 @@ func main() {
     
     start := time.Now()
     part1(grid, startingPos.x, startingPos.y)
+    elapsed := time.Since(start)
     fmt.Println("Day 7 Solution (Part 1):", totalSplits)
-    fmt.Println("Part 1 execution time:", time.Since(start))
+    fmt.Printf("Part 1 execution time: %.2fµs\n", float64(elapsed.Nanoseconds())/1000.0)
 
     start = time.Now()
     result := part2(grid, startingPos.x, startingPos.y)
+    elapsed = time.Since(start)
     fmt.Println("Day 7 Solution (Part 2):", result)
-    fmt.Println("Part 2 execution time:", time.Since(start))
+    fmt.Printf("Part 2 execution time: %.2fµs\n", float64(elapsed.Nanoseconds())/1000.0)
 }
 
 func part1(grid [][]rune, startX int, startY int) {
