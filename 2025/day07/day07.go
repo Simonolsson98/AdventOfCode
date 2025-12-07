@@ -1,13 +1,14 @@
 package main
 
 import (
-    "fmt"
-    "strings"
-    "os"
-    "github.com/simonolsson98/adventofcode/utils"
-    "slices"
-    "path/filepath"
-    "time"
+	"fmt"
+	"os"
+	"path/filepath"
+	"slices"
+	"strings"
+	"time"
+
+	"github.com/simonolsson98/adventofcode/utils"
 )
 
 type pos struct {
@@ -73,7 +74,29 @@ func part1(grid [][]rune, startX int, startY int) {
     }
 }
 
+var memoizedRoutes = make(map[pos]int)
 func part2(grid [][]rune, startX int, startY int) int {
+    x := startX + 1
+    y := startY
+
+    // hit the bottom => return 1 valid route
+    if x > len(grid) - 1 {
+        return 1
+    }
+
+    // cache hit, wooo
+    if storedNumOfRoutes, exists := memoizedRoutes[pos{x, y}]; exists {
+        return storedNumOfRoutes
+    }
     
-    return 0
+    if grid[x][y] == '.'{
+        return part2(grid, x, y)
+    } else {
+        // split route in two
+        result := part2(grid, x, y - 1) + part2(grid, x, y + 1)
+
+        // store in cache
+        memoizedRoutes[pos{x, y}] = result
+        return result
+    }
 }
