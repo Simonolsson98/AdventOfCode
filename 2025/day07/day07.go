@@ -5,11 +5,18 @@ import (
     "strings"
     "os"
     "github.com/simonolsson98/adventofcode/utils"
-    //"strconv"
+    "slices"
     "path/filepath"
     "time"
 )
 
+type pos struct {
+    x int
+    y int
+}
+
+var visited []pos = []pos{}
+var totalSplits int = 0
 func main() {
     inputFile := strings.Split(filepath.Base(os.Args[0]), ".")[0] + "_input"
     input, err := utils.ReadInput(inputFile)
@@ -18,23 +25,55 @@ func main() {
         return
     }
 
+    var startingPos pos
+    var grid [][]rune
+    startingPosFound := false
+	for _, line := range strings.Split(input, "\n") {
+        if !startingPosFound {
+            for j, char := range line {
+                if char == 'S' {
+                    startingPos = pos{x: len(grid), y: j}
+                    startingPosFound = true
+                }
+            }
+        }
+		grid = append(grid, []rune(line))
+	}
+    visited = []pos{startingPos}
+    
     start := time.Now()
-    result := part1(input)
-    fmt.Println("Day 7 Solution (Part 1):", result)
+    part1(grid, startingPos.x, startingPos.y)
+    fmt.Println("Day 7 Solution (Part 1):", totalSplits)
     fmt.Println("Part 1 execution time:", time.Since(start))
 
     start = time.Now()
-    result = part2(input)
+    result := part2(grid, startingPos.x, startingPos.y)
     fmt.Println("Day 7 Solution (Part 2):", result)
     fmt.Println("Part 2 execution time:", time.Since(start))
 }
 
-func part1(input string) int {
+func part1(grid [][]rune, startX int, startY int) {
+    x := startX + 1
+    y := startY
+    currentPos := pos{x, y}
+    if slices.Contains(visited, currentPos) {
+        return
+    }
+    visited = append(visited, pos{x, y})
+    if x > len(grid) - 1 {
+        return
+    }
     
-    return 0
+    if grid[x][y] == '.'{
+        part1(grid, x, y)
+    } else {
+        totalSplits++
+        part1(grid, x, y - 1)
+        part1(grid, x, y + 1)
+    }
 }
 
-func part2(input string) int {
+func part2(grid [][]rune, startX int, startY int) int {
     
     return 0
 }
