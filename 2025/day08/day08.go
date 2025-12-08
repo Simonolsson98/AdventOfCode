@@ -31,7 +31,7 @@ func main() {
 	}
 
 	start := time.Now()
-	result := part1(input, 1000)
+	result := part1(input)
 	fmt.Println("Day 8 Solution (Part 1):", result)
 	fmt.Println("Part 1 execution time:", time.Since(start))
 
@@ -41,7 +41,7 @@ func main() {
 	fmt.Println("Part 2 execution time:", time.Since(start))
 }
 
-func part1(input string, interations int) int {
+func part1(input string) int {
 	lines := strings.Split(strings.TrimSpace(input), "\n")
 	var points []Point
 	for _, line := range lines {
@@ -60,7 +60,7 @@ func part1(input string, interations int) int {
 
 	var mapOfConnectedCircuits map[int][]Point = make(map[int][]Point)
 	nextCircuit := 0
-	for i := 0; i < interations; i++ {
+	for i := 0; i < len(points); i++ { // len(points) is the same as 1000
 		p1IsConnected := false
 		p2IsConnected := false
 		currIndexp1 := -1
@@ -138,6 +138,65 @@ func GenerateEuclidianDistances(points []Point) []Pair {
 }
 
 func part2(input string) int {
+	lines := strings.Split(strings.TrimSpace(input), "\n")
+	var points []Point
+	for _, line := range lines {
+		parts := strings.Split(line, ",")
+		x, _ := strconv.Atoi(parts[0])
+		y, _ := strconv.Atoi(parts[1])
+		z, _ := strconv.Atoi(parts[2])
+		points = append(points, Point{x, y, z})
+	}
 
-	return 0
+	var pairs []Pair = GenerateEuclidianDistances(points)
+
+	sort.Slice(pairs, func(i, j int) bool {
+		return pairs[i].distSq < pairs[j].distSq
+	})
+
+	var mapOfConnectedCircuits map[int][]Point = make(map[int][]Point)
+	nextCircuit := 0
+	for i := 0; i > -1; i++ {
+		p1IsConnected := false
+		p2IsConnected := false
+		currIndexp1 := -1
+		currIndexp2 := -1
+		for k, v := range mapOfConnectedCircuits {
+			for j := range v {
+				currValue := v[j]
+				if pairs[i].p1 == currValue {
+					currIndexp1 = k
+					p1IsConnected = true
+				}
+				if pairs[i].p2 == currValue {
+					currIndexp2 = k
+					p2IsConnected = true
+				}
+
+				if p1IsConnected && p2IsConnected {
+					break
+				}
+			}
+		}
+
+		if p1IsConnected && p2IsConnected && (currIndexp1 == currIndexp2) { // both points are in the same circuit
+			continue
+		} else if p1IsConnected && p2IsConnected && (currIndexp1 != currIndexp2) { // both points are in different circuits - merge them
+			mapOfConnectedCircuits[currIndexp1] = append(mapOfConnectedCircuits[currIndexp1], mapOfConnectedCircuits[currIndexp2]...)
+			delete(mapOfConnectedCircuits, currIndexp2)
+		} else if p1IsConnected { // only p1 is connected, so add p2 to p1's circuit
+			mapOfConnectedCircuits[currIndexp1] = append(mapOfConnectedCircuits[currIndexp1], pairs[i].p2)
+		} else if p2IsConnected { // only p2 is connected, so add p1 to p2's circuit
+			mapOfConnectedCircuits[currIndexp2] = append(mapOfConnectedCircuits[currIndexp2], pairs[i].p1)
+		} else { // neither point is connected, so create a new circuit
+			mapOfConnectedCircuits[nextCircuit] = append(mapOfConnectedCircuits[currIndexp1], pairs[i].p1, pairs[i].p2)
+			nextCircuit++
+		}
+
+		if len(mapOfConnectedCircuits) == 1 && i > 1 { // one circuit left, as long as it isnt the first iteration (the first circuit created)
+			return pairs[i].p1.x * pairs[i].p2.x
+		}
+	}
+
+	return -1
 }
