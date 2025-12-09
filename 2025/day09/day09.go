@@ -115,7 +115,7 @@ func part2(input string) int {
 }
 
 func isValid(xMin, xMax, yMin, yMax int, hSegments []HSegment, vSegments []VSegment) bool {
-	// Check corners first
+	// check corners first
 	if !hasPointBelow(xMin, yMin, hSegments, vSegments) || !hasPointLeft(xMin, yMin, hSegments, vSegments) {
 		return false
 	}
@@ -129,6 +129,7 @@ func isValid(xMin, xMax, yMin, yMax int, hSegments []HSegment, vSegments []VSegm
 		return false
 	}
 
+	// otherwise... check if any point of the rectangle is outside a segment => invalid
 	for i := xMin + 1; i < xMax; i++ {
 		if !hasPointBelow(i, yMin, hSegments, vSegments) {
 			return false
@@ -160,27 +161,33 @@ func ExtractSegments(corners []string) ([]HSegment, []VSegment) {
 	var hSegments []HSegment
 	var vSegments []VSegment
 
+	mapByXCoordinate := make(map[int][]int)
+	mapByYCoordinate := make(map[int][]int)
+
 	for _, corner := range corners {
-		currentCorner := strings.Split(corner, ",")
-		currentCornerXCoord, _ := strconv.Atoi(currentCorner[0])
-		currentCornerYCoord, _ := strconv.Atoi(currentCorner[1])
+		parts := strings.Split(corner, ",")
+		x, _ := strconv.Atoi(parts[0])
+		y, _ := strconv.Atoi(parts[1])
 
-		for _, corner2 := range corners {
-			if corner2 == corner {
-				continue
+		//store y coordinates by x and vice versa, for potential segment extraction
+		mapByXCoordinate[x] = append(mapByXCoordinate[x], y)
+		mapByYCoordinate[y] = append(mapByYCoordinate[y], x)
+	}
+
+	for x, ys := range mapByXCoordinate {
+		for _, y1 := range ys {
+			for _, y2 := range ys {
+				if y1 == y2 { continue }
+				vSegments = append(vSegments, VSegment{x, min(y1, y2), max(y1, y2)})
 			}
+		}
+	}
 
-			otherCorner := strings.Split(corner2, ",")
-			otherCornerXCoord, _ := strconv.Atoi(otherCorner[0])
-			otherCornerYCoord, _ := strconv.Atoi(otherCorner[1])
-			if otherCornerXCoord == currentCornerXCoord { // matching x coord
-				y1 := min(currentCornerYCoord, otherCornerYCoord)
-				y2 := max(currentCornerYCoord, otherCornerYCoord)
-				vSegments = append(vSegments, VSegment{currentCornerXCoord, y1, y2})
-			} else if otherCornerYCoord == currentCornerYCoord { // matching y coord
-				x1 := min(currentCornerXCoord, otherCornerXCoord)
-				x2 := max(currentCornerXCoord, otherCornerXCoord)
-				hSegments = append(hSegments, HSegment{currentCornerYCoord, x1, x2})
+	for y, xs := range mapByYCoordinate {
+		for _, x1 := range xs {
+			for _, x2 := range xs {
+				if x1 == x2 { continue }
+				hSegments = append(hSegments, HSegment{y, min(x1, x2), max(x1, x2)})
 			}
 		}
 	}
