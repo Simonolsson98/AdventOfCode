@@ -76,14 +76,23 @@ type PairWithArea struct {
 }
 
 var sortedByAreas []PairWithArea
-
+var verticalSegmentsByXCoord map[int][]VSegment
+var horizontalSegmentsByYCoord map[int][]HSegment
+var verticalSegments []VSegment
+var horizontalSegments []HSegment
 func part2(input string) int {
-
 	corners := strings.Split(strings.TrimSpace(input), "\n")
-	var hSegments []HSegment
-	var vSegments []VSegment
 
-	hSegments, vSegments = ExtractSegments(corners)
+	ExtractSegments(corners)
+
+	verticalSegmentsByXCoord = make(map[int][]VSegment)
+	for _, s := range verticalSegments {
+		verticalSegmentsByXCoord[s.x] = append(verticalSegmentsByXCoord[s.x], s)
+	}
+	horizontalSegmentsByYCoord = make(map[int][]HSegment)
+	for _, s := range horizontalSegments {
+		horizontalSegmentsByYCoord[s.y] = append(horizontalSegmentsByYCoord[s.y], s)
+	}
 
 	slices.SortFunc(sortedByAreas, func(a, b PairWithArea) int {
 		return b.area - a.area
@@ -106,7 +115,7 @@ func part2(input string) int {
 		yMin := min(y, y2)
 		yMax := max(y, y2)
 
-		if isValid(xMin, xMax, yMin, yMax, hSegments, vSegments) {
+		if isValid(xMin, xMax, yMin, yMax, horizontalSegments, verticalSegments) {
 			return (xdiff + 1) * (ydiff + 1)
 		}
 	}
@@ -114,35 +123,34 @@ func part2(input string) int {
 	return maxArea
 }
 
-func isValid(xMin, xMax, yMin, yMax int, hSegments []HSegment, vSegments []VSegment) bool {
+func isValid(xMin, xMax, yMin, yMax int, horizontalSegments []HSegment, verticalSegments []VSegment) bool {
 	// check corners first
-	if !hasPointBelow(xMin, yMin, hSegments, vSegments) || !hasPointLeft(xMin, yMin, hSegments, vSegments) {
+	if !hasPointBelow(xMin, yMin) || !hasPointLeft(xMin, yMin) {
 		return false
 	}
-	if !hasPointBelow(xMax, yMin, hSegments, vSegments) || !hasPointRight(xMax, yMin, hSegments, vSegments) {
+	if !hasPointBelow(xMax, yMin) || !hasPointRight(xMax, yMin) {
 		return false
 	}
-	if !hasPointAbove(xMin, yMax, hSegments, vSegments) || !hasPointLeft(xMin, yMax, hSegments, vSegments) {
+	if !hasPointAbove(xMin, yMax) || !hasPointLeft(xMin, yMax) {
 		return false
 	}
-	if !hasPointAbove(xMax, yMax, hSegments, vSegments) || !hasPointRight(xMax, yMax, hSegments, vSegments) {
+	if !hasPointAbove(xMax, yMax) || !hasPointRight(xMax, yMax) {
 		return false
 	}
 
-	// otherwise... check if any point of the rectangle is outside a segment => invalid
 	for i := xMin + 1; i < xMax; i++ {
-		if !hasPointBelow(i, yMin, hSegments, vSegments) {
+		if !hasPointBelow(i, yMin) {
 			return false
 		}
-		if !hasPointAbove(i, yMax, hSegments, vSegments) {
+		if !hasPointAbove(i, yMax) {
 			return false
 		}
 	}
 	for j := yMin + 1; j < yMax; j++ {
-		if !hasPointLeft(xMin, j, hSegments, vSegments) {
+		if !hasPointLeft(xMin, j) {
 			return false
 		}
-		if !hasPointRight(xMax, j, hSegments, vSegments) {
+		if !hasPointRight(xMax, j) {
 			return false
 		}
 	}
@@ -157,94 +165,103 @@ type VSegment struct {
 	x, y1, y2 int
 }
 
-func ExtractSegments(corners []string) ([]HSegment, []VSegment) {
-	var hSegments []HSegment
-	var vSegments []VSegment
-
-	mapByXCoordinate := make(map[int][]int)
-	mapByYCoordinate := make(map[int][]int)
+func ExtractSegments(corners []string){
+	byX := make(map[int][]int)
+	byY := make(map[int][]int)
 
 	for _, corner := range corners {
 		parts := strings.Split(corner, ",")
 		x, _ := strconv.Atoi(parts[0])
 		y, _ := strconv.Atoi(parts[1])
-
-		//store y coordinates by x and vice versa, for potential segment extraction
-		mapByXCoordinate[x] = append(mapByXCoordinate[x], y)
-		mapByYCoordinate[y] = append(mapByYCoordinate[y], x)
+		byX[x] = append(byX[x], y)
+		byY[y] = append(byY[y], x)
 	}
 
-	for x, ys := range mapByXCoordinate {
+	for x, ys := range byX {
 		for _, y1 := range ys {
 			for _, y2 := range ys {
 				if y1 == y2 { continue }
-				vSegments = append(vSegments, VSegment{x, min(y1, y2), max(y1, y2)})
+				verticalSegments = append(verticalSegments, VSegment{x, min(y1, y2), max(y1, y2)})
 			}
 		}
 	}
 
-	for y, xs := range mapByYCoordinate {
+	for y, xs := range byY {
 		for _, x1 := range xs {
 			for _, x2 := range xs {
 				if x1 == x2 { continue }
-				hSegments = append(hSegments, HSegment{y, min(x1, x2), max(x1, x2)})
+				horizontalSegments = append(horizontalSegments, HSegment{y, min(x1, x2), max(x1, x2)})
 			}
 		}
 	}
-	
-	return hSegments, vSegments
 }
 
-func hasPointBelow(x, y int, hSegs []HSegment, vSegs []VSegment) bool {
-	for _, s := range vSegs {
-		if s.x == x && s.y1 <= y {
-			return true
+func hasPointBelow(x, y int) bool {
+	// for each vertical segment at x, check if our point is below any of them
+	if verticalSegments, ok := verticalSegmentsByXCoord[x]; ok {
+		for _, verticalSegment := range verticalSegments {
+			if verticalSegment.y1 <= y {
+				return true
+			}
 		}
 	}
-	for _, s := range hSegs {
-		if s.y <= y && x >= s.x1 && x <= s.x2 {
+	// for each horizontal segment, check if our point is below any of them (while also within the x1 and x2 bounds of the segment)
+	for _, horizontalSegment := range horizontalSegments {
+		if horizontalSegment.y <= y && x >= horizontalSegment.x1 && x <= horizontalSegment.x2 {
 			return true
 		}
 	}
 	return false
 }
 
-func hasPointAbove(x, y int, hSegs []HSegment, vSegs []VSegment) bool {
-	for _, s := range vSegs {
-		if s.x == x && s.y2 >= y {
-			return true
+func hasPointAbove(x, y int) bool {
+	// for each vertical segment at x, check if our point is above any of them
+	if verticalSegments, ok := verticalSegmentsByXCoord[x]; ok {
+		for _, verticalSegment := range verticalSegments {
+			if verticalSegment.y2 >= y {
+				return true
+			}
 		}
 	}
-	for _, s := range hSegs {
-		if s.y >= y && x >= s.x1 && x <= s.x2 {
-			return true
-		}
-	}
-	return false
-}
-
-func hasPointLeft(x, y int, hSegs []HSegment, vSegs []VSegment) bool {
-	for _, s := range hSegs {
-		if s.y == y && s.x1 <= x {
-			return true
-		}
-	}
-	for _, s := range vSegs {
-		if s.x <= x && y >= s.y1 && y <= s.y2 {
+	// for each horizontal segment, check if our point is above any of them (while also within the x1 and x2 bounds of the segment)
+	for _, horizontalSegment := range horizontalSegments {
+		if horizontalSegment.y >= y && x >= horizontalSegment.x1 && x <= horizontalSegment.x2 {
 			return true
 		}
 	}
 	return false
 }
 
-func hasPointRight(x, y int, hSegs []HSegment, vSegs []VSegment) bool {
-	for _, s := range hSegs {
-		if s.y == y && s.x2 >= x {
+func hasPointLeft(x, y int) bool {
+	// for each horizontal segment at y, check if our point is left of any of them
+	if horizontalSegments, ok := horizontalSegmentsByYCoord[y]; ok {
+		for _, horizontalSegment := range horizontalSegments {
+			if horizontalSegment.x1 <= x {
+				return true
+			}
+		}
+	}
+	// for each vertical segment, check if our point is left of any of them (while also within the y1 and y2 bounds of the segment)
+	for _, verticalSegment := range verticalSegments {
+		if verticalSegment.x <= x && y >= verticalSegment.y1 && y <= verticalSegment.y2 {
 			return true
 		}
 	}
-	for _, s := range vSegs {
-		if s.x >= x && y >= s.y1 && y <= s.y2 {
+	return false
+}
+
+func hasPointRight(x, y int) bool {
+	// for each horizontal segment at y, check if our point is right of any of them
+	if horizontalSegments, ok := horizontalSegmentsByYCoord[y]; ok {
+		for _, s := range horizontalSegments {
+			if s.x2 >= x {
+				return true
+			}
+		}
+	}
+	// for each vertical segment, check if our point is right of any of them (while also within the y1 and y2 bounds of the segment)
+	for _, verticalSegment := range verticalSegments {
+		if verticalSegment.x >= x && y >= verticalSegment.y1 && y <= verticalSegment.y2 {
 			return true
 		}
 	}
