@@ -22,7 +22,7 @@ func main() {
 
 	start := time.Now()
 
-	result := part1(input, true)
+	result := part1(input)
 	elapsed := time.Since(start)
 	fmt.Println("Day 9 Solution (Part 1):", result)
 	fmt.Printf("Part 1 execution time: %.2fµs\n", float64(elapsed.Nanoseconds())/1000.0)
@@ -34,7 +34,7 @@ func main() {
 	fmt.Printf("Part 2 execution time: %.2fµs\n", float64(elapsed.Nanoseconds())/1000.0)
 }
 
-func part1(input string, onlyKeepMax bool) int {
+func part1(input string) int {
 	max := 0
 	splitEntireInput := strings.Split(strings.TrimSpace(input), "\n")
 	lenOfEntireInput := len(splitEntireInput)
@@ -57,10 +57,9 @@ func part1(input string, onlyKeepMax bool) int {
 			ydiff := utils.CalcAbs(y - y2)
 			if (xdiff+1)*(ydiff+1) > max {
 				max = (xdiff + 1) * (ydiff + 1)
-				sortedByAreas = append(sortedByAreas, PairWithArea{Pair{x, y}, Pair{x2, y2}, max})
-			} else if !onlyKeepMax {
-				sortedByAreas = append(sortedByAreas, PairWithArea{Pair{x, y}, Pair{x2, y2}, (xdiff + 1) * (ydiff + 1)})
 			}
+
+			sortedByAreas = append(sortedByAreas, PairWithArea{Pair{x, y}, Pair{x2, y2}, (xdiff + 1) * (ydiff + 1)})
 		}
 	}
 	return max
@@ -79,15 +78,12 @@ type PairWithArea struct {
 var sortedByAreas []PairWithArea
 
 func part2(input string) int {
-	sortedByAreas = []PairWithArea{}
 
 	corners := strings.Split(strings.TrimSpace(input), "\n")
 	var hSegments []HSegment
 	var vSegments []VSegment
 
 	hSegments, vSegments = ExtractSegments(corners)
-
-	part1(input, false)
 
 	slices.SortFunc(sortedByAreas, func(a, b PairWithArea) int {
 		return b.area - a.area
