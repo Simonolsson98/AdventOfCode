@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"slices"
 	"strconv"
 	"strings"
 	"time"
@@ -20,7 +21,8 @@ func main() {
 	}
 
 	start := time.Now()
-	result := part1(input)
+
+	result := part1(input, true)
 	elapsed := time.Since(start)
 	fmt.Println("Day 9 Solution (Part 1):", result)
 	fmt.Printf("Part 1 execution time: %.2fµs\n", float64(elapsed.Nanoseconds())/1000.0)
@@ -32,10 +34,14 @@ func main() {
 	fmt.Printf("Part 2 execution time: %.2fµs\n", float64(elapsed.Nanoseconds())/1000.0)
 }
 
-func part1(input string) int {
+func part1(input string, onlyKeepMax bool) int {
 	max := 0
-	for _, line := range strings.Split(strings.TrimSpace(input), "\n") {
-		for _, line2 := range strings.Split(strings.TrimSpace(input), "\n") {
+	splitEntireInput := strings.Split(strings.TrimSpace(input), "\n")
+	lenOfEntireInput := len(splitEntireInput)
+	for x := range lenOfEntireInput {
+		for y := x + 1; y < lenOfEntireInput; y++ {
+			line := splitEntireInput[x]
+			line2 := splitEntireInput[y]
 			if line == line2 {
 				continue
 			}
@@ -47,16 +53,13 @@ func part1(input string) int {
 			x2, _ := strconv.Atoi(coords2[0])
 			y2, _ := strconv.Atoi(coords2[1])
 
-			xdiff := x - x2
-			ydiff := y - y2
-			if xdiff < 0 {
-				xdiff = -xdiff
-			}
-			if ydiff < 0 {
-				ydiff = -ydiff
-			}
+			xdiff := utils.CalcAbs(x - x2)
+			ydiff := utils.CalcAbs(y - y2)
 			if (xdiff+1)*(ydiff+1) > max {
 				max = (xdiff + 1) * (ydiff + 1)
+				sortedByAreas = append(sortedByAreas, PairWithArea{Pair{x, y}, Pair{x2, y2}, max})
+			} else if !onlyKeepMax {
+				sortedByAreas = append(sortedByAreas, PairWithArea{Pair{x, y}, Pair{x2, y2}, (xdiff + 1) * (ydiff + 1)})
 			}
 		}
 	}
@@ -67,8 +70,97 @@ type Pair struct {
 	x, y int
 }
 
+type PairWithArea struct {
+	pair Pair
+	pair2 Pair
+	area int
+}
+
+var sortedByAreas []PairWithArea
+
 func part2(input string) int {
+	sortedByAreas = []PairWithArea{}
+
 	corners := strings.Split(strings.TrimSpace(input), "\n")
+	var hSegments []HSegment
+	var vSegments []VSegment
+
+	hSegments, vSegments = ExtractSegments(corners)
+
+	part1(input, false)
+
+	slices.SortFunc(sortedByAreas, func(a, b PairWithArea) int {
+		return b.area - a.area
+	})
+
+	maxArea := 0
+	for _, pairOfCornerCoordinates := range sortedByAreas { // will try each largest area first
+		firstPair := pairOfCornerCoordinates.pair
+		secondPair := pairOfCornerCoordinates.pair2
+
+		x := firstPair.x
+		y := firstPair.y
+		x2 := secondPair.x
+		y2 := secondPair.y
+
+		xdiff := utils.CalcAbs(x - x2)
+		ydiff := utils.CalcAbs(y - y2)
+		xMin := min(x, x2)
+		xMax := max(x, x2)
+		yMin := min(y, y2)
+		yMax := max(y, y2)
+
+		if isValid(xMin, xMax, yMin, yMax, hSegments, vSegments) {
+			return (xdiff + 1) * (ydiff + 1)
+		}
+	}
+
+	return maxArea
+}
+
+func isValid(xMin, xMax, yMin, yMax int, hSegments []HSegment, vSegments []VSegment) bool {
+	// Check corners first
+	if !hasPointBelow(xMin, yMin, hSegments, vSegments) || !hasPointLeft(xMin, yMin, hSegments, vSegments) {
+		return false
+	}
+	if !hasPointBelow(xMax, yMin, hSegments, vSegments) || !hasPointRight(xMax, yMin, hSegments, vSegments) {
+		return false
+	}
+	if !hasPointAbove(xMin, yMax, hSegments, vSegments) || !hasPointLeft(xMin, yMax, hSegments, vSegments) {
+		return false
+	}
+	if !hasPointAbove(xMax, yMax, hSegments, vSegments) || !hasPointRight(xMax, yMax, hSegments, vSegments) {
+		return false
+	}
+
+	for i := xMin + 1; i < xMax; i++ {
+		if !hasPointBelow(i, yMin, hSegments, vSegments) {
+			return false
+		}
+		if !hasPointAbove(i, yMax, hSegments, vSegments) {
+			return false
+		}
+	}
+	for j := yMin + 1; j < yMax; j++ {
+		if !hasPointLeft(xMin, j, hSegments, vSegments) {
+			return false
+		}
+		if !hasPointRight(xMax, j, hSegments, vSegments) {
+			return false
+		}
+	}
+	return true
+}
+
+type HSegment struct {
+	y, x1, x2 int
+}
+
+type VSegment struct {
+	x, y1, y2 int
+}
+
+func ExtractSegments(corners []string) ([]HSegment, []VSegment) {
 	var hSegments []HSegment
 	var vSegments []VSegment
 
@@ -77,8 +169,7 @@ func part2(input string) int {
 		currentCornerXCoord, _ := strconv.Atoi(currentCorner[0])
 		currentCornerYCoord, _ := strconv.Atoi(currentCorner[1])
 
-		corners2 := strings.Split(strings.TrimSpace(input), "\n")
-		for _, corner2 := range corners2 {
+		for _, corner2 := range corners {
 			if corner2 == corner {
 				continue
 			}
@@ -97,75 +188,8 @@ func part2(input string) int {
 			}
 		}
 	}
-
-	maxArea := 0
-	for _, line := range strings.Split(strings.TrimSpace(input), "\n") {
-		for _, line2 := range strings.Split(strings.TrimSpace(input), "\n") {
-			if line == line2 {
-				continue
-			}
-
-			coords := strings.Split(line, ",")
-			coords2 := strings.Split(line2, ",")
-			x, _ := strconv.Atoi(coords[0])
-			y, _ := strconv.Atoi(coords[1])
-			x2, _ := strconv.Atoi(coords2[0])
-			y2, _ := strconv.Atoi(coords2[1])
-
-			xdiff := x - x2
-			ydiff := y - y2
-			if xdiff < 0 {
-				xdiff = -xdiff
-			}
-			if ydiff < 0 {
-				ydiff = -ydiff
-			}
-			if (xdiff+1)*(ydiff+1) > maxArea {
-				xMin := min(x, x2)
-				xMax := max(x, x2)
-				yMin := min(y, y2)
-				yMax := max(y, y2)
-
-				valid := true
-				for i := xMin; i <= xMax; i++ {
-					if !hasPointBelow(i, yMin, hSegments, vSegments) {
-						valid = false
-						break
-					}
-					if !hasPointAbove(i, yMax, hSegments, vSegments) {
-						valid = false
-						break
-					}
-				}
-				if valid {
-					for j := yMin; j <= yMax; j++ {
-						if !hasPointLeft(xMin, j, hSegments, vSegments) {
-							valid = false
-							break
-						}
-						if !hasPointRight(xMax, j, hSegments, vSegments) {
-							valid = false
-							break
-						}
-					}
-				}
-
-				if valid {
-					maxArea = (xdiff + 1) * (ydiff + 1)
-				}
-			}
-		}
-	}
-
-	return maxArea
-}
-
-type HSegment struct {
-	y, x1, x2 int
-}
-
-type VSegment struct {
-	x, y1, y2 int
+	
+	return hSegments, vSegments
 }
 
 func hasPointBelow(x, y int, hSegs []HSegment, vSegs []VSegment) bool {
@@ -222,18 +246,4 @@ func hasPointRight(x, y int, hSegs []HSegment, vSegs []VSegment) bool {
 		}
 	}
 	return false
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
 }
