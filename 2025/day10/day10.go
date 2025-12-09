@@ -22,13 +22,13 @@ func main() {
     result := part1(input)
     elapsed := time.Since(start)
     fmt.Println("Day 10 Solution (Part 1):", result)
-    fmt.Println("Part 1 execution time: %.2fµs\n", float64(elapsed.Nanoseconds())/1000.0)
+    fmt.Printf("Part 1 execution time: %.2fµs\n", float64(elapsed.Nanoseconds())/1000.0)
 
     start = time.Now()
     result = part2(input)
     elapsed = time.Since(start)
     fmt.Println("Day 10 Solution (Part 2):", result)
-    fmt.Println("Part 2 execution time: %.2fµs\n", float64(elapsed.Nanoseconds())/1000.0)
+    fmt.Printf("Part 2 execution time: %.2fµs\n", float64(elapsed.Nanoseconds())/1000.0)
 }
 
 func part1(input string) int {
