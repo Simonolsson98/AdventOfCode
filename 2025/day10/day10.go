@@ -231,7 +231,7 @@ func GaussElimination(buttons [][]int, targets []int) int {
 					}
 					
 					// check if integer and non-negative
-					if val < 0 || math.Abs(val - math.Round(val)) > 1e-9 {
+					if val < -1e-9 || math.Abs(val - math.Round(val)) > 1e-9 {
 						valid = false
 						break
 					}
@@ -250,7 +250,7 @@ func GaussElimination(buttons [][]int, targets []int) int {
 		freeCol := freeVars[idx]
 		maxVal := math.MaxInt32
 		
-		// check original constraints for this column
+		// Check original constraints for this column
 		for _, targetIdx := range buttons[freeCol] {
 			// count how many times it hits this target
 			count := 0
