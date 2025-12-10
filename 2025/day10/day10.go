@@ -124,13 +124,11 @@ func part2(input string) int {
 
 		joltages := strings.Split(parts[len(parts)-1], ",")
 		joltageTargets := []int{}
-		joltageInitial := [][]int{{}}
 		for _, j := range joltages {
 			j = strings.ReplaceAll(j, "{", "")
 			j = strings.ReplaceAll(j, "}", "")
 			joltage, _ := strconv.Atoi(j)
 			joltageTargets = append(joltageTargets, joltage)
-			joltageInitial[0] = append(joltageInitial[0], 0)
 		}
 
 		// solve using Parametric Gaussian Elimination
@@ -146,7 +144,7 @@ func GaussElimination(buttons [][]int, targets []int) int {
 
 	// augmented matrix
 	matrix := make([][]float64, rows)
-	for i := 0; i < rows; i++ {
+	for i := range rows {
 		matrix[i] = make([]float64, cols+1)
 		matrix[i][cols] = float64(targets[i])
 	}
@@ -207,71 +205,88 @@ func GaussElimination(buttons [][]int, targets []int) int {
 		}
 	}
 	
-	minTotal := -1
+	solver := &ParametricSolver{
+		matrix:   matrix,
+		pivots:   pivots,
+		freeVars: freeVars,
+		buttons:  buttons,
+		targets:  targets,
+		cols:     cols,
+		minTotal: -1,
+	}
+	
+	solver.solve(0, make([]int, len(freeVars)))
 
-	var solve func(idx int, currentFreeValues []int)
-	solve = func(idx int, currentFreeValues []int) {
-		if idx == len(freeVars) {
-			// all free vars assigned, check pivots.
-			currentTotal := 0
-			for _, val := range currentFreeValues {
-				currentTotal += val
-			}
-			
-			valid := true
-			for col := 0; col < cols; col++ {
-				if _, isPivot := pivots[col]; isPivot {
-					row := pivots[col]
-					val := matrix[row][cols]
-					
-					// subtract free var contributions
-					for k, freeCol := range freeVars {
-						coeff := matrix[row][freeCol]
-						val -= coeff * float64(currentFreeValues[k])
-					}
-					
-					// check if integer and non-negative
-					if val < -1e-9 || math.Abs(val - math.Round(val)) > 1e-9 {
-						valid = false
-						break
-					}
-					currentTotal += int(math.Round(val))
-				}
-			}
-			
-			if valid {
-				if minTotal == -1 || currentTotal < minTotal {
-					minTotal = currentTotal
-				}
-			}
-			return
+	return solver.minTotal
+}
+type ParametricSolver struct {
+	matrix   [][]float64
+	pivots   map[int]int
+	freeVars []int
+	buttons  [][]int
+	targets  []int
+	cols     int
+	minTotal int
+}
+
+func (s *ParametricSolver) solve(idx int, currentFreeValues []int) {
+	if idx == len(s.freeVars) {
+		// All free vars assigned. Check pivots.
+		currentTotal := 0
+		for _, val := range currentFreeValues {
+			currentTotal += val
 		}
 
-		freeCol := freeVars[idx]
-		maxVal := math.MaxInt32
-		
-		// Check original constraints for this column
-		for _, targetIdx := range buttons[freeCol] {
-			// count how many times it hits this target
-			count := 0
-			for _, t := range buttons[freeCol] {
-				if t == targetIdx {
-					count++
+		valid := true
+		for col := 0; col < s.cols; col++ {
+			if _, isPivot := s.pivots[col]; isPivot {
+				row := s.pivots[col]
+				val := s.matrix[row][s.cols]
+
+				// Subtract free var contributions
+				for k, freeCol := range s.freeVars {
+					coeff := s.matrix[row][freeCol]
+					val -= coeff * float64(currentFreeValues[k])
 				}
+
+				// Check if integer and non-negative
+				if val < -1e-9 || math.Abs(val-math.Round(val)) > 1e-9 {
+					valid = false
+					break
+				}
+				currentTotal += int(math.Round(val))
 			}
-			b := targets[targetIdx] / count
+		}
+
+		if valid {
+			if s.minTotal == -1 || currentTotal < s.minTotal {
+				s.minTotal = currentTotal
+			}
+		}
+		return
+	}
+
+	freeCol := s.freeVars[idx]
+	maxVal := math.MaxInt32
+
+	// check original constraints for this column
+	for _, targetIdx := range s.buttons[freeCol] {
+		count := 0
+		for _, t := range s.buttons[freeCol] {
+			if t == targetIdx {
+				count++
+			}
+		}
+		if count > 0 {
+			b := s.targets[targetIdx] / count
 			if b < maxVal {
 				maxVal = b
 			}
 		}
-		
-		for val := 0; val <= maxVal; val++ {
-			currentFreeValues[idx] = val
-			solve(idx+1, currentFreeValues)
-		}
 	}
-	
-	solve(0, make([]int, len(freeVars)))
 
-	return minTotal
+	for val := 0; val <= maxVal; val++ {
+		currentFreeValues[idx] = val
+		s.solve(idx+1, currentFreeValues)
+	}
 }
