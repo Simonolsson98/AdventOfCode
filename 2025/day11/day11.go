@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"maps"
 	"os"
 	"path/filepath"
 	"strings"
@@ -34,7 +33,7 @@ func main() {
 	fmt.Printf("Part 1 execution time: %.2fµs\n", float64(elapsed.Nanoseconds())/1000.0)
 
 	start = time.Now()
-	result = part2("svr", mapOfRoutes, make(map[string]int), map[string]bool{"dac": false, "fft": false})
+	result = part2("svr", mapOfRoutes, make(map[Part2State]int), false, false)
 	elapsed = time.Since(start)
 	fmt.Println("Day 11 Solution (Part 2):", result)
 	fmt.Printf("Part 2 execution time: %.2fµs\n", float64(elapsed.Nanoseconds())/1000.0)
@@ -60,45 +59,37 @@ func part1(route string, mapOfRoutes map[string][]string, visited map[string]int
 	return count
 }
 
-func part2(route string, mapOfRoutes map[string][]string, visited map[string]int, visitedNecessaryRoutes map[string]bool) int {
-	if val, ok := visited[route]; ok && visitedNecessaryRoutes["dac"] && visitedNecessaryRoutes["fft"] {
-		// cache hit
-		println("Cache hit for", route, "with value", val)
+type Part2State struct {
+	Route  string
+	HasDac bool
+	HasFft bool
+}
+
+func part2(route string, mapOfRoutes map[string][]string, visited map[Part2State]int, hasDac, hasFft bool) int {
+	if route == "dac" {
+		hasDac = true
+	}
+	if route == "fft" {
+		hasFft = true
+	}
+
+	state := Part2State{Route: route, HasDac: hasDac, HasFft: hasFft}
+	if val, ok := visited[state]; ok {
 		return val
 	}
 
+	if route == "out" {
+		if hasDac && hasFft {
+			return 1
+		}
+		return 0
+	}
+
 	count := 0
-	visitedNecessaryRoutesCopy := make(map[string]bool)
-	maps.Copy(visitedNecessaryRoutesCopy, visitedNecessaryRoutes)
-
-	for x, neighbor := range mapOfRoutes[route] {
-		println(" - exploring neighbor", x, ":", neighbor, "from", route)
-		if neighbor == "fft" {
-			// println("Found", neighbor)
-			visitedNecessaryRoutes["fft"] = true
-		}
-		if neighbor == "dac" {
-			// println("Found", neighbor)
-			visitedNecessaryRoutes["dac"] = true
-		}
-
-		if neighbor == "out" && visitedNecessaryRoutes["dac"] && visitedNecessaryRoutes["fft"] {
-			// println("Valid route found through", route)
-			count++
-		} else {
-			// recurse
-			// println("recursing to", neighbor, "via", route)
-			// for i := range visitedNecessaryRoutes {
-			// 	println(" - visitedNecessaryRoutes:", i, "=", visitedNecessaryRoutes[i])
-			// }
-			count += part2(neighbor, mapOfRoutes, visited, visitedNecessaryRoutes)
-			visitedNecessaryRoutes = visitedNecessaryRoutesCopy
-		}
+	for _, neighbor := range mapOfRoutes[route] {
+		count += part2(neighbor, mapOfRoutes, visited, hasDac, hasFft)
 	}
 
-	if visitedNecessaryRoutes["dac"] && visitedNecessaryRoutes["fft"] {
-		visited[route] = count //save all possible routes from this node
-		// println("adding to cache:", route, "with value", count)
-	}
+	visited[state] = count
 	return count
 }
